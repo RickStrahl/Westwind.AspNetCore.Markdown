@@ -1,0 +1,9 @@
+﻿@model Westwind.AspNetCore.Markdown.MarkdownModel
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "_Layout";
+}
+<div style="margin-top: 40px;">
+    @Model.RenderedMarkdown
+</div>
+
