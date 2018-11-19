@@ -89,8 +89,6 @@ namespace Westwind.AspNetCore.Markdown
         /// </summary>
         [HtmlAttributeName("Filename")]
         public string Filename { get; set; }
-
-
         
 
         public MarkdownTagHelper(IHttpContextAccessor httpContext)

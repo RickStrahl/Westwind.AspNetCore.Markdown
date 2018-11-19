@@ -79,7 +79,7 @@ To embed in Razor Views:
 ```
 
 ### SanitizeHtml in Parser Methods to mitigate XSS
-Both of the above methods include a few optional parameters including a `stripScriptTags` parameter which defaults to `false`. If set to `true` any `<script>` tags that are not embedded inside of inline or fenced code blocks are stripped. Additionally any reference to `javascript:` inside of a tag is replaced with `unsupported:` rendering the script non-functional.
+Both of the above methods include a few optional parameters including a `sanitizeHtml` parameter which defaults to `false`. If set to `true` any `<script>` tags that are not embedded inside of inline or fenced code blocks are stripped. Additionally any reference to `javascript:` inside of a tag is replaced with `unsupported:` rendering the script non-functional.
 
 ```cs
 string html = Markdown.Parse(markdownText, sanitizeHtml: true)
@@ -515,7 +515,7 @@ services.AddMarkdown(config =>
 ### Use the StripScriptTags Option
 The various components and static methods each have the ability to trigger a script tag filter which is fired after the HTML has been generated. A few RegEx expressions are used to remove `<script>` (and `<iframe>`,`<object>`,`<embed>` and `<form>`) tags, `<a href='javascript:'>` type requests and `onXXX=` DOM event handlers.
 
-#### Markdown.Parse(markdown,stripScriptTags)
+#### Markdown.Parse(markdown,sanitizeHtml)
 The `Parse()` and `ParseHtml()` methods both include a `sanitizeHtml` parameter which is `false` by default. The default behavior is to leave script code as is so if you use the static functions stripping script out is always an opt in operation.
 
 #### Markdown Tag Helper
@@ -534,7 +534,7 @@ folderConfig.SanitizeHtml = true;
 ```
 
 #### Overriding the Html Tag Blacklist
-The HTML Tag Blacklist used when when StripScripttags is set to `true` can be overridden via the Config object's `HtmlTagBlackList` property during configuration:
+The HTML Tag Blacklist used when when `sanitizeHtml` is set to `true` can be overridden via the Config object's `HtmlTagBlackList` property during configuration:
 
 ```cs
 public void ConfigureServices(IServiceCollection services)
