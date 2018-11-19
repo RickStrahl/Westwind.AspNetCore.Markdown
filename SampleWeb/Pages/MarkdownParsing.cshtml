@@ -53,7 +53,7 @@
 
     <h3 class="header">Markdown.ParseHtmlFromFile()</h3>
     <p>
-        And one more time with the same content as above using <code>Markdown.ParseHtmlStringFromFile()</code>:
+        Rendering Markdown from a file <code>Markdown.ParseHtmlStringFromFile()</code>:
     </p>
 
     <div class="sample-block">
@@ -61,16 +61,29 @@
     </div>
     
 
-@section Scripts {
-    <script src="~/lib/highlightjs/highlight.pack.js"></script>
-    <link href="~/lib/highlightjs/styles/vs2015.css" rel="stylesheet" />
-    <script>
-                setTimeout(function () {
-                    var pres = document.querySelectorAll("pre>code");
-                    for (var i = 0; i < pres.length; i++) {
-                        hljs.highlightBlock(pres[i]);
-                    }
-                });
+    <h3 class="header">Async Markdown.ParseFromFileAsync()</h3>
+    <p>
+        And one more time with the same content as above using <code>Markdown.ParseFromFileAsync()</code>:
+    </p>
 
-    </script>
-}
+    <div class="sample-block">
+        @{
+            var parsedHtml = await Markdown.ParseFromFileAsync("~/MarkdownPartialPage.md");
+        }
+        @Html.Raw(parsedHtml)
+    </div>
+
+
+    @section Scripts {
+        <script src="~/lib/highlightjs/highlight.pack.js"></script>
+        <link href="~/lib/highlightjs/styles/vs2015.css" rel="stylesheet" />
+        <script>
+            setTimeout(function () {
+                var pres = document.querySelectorAll("pre>code");
+                for (var i = 0; i < pres.length; i++) {
+                    hljs.highlightBlock(pres[i]);
+                }
+            });
+
+        </script>
+    }
