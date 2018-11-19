@@ -140,12 +140,11 @@ This example data binds the Model.MarkdownText property to the TagHelper's <code
     <script src="~/lib/highlightjs/highlight.pack.js"></script>
     <link href="~/lib/highlightjs/styles/vs2015.css" rel="stylesheet" />
     <script>
-                        setTimeout(function () {
-                            var pres = document.querySelectorAll("pre>code");
-                            for (var i = 0; i < pres.length; i++) {
-                                hljs.highlightBlock(pres[i]);
-                            }
-                        });
-
+        setTimeout(function () {
+            var pres = document.querySelectorAll("pre>code");
+            for (var i = 0; i < pres.length; i++) {
+                hljs.highlightBlock(pres[i]);
+            }
+        });
     </script>
 }

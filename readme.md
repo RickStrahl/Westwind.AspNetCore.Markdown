@@ -64,10 +64,10 @@ string html = Markdown.Parse(markdownText)
 You can also convert Markdown using a file:
 
 ```cs
-var html = Markdown.ParseHtmlFromFile("~/EmbeddedMarkdownContent.md");
+var html = Markdown.ParseFromFile("~/EmbeddedMarkdownContent.md");
 
 // async
-html = await Markdown.ParseHtmlFromFileAsync("~/EmbeddedMarkdownContent.md");
+html = await Markdown.ParseFromFileAsync("~/EmbeddedMarkdownContent.md");
 ```
 
 To embed in Razor Views:
