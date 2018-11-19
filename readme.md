@@ -1,25 +1,33 @@
 # ASP.NET Core Markdown Support
 
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages?q=Westwind.aspnetcore.markdown)
+[![NuGet](https://img.shields.io/nuget/vpre/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) [![](https://img.shields.io/nuget/dt/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/)
+
+
 
 This small package provides Markdown support for your ASP.NET Core applications. It has the following features:
 
-*  **[Markdown Parsing Helpers](#markdown-parsing)**
+*  **[Markdown Parsing](#markdown-parsing)**
     *  Parse Markdown to raw String  
       `Markdown.Parse(markdown)`  
       `@Markdown.ParseHtmlString(markdown)`
     *  Parse Markdown from Files  
-       `Markdown.ParseFromFile("~/MarkdownPartial.md")`         `Markdown.ParseHtmlStringFromFile("~/MarkdownPartial.md")`
+       `Markdown.ParseFromFile("~/MarkdownPartial.md")`  
+       `Markdown.ParseHtmlStringFromFile("~/MarkdownPartial.md")`
 * **[Markdown TagHelper](#markdown-taghelper)** 
     *  Embed Markdown text into Views and Pages
-    *  Databind Markdown text via `markdown` attribute
+    *  Databind Model data as Markdown text via `markdown` attribute
     *  Embed Markdown from files via `filename` attribute
+    *  Supports white space normalization 
+    *  
 *  **[Markdown Page Processor Middleware](#markdown-page-processor-middleware)**
-    *  Serve .md files as Markdown
-    *  Serve extensionless URLs as Markdown
-    *  Configurable Razor template to customize Markdown Page Container UI
-*  [Uses the MarkDig Markdown Parser](https://github.com/lunet-io/markdig)
-
+    *  Serve .md or any custom extensions files as Markdown
+    *  Serve mapped extensionless URLs as Markdown
+    *  Configure a Razor template to customize Markdown Page Container UI
+*  **Configuration and Support Features**
+	* [Uses the MarkDig Markdown Parser](https://github.com/lunet-io/markdig)
+	* Customizable Markdown Parsing Pipeline for Markdig
+	* Pluggable Markdown Parser Support
+	* HTML Sanitation support built in
 
 Related links:
 
@@ -61,7 +69,7 @@ You can also convert Markdown using a file:
 var html = Markdown.ParseHtmlFromFile("~/EmbeddedMarkdownContent.md");
 
 // async
-var html = await Markdown.ParseHtmlFromFileAsync("~/EmbeddedMarkdownContent.md");
+html = await Markdown.ParseHtmlFromFileAsync("~/EmbeddedMarkdownContent.md");
 ```
 
 To embed in Razor Views:
@@ -70,11 +78,11 @@ To embed in Razor Views:
 @Markdown.ParseHtmlStringFromFile("~/EmbeddedMarkdownContent.md")
 ```
 
-### StripScriptTags in Parser Methods to mitigate XSS
+### SanitizeHtml in Parser Methods to mitigate XSS
 Both of the above methods include a few optional parameters including a `stripScriptTags` parameter which defaults to `false`. If set to `true` any `<script>` tags that are not embedded inside of inline or fenced code blocks are stripped. Additionally any reference to `javascript:` inside of a tag is replaced with `unsupported:` rendering the script non-functional.
 
 ```cs
-string html = Markdown.Parse(markdownText, stripScriptTags: true)
+string html = Markdown.Parse(markdownText, sanitizeHtml: true)
 ```
 
 ### MarkDig Pipeline Configuration
@@ -207,11 +215,11 @@ The current Time is: @DateTime.Now.ToString("HH:mm:ss")
 
 This also works, but is hard to maintain in some code editors due to auto-code reformatting.
 
-### strip-script-tags
+### sanitize-html
 By default the Markdown tag helper strips `<script>` tags and `href="javascript"` directives from the generated HTML content. If you would like to explicitly include script tags because your content requires it you can enable that functionality by setting
 
 ```html
-<markdown strip-script-tags="true">
+<markdown sanitize-html="true">
     ### Rudimentary XSS Support
     Below are a script tag, and some raw HTML alert with an onclick handler which 
     are potential XSS vulnerable. Default is `strip-script-tags="true"` to remove

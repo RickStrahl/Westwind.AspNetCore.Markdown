@@ -2,20 +2,19 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.50</Version>    
+    <Version>3.1</Version>    
     <Authors>Rick Strahl</Authors>
     <Company>West Wind Technologies</Company>
     <Product>West Wind Web Toolkit</Product>
     <Title>Westwind AspNet Core Markdown TagHelper and Parser</Title>
-    <Description>This library provides Markdown support for ASP.NET Core with high level helpers to facilitate using Markdown in your apps.
-    
-    It has Markdown parsing helpers for parsing Markdown in code (`Markdown.Parse()` or `Markdown.ParseHtmlString()`.
-    
-    There is  a `&lt;markdown&gt; TagHelper that allows embedding static text into Razor pages or views as well as binding model data. 
-    
-    Finally you there's also a generic middleware component to allow drop in Markdown document support for any application to serve Markdown files rendered into HTML content in the context of the host application.
-    
-    For similar features for System.Web based ASP.NET see `Westwind.Web.MarkdownControl`.
+    <Description>This library provides Markdown support for ASP.NET Core applications:
+
+* Markdown Parsing Support via Markdown.Parse() and Markdown.ParseHtmlString()
+* Markdown Parsing from Files via Markdown.ParseFromFile() and .ParseFromFileAsync()
+* Markdown TagHelper - embed static text, files or bind model data 
+* Markdown Page Handler Middleware to render Markdown files in your site
+   
+For similar features in System.Web based ASP.NET apps see `Westwind.Web.MarkdownControl`.
     </Description>
     <Copyright>(c) West Wind Technologies, 2017-2018</Copyright>
     <PackageProjectUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown</PackageProjectUrl>
@@ -23,7 +22,7 @@
     <RepositoryUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>Westwind AspNetCore Web</PackageTags>
-    <PackageIconUrl>https://markdownmonster.west-wind.com/images/markdown_icon.png</PackageIconUrl>
+    <PackageIconUrl>https://markdownmonster.west-wind.com/images/markdown_icon.png</PackageIconUrl>    
   </PropertyGroup>
 
   <ItemGroup>
