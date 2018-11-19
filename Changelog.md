@@ -1,7 +1,7 @@
 # Westwind.AspNetCore Change Log
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore)</small>
 
-### Version 3.1
+### Version 3.1.1
 
 * **Markdown TagHelper Filename Property**  
 You can now include Markdown content from the site's file system using the `<markdown>` TagHelper file the `filename` attribute. This makes it easy to break out large text blocks and edit and maintain them easily in your favorite Markdown editor vs. editing inline the HTML content. Note that related resources are **host page relative**, not relative to the Markdown page so plan accordingly for links and image refs.
