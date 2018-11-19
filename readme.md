@@ -2,8 +2,6 @@
 
 [![NuGet](https://img.shields.io/nuget/vpre/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) [![](https://img.shields.io/nuget/dt/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/)
 
-
-
 This small package provides Markdown support for your ASP.NET Core applications. It has the following features:
 
 *  **[Markdown Parsing](#markdown-parsing)**
@@ -58,7 +56,7 @@ string html = Markdown.Parse(markdownText)
 
 ### Markdown to Razor Html String
 
-```cs
+```html
 <div>@Markdown.ParseHtmlString(Model.ProductInfoMarkdown)</div>
 ```
 
@@ -179,7 +177,7 @@ In addition to the content you can also bind to the `markdown` attribute which a
 The `markdown` attribute accepts binding expressions so you can bind Markdown for display from model values or other expressions easily.
 
 ### NormalizeWhiteSpace
-Markdown is sensitive to leading spaces and given that you're likely to enter Markdown into the literal TagHelper in a code editor there's likely to be a leading block of white space. Markdown treats leading whitespace as significant - 4 spaces or a tab indicate a code block so if you have:
+Markdown is sensitive to leading spaces and given that you're likely to enter Markdown into the literal TagHelper in a code editor there's likely to be a leading block of white space. Markdown treats leading white space as significant - 4 spaces or a tab indicate a code block so if you have:
 
 ```html
 <markdown>
@@ -196,7 +194,7 @@ Markdown is sensitive to leading spaces and given that you're likely to enter Ma
 
 without special handling Markdown would interpret the entire markdown text as a single code block.
 
-By default the TagHelper sets `normalize-whitespace="true"` which automatically strips common whitespace to all lines from the code block. Note that this is based on the formatting of the first non-blank line of code and works only if all code lines start with the same formatted whitespace.
+By default the TagHelper sets `normalize-whitespace="true"` which automatically strips common white space to all lines from the code block. Note that this is based on the formatting of the first non-blank line of code and works only if all code lines start with the same formatted white space.
 
 Optionally you can also force justify your code and turn the setting to `false`:
 
@@ -445,7 +443,6 @@ The screenshot below shows the output of this page which is a Markdown blog post
 ![](MarkdownRenderedPage.png)
 
 Voila generically rendered Markdown content from .md files on disk.
-
 
 ## Markdown Styling
 A Markdown parser **only converts Markdown to HTML**, it does nothing for styling or how that rendered HTML content is displayed. It's up to the hosting application to provide the styling applied to the rendered HTML. For the most part HTML 'just works'. For example the stock ASP.NET Core Bootstrap templates render most markdown text nicely as you would expect.
