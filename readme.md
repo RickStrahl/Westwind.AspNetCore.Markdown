@@ -541,3 +541,20 @@ public void ConfigureServices(IServiceCollection services)
 ```
 
 This value is global and can only be set during startup. Changing it at runtime has no effect as it translates to RegEx expression parameters.
+
+## License
+The Westwind.Web.MarkdownControl library is an open source product licensed under:
+
+* **[MIT license](http://opensource.org/licenses/MIT)**
+
+All source code is **&copy; West Wind Technologies**, regardless of changes made to them. Any source code modifications must leave the original copyright code headers intact if present.
+
+There's no charge to use, integrate or modify the code for this project. You are free to use it in personal, commercial, government and any other type of application and you are free to modify the code for use in your own projects.
+
+### Give back
+If you find this library useful, consider making a small donation:
+
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BA3NHHFHTMXD8" 
+    title="Find this library useful? Consider making a small donation." alt="Make Donation" style="text-decoration: none;">
+	<img src="https://weblog.west-wind.com/images/donation.png" />
+</a>

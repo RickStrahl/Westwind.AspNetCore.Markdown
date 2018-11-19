@@ -18,9 +18,9 @@
     For similar features for System.Web based ASP.NET see `Westwind.Web.MarkdownControl`.
     </Description>
     <Copyright>(c) West Wind Technologies, 2017-2018</Copyright>
-    <PackageProjectUrl>https://github.com/RickStrahl/Westwind.AspNetCore/tree/master/Westwind.AspNetCore</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/RickStrahl/Westwind.AspNetCore/tree/master/Westwind.AspNetCore#License</PackageLicenseUrl>
-    <RepositoryUrl>https://github.com/RickStrahl/Westwind.AspNetCore/tree/master/Westwind.AspNetCore</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown#License</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>Westwind AspNetCore Web</PackageTags>
     <PackageIconUrl>https://markdownmonster.west-wind.com/images/markdown_icon.png</PackageIconUrl>
