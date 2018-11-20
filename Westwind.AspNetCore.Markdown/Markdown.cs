@@ -34,6 +34,8 @@
 
 using System;
 using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Westwind.AspnetCore.Markdown.Utilities;
@@ -42,6 +44,8 @@ namespace Westwind.AspNetCore.Markdown
 {
     public static class Markdown
     {
+
+     
         /// <summary>
         /// Renders raw markdown from string to HTML
         /// </summary>
@@ -161,9 +165,76 @@ namespace Westwind.AspNetCore.Markdown
             return new HtmlString(ParseFromFile(markdownFile, usePragmaLines, forceReload, sanitizeHtml));
         }
 
+        /// <summary>
+        /// Parses content from a url as Markdown to HTML.
+        /// </summary>
+        /// <param name="url">A Url that contains Markdown</param>
+        /// <param name="usePragmaLines">Generates line numbers as ids into headers and paragraphs. Useful for previewers to match line numbers to rendered output</param>
+        /// <param name="forceReload">Forces the parser to reloaded. Otherwise cached instance is used</param>
+        /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
+        /// <returns>HTML result as a string</returns>
+        public static string ParseFromUrl(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false)
+        {
+            if (string.IsNullOrEmpty(url))
+                return url;
 
+            string content = null;
+            try
+            {                
+                var client = MarkdownComponentState.HttpClientFactory.CreateClient();
 
-        
+                var result =client.GetAsync(url).GetAwaiter().GetResult();
+                if (result.IsSuccessStatusCode)
+                    content = result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                else
+                    throw new FileLoadException($"Couldn\'t load Markdown from Url: {url}.");
+            }
+            catch (Exception ex)
+            {
+                throw new FileLoadException("Couldn't load Markdown file: " + url, ex);
+            }
+
+            return Parse(content, usePragmaLines, forceReload, sanitizeHtml);
+        }
+
+        public static HtmlString ParseHtmlStringFromUrl(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false)
+        {
+            return new HtmlString(ParseFromUrl(url, usePragmaLines, forceReload, sanitizeHtml));
+        }
+
+        /// <summary>
+        /// Parses content from a url as Markdown to HTML.
+        /// </summary>
+        /// <param name="url">A Url that contains Markdown</param>
+        /// <param name="usePragmaLines">Generates line numbers as ids into headers and paragraphs. Useful for previewers to match line numbers to rendered output</param>
+        /// <param name="forceReload">Forces the parser to reloaded. Otherwise cached instance is used</param>
+        /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
+        /// <returns>HTML result as a string</returns>
+        public static async Task<string> ParseFromUrlAsync(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false)
+        {
+            if (string.IsNullOrEmpty(url))
+                return url;
+
+            string content = null;
+
+            try
+            {                
+                var client = MarkdownComponentState.HttpClientFactory.CreateClient();
+
+                var result = await client.GetAsync(url);
+                if (result.IsSuccessStatusCode)                
+                    content = await result.Content.ReadAsStringAsync();
+                else
+                    throw new FileLoadException($"Couldn\'t load Markdown from Url: {url}.");
+            }
+            catch (Exception ex)
+            {
+                throw new FileLoadException($"Couldn\'t load Markdown from Url: {url}.", ex);
+            }
+
+            return Parse(content, usePragmaLines, forceReload, sanitizeHtml);
+        }
+
 
     }
 }

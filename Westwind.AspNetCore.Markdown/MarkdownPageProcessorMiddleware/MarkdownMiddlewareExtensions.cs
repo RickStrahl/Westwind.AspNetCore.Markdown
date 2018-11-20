@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,10 +13,6 @@ namespace Westwind.AspNetCore.Markdown
     /// </summary>
     public static class MarkdownMiddlewareExtensions
     {
-
-        internal static IServiceProvider ServiceProvider { get; set; }
-
-
         /// <summary>
         /// Configure the MarkdownPageProcessor in Startup.ConfigureServices.
         /// </summary>
@@ -29,6 +26,8 @@ namespace Westwind.AspNetCore.Markdown
 
             if (configAction != null)            
                 configAction.Invoke(config);
+
+            MarkdownComponentState.Configuration = config;
 
             MarkdownParserBase.HtmlSanitizeTagBlackList = config.HtmlTagBlackList;
 
@@ -44,6 +43,7 @@ namespace Westwind.AspNetCore.Markdown
 
             // We need access to the HttpContext for Filename resolution
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpClient();
 
             return services;
         }
@@ -56,15 +56,36 @@ namespace Westwind.AspNetCore.Markdown
         /// <returns></returns>
         public static IApplicationBuilder UseMarkdown(this IApplicationBuilder builder)
         {
-            ServiceProvider = builder.ApplicationServices;
-
+            MarkdownComponentState.ServiceProvider = builder.ApplicationServices;
             return builder.UseMiddleware<MarkdownPageProcessorMiddleware>();
         }
 
         public static HttpContext GetHttpContext()
         {
-            var contextAccessor = ServiceProvider.GetService<IHttpContextAccessor>() as IHttpContextAccessor;
+            var contextAccessor = MarkdownComponentState.ServiceProvider.GetService<IHttpContextAccessor>() as IHttpContextAccessor;
             return contextAccessor.HttpContext;
         }
     }
+
+    /// <summary>
+    /// Internally held references that made accessible to the static Markdown functions
+    /// </summary>
+    internal static class MarkdownComponentState
+    {
+        internal static IServiceProvider ServiceProvider { get; set; }
+        internal static MarkdownConfiguration Configuration { get; set; }
+
+        internal static IHttpClientFactory HttpClientFactory
+        {
+            get
+            {
+                if (_httpClientFactory == null)
+                    _httpClientFactory = ServiceProvider.GetService(typeof(IHttpClientFactory)) as IHttpClientFactory;
+                return _httpClientFactory;
+            }
+        }
+        private static IHttpClientFactory _httpClientFactory;
+    }
+
 }
+

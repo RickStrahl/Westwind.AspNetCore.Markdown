@@ -36,7 +36,7 @@
     </style>
 }
 
-    <h1>Markdown 'Islands' with the &lt;markdown&gt; TagHelper</h1>
+<h1>Markdown 'Islands' with the &lt;markdown&gt; TagHelper</h1>
 
 
 <h3 class="header">Markdown TagHelper Static Text Block</h3>
@@ -81,10 +81,10 @@ This example embeds a static Markdown block into the current Razor page.
         > If you didn't see an alert box when the page loaded the
         > `
         <script>
-    ` tag was scrubbed.
+            ` tag was scrubbed.
 
-                <script>
-                   alert("GOTHCHA! Injected code executed.")
+                        <script>
+                           alert("GOTHCHA! Injected code executed.")
         </script>
 
         <a href="javascript:alert('Gotcha! JavaScript: fired');">XSS Link</a>
@@ -106,9 +106,9 @@ This example embeds a static Markdown block into the current Razor page.
         ```cs
         var html = Markdown.Parse("This is **Markdown** Text.")
         ```
-        
+
         Using fenced code blocks and <a href="https://highlightjs.com">highlightJs</a>
-    </markdown>        
+    </markdown>
 </div>
 
 
@@ -134,17 +134,27 @@ This example data binds the Model.MarkdownText property to the TagHelper's <code
 </div>
 
 
+<h3 class="header">Markdown TagHelper with Url Loaded from a GitHub Readme</h3>
+<p>
+    This example uses <code>&lt;markdown Filename="~/MarkdownPartialPage.md">&lt;/markdown></code> to render
+    Markdown from a file into the current page.
+</p>
+
+<div class="sample-block">
+    <markdown Url="https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md"></markdown>
+</div>
+
 
 
 @section Scripts {
     <script src="~/lib/highlightjs/highlight.pack.js"></script>
     <link href="~/lib/highlightjs/styles/vs2015.css" rel="stylesheet" />
     <script>
-        setTimeout(function () {
-            var pres = document.querySelectorAll("pre>code");
-            for (var i = 0; i < pres.length; i++) {
-                hljs.highlightBlock(pres[i]);
-            }
-        });
+                setTimeout(function () {
+                    var pres = document.querySelectorAll("pre>code");
+                    for (var i = 0; i < pres.length; i++) {
+                        hljs.highlightBlock(pres[i]);
+                    }
+                });
     </script>
 }

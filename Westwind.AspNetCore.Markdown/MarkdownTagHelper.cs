@@ -87,8 +87,14 @@ namespace Westwind.AspNetCore.Markdown
         /// <summary>
         /// Optional file to load content. Use       
         /// </summary>
-        [HtmlAttributeName("Filename")]
+        [HtmlAttributeName("filename")]
         public string Filename { get; set; }
+
+        /// <summary>
+        /// When set allows loading content from a url
+        /// </summary>
+        [HtmlAttributeName("url")]
+        public string Url { get; set; }
         
 
         public MarkdownTagHelper(IHttpContextAccessor httpContext)
@@ -108,45 +114,44 @@ namespace Westwind.AspNetCore.Markdown
             await base.ProcessAsync(context, output);
 
             string content = null;
+            string html = null;
+            if (!string.IsNullOrEmpty(Url))
+            {
+                html = await Westwind.AspNetCore.Markdown.Markdown.ParseFromUrlAsync(Url);
+
+                output.TagName = null;  // Remove the <markdown> element
+                output.Content.SetHtmlContent(html);
+                return;
+            }
+
             if (!string.IsNullOrEmpty(Filename))
             {
-                try
-                {
-                    var filename  = HttpRequestExtensions.MapPath(_httpContext.HttpContext.Request, Filename);
-
-                    using (var reader = File.OpenText(filename))
-                    {
-                        content = await reader.ReadToEndAsync();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new FileLoadException("Couldn't load Markdown file: " + Path.GetFileName(Filename), ex);
-                }
-
-                if (string.IsNullOrEmpty(content))
-                    return;
+                html = await Westwind.AspNetCore.Markdown.Markdown.ParseFromFileAsync(Filename);
+                output.TagName = null;  // Remove the <markdown> element
+                output.Content.SetHtmlContent(html);
+                return;
             }
+            
+            if (Markdown != null)
+                content = Markdown.Model?.ToString();
+
+            if (content == null)
+                content = (await output.GetChildContentAsync(NullHtmlEncoder.Default))
+                    .GetContent(NullHtmlEncoder.Default);
+
+            if (string.IsNullOrEmpty(content))
+                return;
+
+            content = content.Trim('\n', '\r');
+
+            string markdown;
+            if (NormalizeWhitespace)
+                markdown = NormalizeWhiteSpaceText(content);
             else
-            {
-
-                if (Markdown != null)
-                    content = Markdown.Model?.ToString();
-
-                if (content == null)
-                    content = (await output.GetChildContentAsync(NullHtmlEncoder.Default))
-                        .GetContent(NullHtmlEncoder.Default);
-
-                if (string.IsNullOrEmpty(content))
-                    return;
-
-                content = content.Trim('\n', '\r');
-            }
-        
-            string markdown = NormalizeWhiteSpaceText(content);            
+                markdown = content;
 
             var parser = MarkdownParserFactory.GetParser();
-            var html = parser.Parse(markdown,SanitizeHtml);
+            html = parser.Parse(markdown,SanitizeHtml);
 
             output.TagName = null;  // Remove the <markdown> element
             output.Content.SetHtmlContent(html);

@@ -10,13 +10,17 @@ This small package provides Markdown support for your ASP.NET Core applications.
       `@Markdown.ParseHtmlString(markdown)`
     *  Parse Markdown from Files  
        `Markdown.ParseFromFile("~/MarkdownPartial.md")`  
+       `Markdown.ParseFromFileAsync("~/MarkdownPartial.md")`  
        `Markdown.ParseHtmlStringFromFile("~/MarkdownPartial.md")`
+    * Parse Markdown from Urls  
+       `Markdown.ParseFromUrl("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md")`  
+       `Markdown.ParseFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md")`
 * **[Markdown TagHelper](#markdown-taghelper)** 
     *  Embed Markdown text into Views and Pages
     *  Databind Model data as Markdown text via `markdown` attribute
-    *  Embed Markdown from files via `filename` attribute
+    *  Render Markdown from files via `filename` attribute
+    *  Render Markdown from Urls via `Url` attribute
     *  Supports white space normalization 
-    *  
 *  **[Markdown Page Processor Middleware](#markdown-page-processor-middleware)**
     *  Serve .md or any custom extensions files as Markdown
     *  Serve mapped extensionless URLs as Markdown
@@ -162,7 +166,22 @@ The TagHelper turns the Markdown text into HTML, in place of the TagHelper conte
 > ##### Razor Expression Evaluation
 > Note that Razor expressions in the markdown content are supported - as the `@DateTime.Now.ToString()` expression in the example -  and are expanded **before** the content is parsed by the TagHelper. This means you can embed dynamic values into the markdown content which gives you most of the flexibilty of Razor code now in Markdown. Embedded expressions **are not automatically HTML encoded** as they are embedded into the Markdown. Additionally you can also generate additional Markdown as part of a Razor expression to make the Markdown even more dynamic.
 
-### Markdown Attribute and DataBinding
+### TagHelper Attributes
+
+#### filename
+You can specify a filename to pull Markdown from and render into HTML. Files can be referenced:
+
+* Physical paths:  `/temp/somefile.md`
+* Relative paths:  `somefolder/somefile.md` - relative to current page
+* Virtual paths:   `~/somefolder/somefile.md` -  relative to site root
+
+> #### File Rendering loads resources as *page-relative*
+> Any relative links and resources - images, relative links - that are referenced are **relative to the host page** not relative to the Markdown document. Make sure you take into account paths for any related resources and either ensure they are relative to the host page or use absolute URLs.
+
+#### url
+You can also load Markdown documents from URL and process them as markdown to HTML for embedding into the page. The Url has to be openly accessible (ie. no authentication).
+
+#### markdown (Model Binding)
 In addition to the content you can also bind to the `markdown` attribute which allows for programmatic assignment and databinding.
 
 ```
@@ -176,7 +195,7 @@ In addition to the content you can also bind to the `markdown` attribute which a
 
 The `markdown` attribute accepts binding expressions so you can bind Markdown for display from model values or other expressions easily.
 
-### NormalizeWhiteSpace
+#### normalize-whitespace
 Markdown is sensitive to leading spaces and given that you're likely to enter Markdown into the literal TagHelper in a code editor there's likely to be a leading block of white space. Markdown treats leading white space as significant - 4 spaces or a tab indicate a code block so if you have:
 
 ```html
@@ -213,7 +232,7 @@ The current Time is: @DateTime.Now.ToString("HH:mm:ss")
 
 This also works, but is hard to maintain in some code editors due to auto-code reformatting.
 
-### sanitize-html
+#### sanitize-html
 By default the Markdown tag helper strips `<script>` tags and `href="javascript"` directives from the generated HTML content. If you would like to explicitly include script tags because your content requires it you can enable that functionality by setting
 
 ```html

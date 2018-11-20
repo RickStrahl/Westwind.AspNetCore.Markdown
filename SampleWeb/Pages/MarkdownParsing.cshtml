@@ -73,8 +73,20 @@
         @Html.Raw(parsedHtml)
     </div>
 
+    <h3 class="header">Async Markdown.ParseFromUrlAsync()</h3>
+    <p>
+        This URL is processed off a GitHub URL that contains Markdown</code>:
+    </p>
 
-    @section Scripts {
+    <div class="sample-block">
+        @{
+            parsedHtml = await Markdown.ParseFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md");
+        }
+        @Html.Raw(parsedHtml)
+    </div>
+
+
+@section Scripts {
         <script src="~/lib/highlightjs/highlight.pack.js"></script>
         <link href="~/lib/highlightjs/styles/vs2015.css" rel="stylesheet" />
         <script>
