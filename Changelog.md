@@ -4,8 +4,12 @@
 ### Version 3.1.10
 
 * **Add support for replacing Markdown Engine**  
-Added support for `config.MarkdownParserFactory` and ability to create an `IMarkdownParserFactory` implementation to create a custom `IMarkdownParserFactory` and `IMarkdownParser` implementation.
+Added support for an `IMarkdownParserFactory` to create a custom `IMarkdownParserFactory` and `IMarkdownParser` implementation.
+The factory can be applied in the configuration via `config.MarkdownParserFactory` in `Startup.ConfigureServices()` of the application.
 
+* **Fix: Trailing Slash Handling for Markdown Extensionless Urls**  
+Fixed issue where a trailing slash would not render Markdown document if a matching .md file is found.   
+**Note:** while pages with backslashes now render, the resulting page may not render properly due to an invalid base path.  This is not related to the component but to HTML pathing - the same is true for MVC views for example with releative paths. I highly recommend you don't use a trailinig slash for Markdown Urls to preserve the proper basepath in your document or you ensure `~/` paths in your document.
 
 ### Version 3.1.1
 

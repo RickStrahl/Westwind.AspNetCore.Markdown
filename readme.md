@@ -566,6 +566,29 @@ public void ConfigureServices(IServiceCollection services)
 
 This value is global and can only be set during startup. Changing it at runtime has no effect as it translates to RegEx expression parameters.
 
+## Using a Different Markdown Parser
+The default implementation of this library and middleware uses the [MarkDig Markdown Parser](https://github.com/lunet-io/markdig) for processing of Markdown content. However, you can implement your own parser by implementing:
+
+* IMarkdownParserFactory
+* IMarkdownParser
+
+These two simple single-method interfaces have a `IMarkdownParserFactory.GetParser()` and `IMarkdownParser.Parse()` methods respectively that you can implement to retrieve an instance of your own custom parser. 
+
+To configure a custom parser apply it to the `Configuration.MarkdownParserFactory` property in the `Startup.ConfigureServices()` method:
+
+```cs
+ services.AddMarkdown(config =>
+{
+	// Create your own IMarkdownParserFactory and IMarkdownParser implementation
+	config.MarkdownParserFactory = new CustomMarkdownParserFactory();
+	
+	...
+}	
+```
+
+The custom parser is then used for all markdown processing in this library.
+
+
 ## License
 The Westwind.Web.MarkdownControl library is an open source product licensed under:
 
