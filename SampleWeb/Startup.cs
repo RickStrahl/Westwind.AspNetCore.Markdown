@@ -51,6 +51,10 @@ namespace SampleWeb
                     // controller.ViewBag.Model = new MyCustomModel();
                 };
 
+                // Create your own IMarkdownParserFactory and IMarkdownParser implementation
+                // to replace the default Markdown Processing
+                //config.MarkdownParserFactory = new CustomMarkdownParserFactory();                 
+
                 // optional custom MarkdigPipeline (using MarkDig; for extension methods)
                 config.ConfigureMarkdigPipeline = builder =>
                 {
@@ -106,7 +110,8 @@ namespace SampleWeb
 
 
             app.UseStaticFiles();
-            app.UseMvc();
+
+            app.UseMvcWithDefaultRoute();
 
 
         }

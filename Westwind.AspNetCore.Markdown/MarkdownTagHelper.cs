@@ -95,7 +95,7 @@ namespace Westwind.AspNetCore.Markdown
         /// </summary>
         [HtmlAttributeName("url")]
         public string Url { get; set; }
-        
+
 
         public MarkdownTagHelper(IHttpContextAccessor httpContext)
         {
@@ -131,7 +131,7 @@ namespace Westwind.AspNetCore.Markdown
                 output.Content.SetHtmlContent(html);
                 return;
             }
-            
+
             if (Markdown != null)
                 content = Markdown.Model?.ToString();
 
@@ -150,8 +150,8 @@ namespace Westwind.AspNetCore.Markdown
             else
                 markdown = content;
 
-            var parser = MarkdownParserFactory.GetParser();
-            html = parser.Parse(markdown,SanitizeHtml);
+            var parser = MarkdownComponentState.Configuration.MarkdownParserFactory.GetParser();
+            html = parser.Parse(markdown, SanitizeHtml);
 
             output.TagName = null;  // Remove the <markdown> element
             output.Content.SetHtmlContent(html);
@@ -184,7 +184,7 @@ namespace Westwind.AspNetCore.Markdown
             if (whitespaceCount == 0)
                 return text;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             for (int i = 0; i < lines.Length; i++)
             {
                 if (lines[i].Length > whitespaceCount)

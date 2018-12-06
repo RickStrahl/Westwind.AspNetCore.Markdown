@@ -20,6 +20,7 @@ namespace Westwind.AspNetCore.Markdown
         /// </summary>
         public List<MarkdownProcessingFolder> MarkdownProcessingFolders { get; set; } = new List<MarkdownProcessingFolder>();
 
+        public IMarkdownParserFactory MarkdownParserFactory { get; set; } = new MarkdigMarkdownParserFactory();
 
         /// <summary>
         /// Optional global configuration for setting up the Markdig Pipeline
@@ -40,7 +41,7 @@ namespace Westwind.AspNetCore.Markdown
         /// <param name="processMdFiles">Process files with an .md extension</param>
         /// <param name="processExtensionlessUrls">Process extensionless Urls as Markdown. Assume matching .md file is available that holds the actual Markdown text</param>
         /// <returns></returns>
-        public MarkdownProcessingFolder AddMarkdownProcessingFolder(string path, 
+        public MarkdownProcessingFolder AddMarkdownProcessingFolder(string path,
                                                                     string viewTemplate = null,
                                                                     bool processMdFiles = true,
                                                                     bool processExtensionlessUrls = true)
@@ -105,7 +106,9 @@ namespace Westwind.AspNetCore.Markdown
         /// from generated HTML content
         /// </summary>
         public bool SanitizeHtml { get; set; } = false;
-        
+
+        //public IMarkdownParserFactory MarkdownParserFactory { get; set; }
+
 
         /// <summary>
         /// Function that can be set to be called before the Markdown View is fired.

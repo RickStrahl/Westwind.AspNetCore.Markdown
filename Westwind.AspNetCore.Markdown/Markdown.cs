@@ -59,7 +59,7 @@ namespace Westwind.AspNetCore.Markdown
             if (string.IsNullOrEmpty(markdown))
                 return "";
 
-            var parser = MarkdownParserFactory.GetParser(usePragmaLines, forceReload);
+            var parser = MarkdownComponentState.Configuration.MarkdownParserFactory.GetParser(usePragmaLines, forceReload);
             return parser.Parse(markdown,sanitizeHtml);
         }
 
@@ -108,7 +108,7 @@ namespace Westwind.AspNetCore.Markdown
                 throw new FileLoadException("Couldn't load Markdown file: " + Path.GetFileName(markdownFile), ex);
             }
 
-            var parser = MarkdownParserFactory.GetParser();
+            var parser = MarkdownComponentState.Configuration.MarkdownParserFactory.GetParser();
             var html = parser.Parse(markdown, sanitizeHtml);
 
             return html;
@@ -180,14 +180,9 @@ namespace Westwind.AspNetCore.Markdown
 
             string content = null;
             try
-            {                
-                var client = MarkdownComponentState.HttpClientFactory.CreateClient();
-
-                var result =client.GetAsync(url).GetAwaiter().GetResult();
-                if (result.IsSuccessStatusCode)
-                    content = result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                else
-                    throw new FileLoadException($"Couldn\'t load Markdown from Url: {url}.");
+            {
+                var client = new WebClient();
+               content = client.DownloadString(new Uri(url));
             }
             catch (Exception ex)
             {
@@ -218,14 +213,9 @@ namespace Westwind.AspNetCore.Markdown
             string content = null;
 
             try
-            {                
-                var client = MarkdownComponentState.HttpClientFactory.CreateClient();
-
-                var result = await client.GetAsync(url);
-                if (result.IsSuccessStatusCode)                
-                    content = await result.Content.ReadAsStringAsync();
-                else
-                    throw new FileLoadException($"Couldn\'t load Markdown from Url: {url}.");
+            {
+                var client = new WebClient();
+                content = await client.DownloadStringTaskAsync(new Uri(url));                
             }
             catch (Exception ex)
             {

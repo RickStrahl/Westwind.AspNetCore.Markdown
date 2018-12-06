@@ -21,10 +21,10 @@ namespace Westwind.AspNetCore.Markdown
         /// <returns></returns>
         public static IServiceCollection AddMarkdown(this IServiceCollection services,
             Action<MarkdownConfiguration> configAction = null)
-        {            
+        {
             var config = new MarkdownConfiguration();
 
-            if (configAction != null)            
+            if (configAction != null)
                 configAction.Invoke(config);
 
             MarkdownComponentState.Configuration = config;
@@ -34,16 +34,15 @@ namespace Westwind.AspNetCore.Markdown
             if (config.ConfigureMarkdigPipeline != null)
                 MarkdownParserMarkdig.ConfigurePipelineBuilder = config.ConfigureMarkdigPipeline;
 
-            config.MarkdownProcessingFolders = 
+            config.MarkdownProcessingFolders =
                 config.MarkdownProcessingFolders
                     .OrderBy(f => f.RelativePath)
                     .ToList();
-            
+
             services.AddSingleton(config);
 
             // We need access to the HttpContext for Filename resolution
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddHttpClient();
 
             return services;
         }
@@ -66,26 +65,5 @@ namespace Westwind.AspNetCore.Markdown
             return contextAccessor.HttpContext;
         }
     }
-
-    /// <summary>
-    /// Internally held references that made accessible to the static Markdown functions
-    /// </summary>
-    internal static class MarkdownComponentState
-    {
-        internal static IServiceProvider ServiceProvider { get; set; }
-        internal static MarkdownConfiguration Configuration { get; set; }
-
-        internal static IHttpClientFactory HttpClientFactory
-        {
-            get
-            {
-                if (_httpClientFactory == null)
-                    _httpClientFactory = ServiceProvider.GetService(typeof(IHttpClientFactory)) as IHttpClientFactory;
-                return _httpClientFactory;
-            }
-        }
-        private static IHttpClientFactory _httpClientFactory;
-    }
-
 }
 

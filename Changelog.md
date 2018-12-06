@@ -1,6 +1,12 @@
 # Westwind.AspNetCore Change Log
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore)</small>
 
+### Version 3.1.10
+
+* **Add support for replacing Markdown Engine**  
+Added support for `config.MarkdownParserFactory` and ability to create an `IMarkdownParserFactory` implementation to create a custom `IMarkdownParserFactory` and `IMarkdownParser` implementation.
+
+
 ### Version 3.1.1
 
 * **Markdown TagHelper Filename Property**  

@@ -31,16 +31,11 @@
 */
 #endregion
 
-
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 
 namespace Westwind.AspNetCore.Markdown
 {
@@ -66,7 +61,7 @@ namespace Westwind.AspNetCore.Markdown
         public Task InvokeAsync(HttpContext context)
         {
             var path = context.Request.Path.Value;
-            if (path == null)
+            if (string.IsNullOrEmpty(path))
                 return _next(context);
 
             bool hasExtension = !string.IsNullOrEmpty(Path.GetExtension(path));
@@ -101,7 +96,7 @@ namespace Westwind.AspNetCore.Markdown
 
                     if (!hasExtension)
                     {
-                        pageFile +=  ".md";                        
+                        pageFile += ".md";
                     }
 
                     if (!File.Exists(pageFile))
