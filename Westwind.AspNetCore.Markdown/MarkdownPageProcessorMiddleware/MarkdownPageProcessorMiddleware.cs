@@ -76,7 +76,7 @@ namespace Westwind.AspNetCore.Markdown
 
             var basePath = _env.WebRootPath;
             var relativePath = path;
-            relativePath = PathHelper.NormalizePath(relativePath).Substring(1);
+            relativePath = PathHelper.NormalizePath(relativePath).Substring(1).TrimEnd('\\', '/');
             var pageFile = Path.Combine(basePath, relativePath);
 
             // process any Markdown file that has .md extension explicitly
@@ -100,7 +100,9 @@ namespace Westwind.AspNetCore.Markdown
                         continue;
 
                     if (!hasExtension)
-                        pageFile += ".md";
+                    {
+                        pageFile +=  ".md";                        
+                    }
 
                     if (!File.Exists(pageFile))
                         continue;
