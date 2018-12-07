@@ -7,28 +7,27 @@
 This small package provides Markdown support for your ASP.NET Core applications. It has the following features:
 
 *  **[Markdown Parsing](#markdown-parsing)**
-    *  Parse Markdown to raw String  
+	* Parse Markdown to HTML Strings 
       `Markdown.Parse(markdown)`  
       `@Markdown.ParseHtmlString(markdown)`
-    *  Parse Markdown from Files  
+	* Parse Markdown from Files  
        `Markdown.ParseFromFile("~/MarkdownPartial.md")`  
        `Markdown.ParseFromFileAsync("~/MarkdownPartial.md")`  
        `Markdown.ParseHtmlStringFromFile("~/MarkdownPartial.md")`
-    * Parse Markdown from Urls  
+	* **Parse Markdown from Urls**  
        `Markdown.ParseFromUrl("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md")`  
        `Markdown.ParseFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md")`
-    * Configurable Markdown Parser  
+	* Configurable Markdown Parser  
     	Plug in your own or customize the Markdown Parser via `IMarkdownParserFactory` and `IMarkdownParser`
 * **[Markdown TagHelper](#markdown-taghelper)** 
-    *  Embed Markdown text into Views and Pages
-    *  Databind Model data as Markdown text via `markdown` attribute
-    *  Render Markdown from files via `filename` attribute
-    *  Render Markdown from Urls via `Url` attribute
-    *  Supports white space normalization 
+	*  Embed Markdown text into Views and Pages
+	*  Databind Model data as Markdown text via markdown attribute
+	*  Render Markdown from files via filename attribute
+	*  Supports white space normalization 
 *  **[Markdown Page Processor Middleware](#markdown-page-processor-middleware)**
-    *  Serve .md or any custom extensions files as Markdown
-    *  Serve mapped extensionless URLs as Markdown
-    *  Configure a Razor template to customize Markdown Page Container UI
+	*  Serve .md or any custom extensions files as Markdown
+	*  Serve mapped extensionless URLs as Markdown
+	*  Configure a Razor template to customize Markdown Page Container UI
 *  **Configuration and Support Features**
 	* [Uses the MarkDig Markdown Parser](https://github.com/lunet-io/markdig)
 	* Customizable Markdown Parsing Pipeline for Markdig
