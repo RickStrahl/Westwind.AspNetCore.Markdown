@@ -52,6 +52,23 @@ or the `dotnet` command line:
 dotnet add package westwind.aspnetcore.markdown
 ```
 
+## Startup Configuration
+To use these components you need to add the following to your Startup class at minimum:
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+	app.AddMarkdown();
+}
+
+public void Configure(IApplicationBuilder app)
+{
+	app.UseMarkdown();
+}
+```
+
+There are additional configuration options for the `AddMarkdown()` method available which are discussed in more detail later.
+
 ## Markdown Parsing Helpers
 At it's simplest this component provides Markdown parsing that you can use to convert Markdown text to HTML either inside of application code, or inside of Razor expressions.
 
@@ -82,6 +99,8 @@ To embed in Razor Views:
 ```html
 @Markdown.ParseHtmlStringFromFile("~/EmbeddedMarkdownContent.md")
 ```
+
+
 
 ### SanitizeHtml in Parser Methods to mitigate XSS
 Both of the above methods include a few optional parameters including a `sanitizeHtml` parameter which defaults to `false`. If set to `true` any `<script>` tags that are not embedded inside of inline or fenced code blocks are stripped. Additionally any reference to `javascript:` inside of a tag is replaced with `unsupported:` rendering the script non-functional.

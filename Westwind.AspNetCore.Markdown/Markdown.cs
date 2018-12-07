@@ -38,6 +38,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
 using Westwind.AspnetCore.Markdown.Utilities;
 
 namespace Westwind.AspNetCore.Markdown
@@ -91,9 +92,10 @@ namespace Westwind.AspNetCore.Markdown
             if (string.IsNullOrEmpty(markdownFile))
                 return markdownFile;
 
-            var context = MarkdownMiddlewareExtensions.GetHttpContext();
-            var filename = HttpRequestExtensions.MapPath(context.Request, markdownFile);
+            string filename;
 
+            var context = MarkdownComponentState.GetHttpContext();
+            filename = HttpRequestExtensions.MapPath(context.Request, markdownFile);
             string markdown = null;
 
             try
@@ -129,7 +131,8 @@ namespace Westwind.AspNetCore.Markdown
             if (string.IsNullOrEmpty(markdownFile))
                 return markdownFile;
 
-            var context = MarkdownMiddlewareExtensions.GetHttpContext();
+                    
+            var context = MarkdownComponentState.GetHttpContext();            
             var filename = HttpRequestExtensions.MapPath(context.Request, markdownFile);
 
             string content = null;

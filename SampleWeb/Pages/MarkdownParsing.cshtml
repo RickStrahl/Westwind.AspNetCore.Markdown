@@ -67,15 +67,17 @@
     </p>
 
     <div class="sample-block">
+        
         @{
             var parsedHtml = await Markdown.ParseFromFileAsync("~/MarkdownPartialPage.md");
         }
         @Html.Raw(parsedHtml)
+        
     </div>
 
     <h3 class="header">Async Markdown.ParseFromUrlAsync()</h3>
     <p>
-        This URL is processed off a GitHub URL that contains Markdown</code>:
+        This URL is processed off a GitHub URL that contains Markdown code:
     </p>
 
     <div class="sample-block">

@@ -43,7 +43,7 @@ namespace Westwind.AspNetCore.Markdown
 
             // We need access to the HttpContext for Filename resolution
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+            
             return services;
         }
 
@@ -55,15 +55,12 @@ namespace Westwind.AspNetCore.Markdown
         /// <returns></returns>
         public static IApplicationBuilder UseMarkdown(this IApplicationBuilder builder)
         {
+            // cache so we can access it from static helpers
             MarkdownComponentState.ServiceProvider = builder.ApplicationServices;
+
             return builder.UseMiddleware<MarkdownPageProcessorMiddleware>();
         }
 
-        public static HttpContext GetHttpContext()
-        {
-            var contextAccessor = MarkdownComponentState.ServiceProvider.GetService<IHttpContextAccessor>() as IHttpContextAccessor;
-            return contextAccessor.HttpContext;
-        }
     }
 }
 

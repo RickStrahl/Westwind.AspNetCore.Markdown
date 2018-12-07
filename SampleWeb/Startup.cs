@@ -27,6 +27,7 @@ namespace SampleWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddMarkdown(config =>
             {
                 // optional Tag BlackList
@@ -34,7 +35,7 @@ namespace SampleWeb
 
                 // Simplest: Use all default settings
                 var folderConfig = config.AddMarkdownProcessingFolder("/docs/", "~/Pages/__MarkdownPageTemplate.cshtml");
-                
+
                 // Customized Configuration: Set FolderConfiguration options
                 folderConfig = config.AddMarkdownProcessingFolder("/posts/", "~/Pages/__MarkdownPageTemplate.cshtml");
 
@@ -47,7 +48,7 @@ namespace SampleWeb
 
                 // Optional pre-processing - with filled model
                 folderConfig.PreProcess = (model, controller) =>
-                {                    
+                {
                     // controller.ViewBag.Model = new MyCustomModel();
                 };
 
@@ -60,12 +61,12 @@ namespace SampleWeb
                 {
                     builder.UseEmphasisExtras(Markdig.Extensions.EmphasisExtras.EmphasisExtraOptions.Default)
                         .UsePipeTables()
-                        .UseGridTables()                        
+                        .UseGridTables()
                         .UseAutoIdentifiers(AutoIdentifierOptions.GitHub) // Headers get id="name" 
                         .UseAutoLinks() // URLs are parsed into anchors
                         .UseAbbreviations()
                         .UseYamlFrontMatter()
-                        .UseEmojiAndSmiley(true)                        
+                        .UseEmojiAndSmiley(true)
                         .UseListExtras()
                         .UseFigures()
                         .UseTaskLists()
@@ -73,7 +74,7 @@ namespace SampleWeb
                         //.DisableHtml()   // renders HTML tags as text including script
                         .UseGenericAttributes();
                 };
-            });            
+            });
 
             // We need to use MVC so we can use a Razor Configuration Template
             services.AddMvc();

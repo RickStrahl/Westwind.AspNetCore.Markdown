@@ -31,16 +31,13 @@
 #endregion
 
 
-using System;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System.Diagnostics;
-using System.IO;
 using Microsoft.AspNetCore.Http;
-using Westwind.AspnetCore.Markdown.Utilities;
+using System;
 
 namespace Westwind.AspNetCore.Markdown
 {
@@ -52,9 +49,7 @@ namespace Westwind.AspNetCore.Markdown
     /// </summary>        
     [HtmlTargetElement("markdown")]
     public class MarkdownTagHelper : TagHelper
-    {
-        private readonly IHttpContextAccessor _httpContext;
-
+    {        
         /// <summary>
         /// When set to true (default) strips leading white space based
         /// on the first line of non-empty content. The first line of
@@ -95,14 +90,7 @@ namespace Westwind.AspNetCore.Markdown
         /// </summary>
         [HtmlAttributeName("url")]
         public string Url { get; set; }
-
-
-        public MarkdownTagHelper(IHttpContextAccessor httpContext)
-        {
-            _httpContext = httpContext;
-        }
-
-
+        
         /// <summary>
         /// Process markdown and generate HTML output
         /// </summary>

@@ -41,9 +41,14 @@
 
 <h3 class="header">Markdown TagHelper Static Text Block</h3>
 
-This example embeds a static Markdown block into the current Razor page.
+<p>
+    This example embeds a static Markdown block into the current Razor page.
+<br/>
+<small><b>Note:</b> The <b>slow load time</b> of this page is due to URL loading of the last sample. To improve performance remove the URL loading example.</small>
+</p>
 
-<div class="sample-block">
+<hr />
+<div class="sample-block ">
     <markdown normalize-whitespace="true" sanitize-html="true">
         #### This is Markdown text inside of a Markdown block
 
@@ -83,8 +88,8 @@ This example embeds a static Markdown block into the current Razor page.
         <script>
             ` tag was scrubbed.
 
-                        <script>
-                           alert("GOTHCHA! Injected code executed.")
+                                        <script>
+                                           alert("GOTHCHA! Injected code executed.")
         </script>
 
         <a href="javascript:alert('Gotcha! JavaScript: fired');">XSS Link</a>
@@ -147,14 +152,14 @@ This example data binds the Model.MarkdownText property to the TagHelper's <code
 
 
 @section Scripts {
+    <!-- HighlightJS added to provide syntax coloring for source code snippets in Markdown -->
     <script src="~/lib/highlightjs/highlight.pack.js"></script>
     <link href="~/lib/highlightjs/styles/vs2015.css" rel="stylesheet" />
-    <script>
-                setTimeout(function () {
-                    var pres = document.querySelectorAll("pre>code");
-                    for (var i = 0; i < pres.length; i++) {
-                        hljs.highlightBlock(pres[i]);
-                    }
-                });
+    <script>        
+        var pres = document.querySelectorAll("pre>code");
+        for (var i = 0; i < pres.length; i++) {
+            hljs.highlightBlock(pres[i]);
+        }
+        
     </script>
 }
