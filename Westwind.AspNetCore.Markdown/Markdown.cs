@@ -151,7 +151,7 @@ namespace Westwind.AspNetCore.Markdown
 
             return Parse(content,usePragmaLines,forceReload,sanitizeHtml);
         }
-
+            
         /// <summary>
         /// Parses content from a file on disk from Markdown to HTML.
         /// </summary>
@@ -226,6 +226,19 @@ namespace Westwind.AspNetCore.Markdown
             }
 
             return Parse(content, usePragmaLines, forceReload, sanitizeHtml);
+        }
+
+        /// <summary>
+        /// Parses content from a url as Markdown to an HTML string.
+        /// </summary>
+        /// <param name="url">A Url that contains Markdown</param>
+        /// <param name="usePragmaLines">Generates line numbers as ids into headers and paragraphs. Useful for previewers to match line numbers to rendered output</param>
+        /// <param name="forceReload">Forces the parser to reloaded. Otherwise cached instance is used</param>
+        /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
+        /// <returns>HTML result as a string</returns>
+        public static async Task<HtmlString> ParseHtmlStringFromUrlAsync(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false)
+        {            
+            return new HtmlString(await ParseFromUrlAsync(url, usePragmaLines, forceReload, sanitizeHtml)); 
         }
 
 

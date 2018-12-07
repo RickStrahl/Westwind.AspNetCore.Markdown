@@ -101,6 +101,18 @@ To embed in Razor Views:
 ```
 
 
+### Parse Markdown to String from a Url
+You can also load Markdown from a URL as long as it's openly accessible via a URL:
+
+```cs
+// sync
+parsedHtml = Markdown.ParseFromUrl("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md")
+
+// async
+parsedHtml = await Markdown.ParseFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md");
+```
+
+HtmlString versions are also available of this method.
 
 ### SanitizeHtml in Parser Methods to mitigate XSS
 Both of the above methods include a few optional parameters including a `sanitizeHtml` parameter which defaults to `false`. If set to `true` any `<script>` tags that are not embedded inside of inline or fenced code blocks are stripped. Additionally any reference to `javascript:` inside of a tag is replaced with `unsupported:` rendering the script non-functional.

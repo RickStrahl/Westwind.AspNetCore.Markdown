@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.1.3</Version>    
+    <Version>3.2</Version>    
     <Authors>Rick Strahl</Authors>
     <Company>West Wind Technologies</Company>
     <Product>West Wind Web Toolkit</Product>
@@ -10,11 +10,12 @@
     <Description>
 This library provides Markdown support for ASP.NET Core applications:
 
- * Markdown TagHelper - embed static text, files or bind model data
+ * Markdown TagHelper - embed static markdown text from files, urls or bind model data
  * Markdown Page Handler Middleware to render Markdown files in your site
 
  * Markdown Parsing Support via Markdown.Parse() and Markdown.ParseHtmlString()
  * Markdown Parsing from Files via Markdown.ParseFromFile() and .ParseFromFileAsync()
+ * Markdown Parsiong from URL via Markdown.ParseFromUrl() and .ParseFromUrlAsync()
 
  * Supports basic HTML Sanitation
  * TagHelper supports White Space Normalization
@@ -34,12 +35,6 @@ For similar features in System.Web based ASP.NET apps see `Westwind.Web.Markdown
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.15.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Net.Http.Formatting">
-      <HintPath>..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnet.webapi.client\5.2.6\lib\netstandard2.0\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
