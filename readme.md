@@ -15,6 +15,8 @@ This small package provides Markdown support for your ASP.NET Core applications.
     * Parse Markdown from Urls  
        `Markdown.ParseFromUrl("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md")`  
        `Markdown.ParseFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md")`
+    * Configurable Markdown Parser  
+    	Plug in your own or customize the Markdown Parser via `IMarkdownParserFactory` and `IMarkdownParser`
 * **[Markdown TagHelper](#markdown-taghelper)** 
     *  Embed Markdown text into Views and Pages
     *  Databind Model data as Markdown text via `markdown` attribute
