@@ -1,11 +1,14 @@
 # Westwind.AspNetCore Change Log
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore)</small>
 
-### Version 3.1.10
+### Version 3.2
 
 * **Add support for replacing Markdown Engine**  
 Added support for an `IMarkdownParserFactory` to create a custom `IMarkdownParserFactory` and `IMarkdownParser` implementation.
 The factory can be applied in the configuration via `config.MarkdownParserFactory` in `Startup.ConfigureServices()` of the application.
+
+* **Add support for loading Markdown from a URL**  
+The Markdown static class and TagHelper now have support for loading Markdown from a URL. `Markdown.ParseFromUrl()` along with async and HtmlStringVersions as well as a `url=` attribute on the TagHelper allow for loading Markdown from a URL.
 
 * **Fix: Trailing Slash Handling for Markdown Extensionless Urls**  
 Fixed issue where a trailing slash would not render Markdown document if a matching .md file is found.   
