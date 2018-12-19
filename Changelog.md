@@ -1,6 +1,12 @@
 # Westwind.AspNetCore Change Log
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore)</small>
 
+
+### Version 3.2.2
+
+* **Add Support for Title Detection with === underlines**  
+Added support for title detection when using a double underscore titles within the first 10 lines of text. Title detection uses Yaml title header first, `#` headers next, and double underscore `===` headers last.
+
 ### Version 3.2
 
 * **Add support for replacing Markdown Engine**  

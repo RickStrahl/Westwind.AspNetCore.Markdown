@@ -219,7 +219,7 @@ You can also load Markdown documents from URL and process them as markdown to HT
 #### markdown (Model Binding)
 In addition to the content you can also bind to the `markdown` attribute which allows for programmatic assignment and databinding.
 
-```
+```html
 @model MarkdownPageModel
 @{
     Model.MarkdownText = "This is some **Markdown**!";
@@ -474,7 +474,7 @@ Finally you need to create your Markdown pages in the folders you configured. As
 
 For example:
 
-```
+```text
 wwwroot/posts/2018/03/23/MarkdownTagHelper.md
 ```
 
@@ -482,7 +482,7 @@ wwwroot/posts/2018/03/23/MarkdownTagHelper.md
 
 I can now access this post using either:
 
-```
+```text
 http://localhost:59805/posts/2018/03/23/MarkdownTagHelper.md
 ```
 
@@ -640,3 +640,4 @@ If you find this library useful, consider making a small donation:
     title="Find this library useful? Consider making a small donation." alt="Make Donation" style="text-decoration: none;">
 	<img src="https://weblog.west-wind.com/images/donation.png" />
 </a>
+
