@@ -73,7 +73,7 @@ namespace Westwind.AspNetCore.Markdown
             
             if (model.FolderConfiguration.ExtractTitle)
             {
-                var firstLines = StringUtils.GetLines(markdown, 30);
+                var firstLines = StringUtils.GetLines(markdown, 50).ToList();
                 var firstLinesText = String.Join("\n", firstLines);
 
                 // Assume YAML 
@@ -87,13 +87,30 @@ namespace Westwind.AspNetCore.Markdown
                     }
                 }
 
-                if (model.Title == null)
+                // if we don't have Yaml headers the header has to be closer to the top
+                firstLines = firstLines.Take(10).ToList();
+                
+                if (string.IsNullOrEmpty(model.Title))
                 {
-                    foreach (var line in firstLines.Take(10))
+                    foreach (var line in firstLines)
                     {
                         if (line.TrimStart().StartsWith("# "))
                         {
                             model.Title = line.TrimStart(new char[] {' ', '\t', '#'});
+                            break;
+                        }
+                    }
+                }
+
+                if (string.IsNullOrEmpty(model.Title))
+                {
+                    for (var index = 0; index < firstLines.Count; index++)
+                    {                    
+                        var line = firstLines[index];
+                        if (line.TrimStart().StartsWith("===") && index > 0)
+                        {
+                            // grab the previous line
+                            model.Title = firstLines[index-1].Trim();
                             break;
                         }
                     }
