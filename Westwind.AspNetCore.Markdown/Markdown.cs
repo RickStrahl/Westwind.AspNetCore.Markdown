@@ -37,6 +37,9 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Markdig.Helpers;
+using Markdig.Syntax;
+using Markdig.Syntax.Inlines;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Westwind.AspnetCore.Markdown.Utilities;
@@ -46,7 +49,8 @@ namespace Westwind.AspNetCore.Markdown
     public static class Markdown
     {
 
-     
+
+        #region From String
         /// <summary>
         /// Renders raw markdown from string to HTML
         /// </summary>
@@ -77,6 +81,9 @@ namespace Westwind.AspNetCore.Markdown
             return new HtmlString(Parse(markdown, usePragmaLines, forceReload, sanitizeHtml));
         }
 
+        #endregion
+
+        #region From File
         /// <summary>
         /// Parses content from a file on disk from Markdown to HTML.
         /// </summary>
@@ -151,7 +158,8 @@ namespace Westwind.AspNetCore.Markdown
 
             return Parse(content,usePragmaLines,forceReload,sanitizeHtml);
         }
-            
+
+
         /// <summary>
         /// Parses content from a file on disk from Markdown to HTML.
         /// </summary>
@@ -168,6 +176,24 @@ namespace Westwind.AspNetCore.Markdown
             return new HtmlString(ParseFromFile(markdownFile, usePragmaLines, forceReload, sanitizeHtml));
         }
 
+
+        /// <summary>
+        /// Parses content from a file on disk from Markdown to an HtmlString instance.
+        /// </summary>
+        /// <param name="filename">A physical or virtual filename path. If running under System.Web this method uses MapPath to resolve paths.
+        /// For non-HttpContext environments this file name needs to be fully qualified.</param>
+        /// <param name="usePragmaLines">Generates line numbers as ids into headers and paragraphs. Useful for previewers to match line numbers to rendered output</param>
+        /// <param name="forceReload">Forces the parser to reloaded. Otherwise cached instance is used</param>
+        /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
+        /// <returns>HTML result as a string</returns>
+        public static async Task<HtmlString> ParseHtmlStringFromFileAsync(string markdownFile, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false)
+        {
+            return new HtmlString(await ParseFromFileAsync(markdownFile, usePragmaLines, forceReload, sanitizeHtml));
+        }
+
+        #endregion
+
+        #region From Url
         /// <summary>
         /// Parses content from a url as Markdown to HTML.
         /// </summary>
@@ -175,8 +201,9 @@ namespace Westwind.AspNetCore.Markdown
         /// <param name="usePragmaLines">Generates line numbers as ids into headers and paragraphs. Useful for previewers to match line numbers to rendered output</param>
         /// <param name="forceReload">Forces the parser to reloaded. Otherwise cached instance is used</param>
         /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
+        /// <param name="fixupBaseUrl">Flag that determines whether relative Markdown images and links are fixed up with the document's base path</param>
         /// <returns>HTML result as a string</returns>
-        public static string ParseFromUrl(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false)
+        public static string ParseFromUrl(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false, bool fixupBaseUrl = true)
         {
             if (string.IsNullOrEmpty(url))
                 return url;
@@ -184,7 +211,7 @@ namespace Westwind.AspNetCore.Markdown
             string content = null;
             try
             {
-                var client = new WebClient();
+               var client = new WebClient();
                content = client.DownloadString(new Uri(url));
             }
             catch (Exception ex)
@@ -192,13 +219,12 @@ namespace Westwind.AspNetCore.Markdown
                 throw new FileLoadException("Couldn't load Markdown file: " + url, ex);
             }
 
+            if (fixupBaseUrl)
+                content = FixupBasePath(content, url);
+            
             return Parse(content, usePragmaLines, forceReload, sanitizeHtml);
         }
 
-        public static HtmlString ParseHtmlStringFromUrl(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false)
-        {
-            return new HtmlString(ParseFromUrl(url, usePragmaLines, forceReload, sanitizeHtml));
-        }
 
         /// <summary>
         /// Parses content from a url as Markdown to HTML.
@@ -207,8 +233,9 @@ namespace Westwind.AspNetCore.Markdown
         /// <param name="usePragmaLines">Generates line numbers as ids into headers and paragraphs. Useful for previewers to match line numbers to rendered output</param>
         /// <param name="forceReload">Forces the parser to reloaded. Otherwise cached instance is used</param>
         /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
+        /// <param name="fixupBaseUrl">Flag that determines whether relative Markdown images and links are fixed up with the document's base path</param>
         /// <returns>HTML result as a string</returns>
-        public static async Task<string> ParseFromUrlAsync(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false)
+        public static async Task<string> ParseFromUrlAsync(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false, bool fixupBaseUrl = true)
         {
             if (string.IsNullOrEmpty(url))
                 return url;
@@ -218,15 +245,35 @@ namespace Westwind.AspNetCore.Markdown
             try
             {
                 var client = new WebClient();
-                content = await client.DownloadStringTaskAsync(new Uri(url));                
+                content = await client.DownloadStringTaskAsync(new Uri(url));
             }
             catch (Exception ex)
             {
                 throw new FileLoadException($"Couldn\'t load Markdown from Url: {url}.", ex);
             }
 
+            if (fixupBaseUrl)
+                content = FixupBasePath(content, url);
+
             return Parse(content, usePragmaLines, forceReload, sanitizeHtml);
         }
+
+
+        /// <summary>
+        /// Parses content from a url as Markdown to HTML.
+        /// </summary>
+        /// <param name="url">A Url that contains Markdown</param>
+        /// <param name="usePragmaLines">Generates line numbers as ids into headers and paragraphs. Useful for previewers to match line numbers to rendered output</param>
+        /// <param name="forceReload">Forces the parser to reloaded. Otherwise cached instance is used</param>
+        /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
+        /// <param name="fixupBaseUrl">Flag that determines whether relative Markdown images and links are fixed up with the document's base path</param>
+        /// <returns>HTML result as a string</returns>
+        public static HtmlString ParseHtmlStringFromUrl(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = true, bool fixupBaseUrl = true)
+        {
+            return new HtmlString(ParseFromUrl(url, usePragmaLines, forceReload, sanitizeHtml, fixupBaseUrl));
+        }
+
+
 
         /// <summary>
         /// Parses content from a url as Markdown to an HTML string.
@@ -235,12 +282,41 @@ namespace Westwind.AspNetCore.Markdown
         /// <param name="usePragmaLines">Generates line numbers as ids into headers and paragraphs. Useful for previewers to match line numbers to rendered output</param>
         /// <param name="forceReload">Forces the parser to reloaded. Otherwise cached instance is used</param>
         /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
+        /// <param name="fixupBaseUrl">Flag that determines whether relative Markdown images and links are fixed up with the document's base path</param>
         /// <returns>HTML result as a string</returns>
-        public static async Task<HtmlString> ParseHtmlStringFromUrlAsync(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false)
+        public static async Task<HtmlString> ParseHtmlStringFromUrlAsync(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false, bool fixupBaseUrl = true)
         {            
-            return new HtmlString(await ParseFromUrlAsync(url, usePragmaLines, forceReload, sanitizeHtml)); 
+            return new HtmlString(await ParseFromUrlAsync(url, usePragmaLines, forceReload, sanitizeHtml,fixupBaseUrl)); 
         }
 
 
+
+        private static string FixupBasePath(string markdown, string basePath)
+        {
+            var doc = Markdig.Markdown.Parse(markdown);
+
+            var uri = new Uri(basePath, UriKind.Absolute);
+
+            foreach (var item in doc)
+            {
+                if (item is ParagraphBlock paragraph)
+                {
+                    foreach (var inline in paragraph.Inline)
+                    {
+                        if (!(inline is LinkInline))
+                            continue;
+
+                        var link = inline as LinkInline;
+                        if (link.Url.Contains("://"))
+                            continue;
+
+                        var newUrl = new Uri(uri, link.Url).ToString();
+                        markdown = markdown.Replace("](" + link.Url + ")", "](" + newUrl + ")");
+                    }
+                }
+            }
+            return markdown;
+        }
+        #endregion
     }
 }

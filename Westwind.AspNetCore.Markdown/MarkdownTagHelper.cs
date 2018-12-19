@@ -90,6 +90,9 @@ namespace Westwind.AspNetCore.Markdown
         /// </summary>
         [HtmlAttributeName("url")]
         public string Url { get; set; }
+
+        [HtmlAttributeName("url-fixup-baseurl")]
+        public bool UrlFixupBaseUrl { get; set; } = true;
         
         /// <summary>
         /// Process markdown and generate HTML output
@@ -104,8 +107,8 @@ namespace Westwind.AspNetCore.Markdown
             string content = null;
             string html = null;
             if (!string.IsNullOrEmpty(Url))
-            {
-                html = await Westwind.AspNetCore.Markdown.Markdown.ParseFromUrlAsync(Url);
+            {                
+                html = await Westwind.AspNetCore.Markdown.Markdown.ParseFromUrlAsync(Url,fixupBaseUrl: UrlFixupBaseUrl);
 
                 output.TagName = null;  // Remove the <markdown> element
                 output.Content.SetHtmlContent(html);

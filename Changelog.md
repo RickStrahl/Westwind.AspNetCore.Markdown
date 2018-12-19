@@ -4,6 +4,9 @@
 
 ### Version 3.2.2
 
+* **Add Support for BaseUrlProcessing for Url Links and Images**  
+When using the TagHelper with the `url=` option or `Markdown.ParseFromUrl()` you can now optionally specify to fix up relative Markdown links and images using the `url-fixup-baseurl=` and `fixupBaseUrl` property respectively. The default behavior is to fix up paths.
+
 * **Add Support for Title Detection with === underlines**  
 Added support for title detection when using a double underscore titles within the first 10 lines of text. Title detection uses Yaml title header first, `#` headers next, and double underscore `===` headers last.
 
