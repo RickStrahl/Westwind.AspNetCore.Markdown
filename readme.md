@@ -210,11 +210,14 @@ You can specify a filename to pull Markdown from and render into HTML. Files can
 * Relative paths:  `somefolder/somefile.md` - relative to current page
 * Virtual paths:   `~/somefolder/somefile.md` -  relative to site root
 
-> #### File Rendering loads resources as *page-relative*
+> #### Relative File Links load resources as *Host Page Relative*
 > Any relative links and resources - images, relative links - that are referenced are **relative to the host page** not relative to the Markdown document. Make sure you take into account paths for any related resources and either ensure they are relative to the host page or use absolute URLs.
 
 #### url
-You can also load Markdown documents from URL and process them as markdown to HTML for embedding into the page. The Url has to be openly accessible (ie. no authentication).
+You can also load Markdown documents from URL and process them as markdown to HTML for embedding into the page. The Url has to be openly accessible (ie. no authentication). This is great for loading and embedding content from remote sources such as from Github and rendering it as part of your application. It's very useful for CMS and Documentation solutions where a remote repository serves as the document store.
+
+#### url-fixup-basepath
+When `true` (default) an relative Markdown images and links are converted to absolute URLs relative to the Markdown document that is being loaded via the `url=` attribute. Typically you'll want images and links to be fixed up so images show and you don't end up with dead links. However in some situations you might want to render the page with the original links in which case you can explicitly force the attribute to `false`.
 
 #### markdown (Model Binding)
 In addition to the content you can also bind to the `markdown` attribute which allows for programmatic assignment and databinding.
@@ -268,7 +271,10 @@ The current Time is: @DateTime.Now.ToString("HH:mm:ss")
 This also works, but is hard to maintain in some code editors due to auto-code reformatting.
 
 #### sanitize-html
-By default the Markdown tag helper strips `<script>` tags and `href="javascript"` directives from the generated HTML content. If you would like to explicitly include script tags because your content requires it you can enable that functionality by setting
+By default the Markdown tag helper strips `<script>` tags and `href="javascript"` directives from the generated HTML content. The default for this property is `true` If you would like to explicitly include script tags because your content requires it you can enable that functionality by setting `sanitize-html=false`.
+
+
+The default behavior strips the script content shown below (`sanitize-html` tag only shown by reference - `true` is the default so not required here):
 
 ```html
 <markdown sanitize-html="true">

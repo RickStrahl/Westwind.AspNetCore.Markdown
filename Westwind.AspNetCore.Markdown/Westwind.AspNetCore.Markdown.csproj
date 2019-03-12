@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.2.2</Version>    
+    <Version>3.2.4</Version>    
     <Authors>Rick Strahl</Authors>
     <Company>West Wind Technologies</Company>
     <Product>West Wind Web Toolkit</Product>
@@ -23,7 +23,7 @@ This library provides Markdown support for ASP.NET Core applications:
 
 For similar features in System.Web based ASP.NET apps see `Westwind.Web.MarkdownControl`.
     </Description>
-    <Copyright>(c) West Wind Technologies, 2017-2018</Copyright>
+    <Copyright>(c) West Wind Technologies, 2017-2019</Copyright>
     <PackageProjectUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown#License</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown</RepositoryUrl>
@@ -33,8 +33,7 @@ For similar features in System.Web based ASP.NET apps see `Westwind.Web.Markdown
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.8.11" />
-    <PackageReference Include="Markdig" Version="0.15.5" />
+    <PackageReference Include="Markdig" Version="0.16.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.3" />
   </ItemGroup>
 

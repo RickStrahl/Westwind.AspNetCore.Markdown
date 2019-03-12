@@ -1,6 +1,13 @@
 # Westwind.AspNetCore Change Log
-<small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore)</small>
+<small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore.Markdown)</small>
 
+### Version 3.2.4
+
+* **Update Markdig Dependency**  
+Update MarkDig version due to breaking change with configuration with the newer version (0.16).
+
+* **Remove HtmlAgilityPack Dependency**  
+Removed the HtmlAgilityPack dependency which was only used for the Markdown URL fixup helper. Replaced with manual parsing code to avoid extra dependency for such a small feature.
 
 ### Version 3.2.2
 
