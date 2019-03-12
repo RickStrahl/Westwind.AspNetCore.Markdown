@@ -31,8 +31,7 @@ namespace Tests
                 "https://github.com/RickStrahl/BlogPosts/raw/master/2018-11/Updating-Westwind.AspNetCore.Markdown-with-Markdown-from-Files-and-URLs/UpdatingWestwindAspnetcoreMarkdownWithMarkdownFromFilesAndUrls.md",
                 fixupBaseUrl: true);
 
-            Westwind.Utilities.ShellUtils.ShowHtml(html);
-
+            Assert.That(html.Contains("<h2 id=\"features\">Features</h2>"));
 
         }
     }
