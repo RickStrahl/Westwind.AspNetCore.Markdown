@@ -208,6 +208,9 @@ namespace Westwind.AspNetCore.Markdown
             if (string.IsNullOrEmpty(url))
                 return url;
 
+            // Fix up common Markdown Urls like Github, MS docs, BitBucket root repos
+            url = MarkdownUtilities.ParseMarkdownUrl(url);
+
             string content = null;
             try
             {
@@ -220,7 +223,7 @@ namespace Westwind.AspNetCore.Markdown
             }
 
             if (fixupBaseUrl)
-                content = FixupBasePath(content, url);
+                content = MarkdownUtilities.FixupMarkdownRelativePaths(content, url);
             
             return Parse(content, usePragmaLines, forceReload, sanitizeHtml);
         }
@@ -240,6 +243,9 @@ namespace Westwind.AspNetCore.Markdown
             if (string.IsNullOrEmpty(url))
                 return url;
 
+            // Fix up common Markdown Urls like Github, MS docs, BitBucket root repos
+            url = MarkdownUtilities.ParseMarkdownUrl(url);
+
             string content = null;
 
             try
@@ -253,7 +259,7 @@ namespace Westwind.AspNetCore.Markdown
             }
 
             if (fixupBaseUrl)
-                content = FixupBasePath(content, url);
+                content = MarkdownUtilities.FixupMarkdownRelativePaths(content, url);
 
             return Parse(content, usePragmaLines, forceReload, sanitizeHtml);
         }
@@ -291,32 +297,7 @@ namespace Westwind.AspNetCore.Markdown
 
 
 
-        private static string FixupBasePath(string markdown, string basePath)
-        {
-            var doc = Markdig.Markdown.Parse(markdown);
-
-            var uri = new Uri(basePath, UriKind.Absolute);
-
-            foreach (var item in doc)
-            {
-                if (item is ParagraphBlock paragraph)
-                {
-                    foreach (var inline in paragraph.Inline)
-                    {
-                        if (!(inline is LinkInline))
-                            continue;
-
-                        var link = inline as LinkInline;
-                        if (link.Url.Contains("://"))
-                            continue;
-
-                        var newUrl = new Uri(uri, link.Url).ToString();
-                        markdown = markdown.Replace("](" + link.Url + ")", "](" + newUrl + ")");
-                    }
-                }
-            }
-            return markdown;
-        }
+       
         #endregion
     }
 }
