@@ -297,6 +297,9 @@ The default behavior strips the script content shown below (`sanitize-html` tag 
 
 With the flag set to `false` the script **does execute** and the link will trigger the second alert. The default of `true` removes the entire script block and replaces `javascript:` in the href with `unsupported:` which effectively doesn't do anything.
 
+#### no-http-exception
+Optional parameter that can be set if you are using a URL bound to the tag helper. When `true` causes the taghelper to render empty instead of throwing an HTTP load exception and break the page.
+
 
 ## Markdown Page Processor Middleware
 The Markdown middleware allows you drop `.md` files into a configured folder and have that folder parsed directly from disk. The middleware merges the Markdown into a pre-configured Razor template you provide so your Markdown text can be rendered in the proper UI context of your site chrome. 
