@@ -194,6 +194,7 @@ namespace Westwind.AspNetCore.Markdown
         #endregion
 
         #region From Url
+
         /// <summary>
         /// Parses content from a url as Markdown to HTML.
         /// </summary>
@@ -202,8 +203,9 @@ namespace Westwind.AspNetCore.Markdown
         /// <param name="forceReload">Forces the parser to reloaded. Otherwise cached instance is used</param>
         /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
         /// <param name="fixupBaseUrl">Flag that determines whether relative Markdown images and links are fixed up with the document's base path</param>
+        /// <param name="noHttpException">If true returns null instead of throwing an Excpetion for URL not found</param>
         /// <returns>HTML result as a string</returns>
-        public static string ParseFromUrl(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false, bool fixupBaseUrl = true)
+        public static string ParseFromUrl(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false, bool fixupBaseUrl = true, bool noHttpException = false)
         {
             if (string.IsNullOrEmpty(url))
                 return url;
@@ -219,6 +221,9 @@ namespace Westwind.AspNetCore.Markdown
             }
             catch (Exception ex)
             {
+                if (noHttpException)
+                    return null;
+
                 throw new FileLoadException("Couldn't load Markdown file: " + url, ex);
             }
 
@@ -237,8 +242,9 @@ namespace Westwind.AspNetCore.Markdown
         /// <param name="forceReload">Forces the parser to reloaded. Otherwise cached instance is used</param>
         /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
         /// <param name="fixupBaseUrl">Flag that determines whether relative Markdown images and links are fixed up with the document's base path</param>
+        /// <param name="noHttpException">If true returns null instead of throwing a URL load exception</param>
         /// <returns>HTML result as a string</returns>
-        public static async Task<string> ParseFromUrlAsync(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false, bool fixupBaseUrl = true)
+        public static async Task<string> ParseFromUrlAsync(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false, bool fixupBaseUrl = true, bool noHttpException = false)
         {
             if (string.IsNullOrEmpty(url))
                 return url;
@@ -255,6 +261,9 @@ namespace Westwind.AspNetCore.Markdown
             }
             catch (Exception ex)
             {
+                if (noHttpException)
+                    return null;
+
                 throw new FileLoadException($"Couldn\'t load Markdown from Url: {url}.", ex);
             }
 
@@ -274,9 +283,9 @@ namespace Westwind.AspNetCore.Markdown
         /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
         /// <param name="fixupBaseUrl">Flag that determines whether relative Markdown images and links are fixed up with the document's base path</param>
         /// <returns>HTML result as a string</returns>
-        public static HtmlString ParseHtmlStringFromUrl(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = true, bool fixupBaseUrl = true)
+        public static HtmlString ParseHtmlStringFromUrl(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = true, bool fixupBaseUrl = true, bool noHttpException = false)
         {
-            return new HtmlString(ParseFromUrl(url, usePragmaLines, forceReload, sanitizeHtml, fixupBaseUrl));
+            return new HtmlString(ParseFromUrl(url, usePragmaLines, forceReload, sanitizeHtml, fixupBaseUrl, noHttpException));
         }
 
 
@@ -290,9 +299,9 @@ namespace Westwind.AspNetCore.Markdown
         /// <param name="sanitizeHtml">Strips out scriptable tags and attributes for prevent XSS attacks. Minimal implementation.</param>
         /// <param name="fixupBaseUrl">Flag that determines whether relative Markdown images and links are fixed up with the document's base path</param>
         /// <returns>HTML result as a string</returns>
-        public static async Task<HtmlString> ParseHtmlStringFromUrlAsync(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false, bool fixupBaseUrl = true)
+        public static async Task<HtmlString> ParseHtmlStringFromUrlAsync(string url, bool usePragmaLines = false, bool forceReload = false, bool sanitizeHtml = false, bool fixupBaseUrl = true, bool noHttpException = false)
         {            
-            return new HtmlString(await ParseFromUrlAsync(url, usePragmaLines, forceReload, sanitizeHtml,fixupBaseUrl)); 
+            return new HtmlString(await ParseFromUrlAsync(url, usePragmaLines, forceReload, sanitizeHtml,fixupBaseUrl, noHttpException)); 
         }
 
 

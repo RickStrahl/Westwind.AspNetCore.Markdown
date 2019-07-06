@@ -79,13 +79,13 @@
     <p>
         This URL is processed off a GitHub URL that contains Markdown code:
 <pre><code>@@{
-    parsedHtml = await Markdown.ParseFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md");
+    parsedHtml = await Markdown.ParseFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md", noHttpException: true);
 }
 @@Html.Raw(parsedHtml)</code></pre>
     </p>
 
     <div class="sample-block">  
-        @(await Markdown.ParseHtmlStringFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md"))
+        @(await Markdown.ParseHtmlStringFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md",noHttpException: true))
     </div>
 
 

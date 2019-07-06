@@ -93,6 +93,9 @@ namespace Westwind.AspNetCore.Markdown
 
         [HtmlAttributeName("url-fixup-baseurl")]
         public bool UrlFixupBaseUrl { get; set; } = true;
+
+        [HtmlAttributeName("no-http-exceptions")]
+        public bool NoHttpException { get; set; }
         
         /// <summary>
         /// Process markdown and generate HTML output
@@ -108,7 +111,7 @@ namespace Westwind.AspNetCore.Markdown
             string html = null;
             if (!string.IsNullOrEmpty(Url))
             {                
-                html = await Westwind.AspNetCore.Markdown.Markdown.ParseFromUrlAsync(Url,fixupBaseUrl: UrlFixupBaseUrl);
+                html = await Westwind.AspNetCore.Markdown.Markdown.ParseFromUrlAsync(Url,fixupBaseUrl: UrlFixupBaseUrl, noHttpException: NoHttpException);
 
                 output.TagName = null;  // Remove the <markdown> element
                 output.Content.SetHtmlContent(html);

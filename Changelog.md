@@ -1,6 +1,15 @@
 # Westwind.AspNetCore Change Log
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore.Markdown)</small>
 
+
+### Version 3.2.5
+
+* **Update to latest version of MarkDig**  
+Update to MarkDig 1.17.1 due to breaking API changes in earlier versions in some of the the MarkDig processor configuration signatures.
+
+* **Add NoHttpException to Parse Methods and TagHelper**  
+Add optional parameter/property to Parse Methods and TagHelper to control how URL retrieved pages are handled if there's no internet connection or the URL isn't available. With NoHttpExceptions set the parser returns null instead of throwing an exception and into the page.
+
 ### Version 3.2.4
 
 * **Update Markdig Dependency**  
