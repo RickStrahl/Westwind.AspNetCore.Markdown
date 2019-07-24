@@ -11,9 +11,10 @@ namespace Westwind.AspNetCore.Markdown
 {
 
     /// <summary>
-    /// A generic controll implementation for processing Markdown
+    /// A generic controller implementation for processing Markdown
     /// files directly as HTML content
-    /// </summary>    
+    /// </summary>
+    [ApiExplorerSettings(IgnoreApi=true)]
     public class MarkdownPageProcessorController : Controller
     {
         public MarkdownConfiguration MarkdownProcessorConfig { get; }
