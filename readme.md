@@ -76,7 +76,7 @@ At it's simplest this component provides Markdown parsing that you can use to co
 ### Markdown to String
 
 ```cs
-string html = Markdown.Parse(markdownText)
+string html = Markdown.Parse(markdownText);
 ```
 
 ### Markdown to Razor Html String
