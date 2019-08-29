@@ -167,7 +167,7 @@ namespace Westwind.AspNetCore.Markdown.Utilities
             if (string.IsNullOrEmpty(html))
                 return html;
 
-            if (!string.IsNullOrEmpty(htmlTagBlacklist) || htmlTagBlacklist == HtmlSanitizeTagBlackList)
+            if (string.IsNullOrEmpty(htmlTagBlacklist) || htmlTagBlacklist == HtmlSanitizeTagBlackList)
             {
                 // Replace Script tags - reused expr is more efficient
                 html = _RegExScript.Replace(html, string.Empty);
