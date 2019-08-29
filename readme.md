@@ -59,7 +59,7 @@ To use these components you need to add the following to your Startup class at m
 ```cs
 public void ConfigureServices(IServiceCollection services)
 {
-	app.AddMarkdown();
+	services.AddMarkdown();
 }
 
 public void Configure(IApplicationBuilder app)
