@@ -549,17 +549,10 @@ app.UseDefaultFiles(new DefaultFilesOptions()
     DefaultFileNames = new List<string> { "index.md", "index.html" }
 });
 
-services.AddMarkdown(config =>
-            {
-                var folderConfig = config.AddMarkdownProcessingFolder(
-                    "/docs/", 
-                    "~/Pages/__MarkdownPageTemplate.cshtml");
-}
+app.UseMarkdown(); 
 ```
 
-Then create `/docs/index.md`.
-
-You can now navigate to `/docs/` and the `/docs/index.md` file will be served.
+Assuming I've mapped the `/docs/` folder, I can then create `/docs/index.md`. I can now navigate to `/docs/` and the `/docs/index.md` file will be served.
 
 ## Westwind.AspNetCore.Markdown and XSS
 You should always treat Markdown **exactly like you would treat raw HTML**. If you're letting users input Markdown, understand that the rendered HTML may have to be **sanitized**.
