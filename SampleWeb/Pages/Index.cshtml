@@ -104,7 +104,13 @@
             <li><a href="/posts/2018/03/24/CreatingAGenericMarkdownPageHandlerInAspNetCore.md">Markdown Page Handler Post(.md file)</a></li>
 
             <li><a href="/docs/ChangeLog">ChangeLog (extensionless)</a></li>
-            <li><a href="/docs/ChangeLog.md">ChangeLog (.md file)</a></li>            
+            <li><a href="/docs/ChangeLog.md">ChangeLog (.md file)</a></li>     
+            <li>
+                <a href="/docs/">Default Document Processing (`/docs/` -> `/docs/index.md`)</a><br />
+                <i><small>note: requires that DefaultDocument middleware is<br/>
+                    registered <b>before</b> the Markdown middleware</small></i>
+
+            </li>
         </ul>
     </div>   
 </div>
