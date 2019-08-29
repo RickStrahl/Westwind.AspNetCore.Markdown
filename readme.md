@@ -1,4 +1,4 @@
-# ASP.NET Core Markdown Support
+﻿# ASP.NET Core Markdown Support
 
 [![NuGet](https://img.shields.io/nuget/vpre/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) [![](https://img.shields.io/nuget/dt/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/)
 
@@ -538,7 +538,30 @@ The following adds basic syntax coloring support using a preconfigured package o
 > <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/vs2015.min.css" rel="stylesheet" />
 > ``` 
 
-## Westwind.AspNetCore and XSS
+### Default Document Handling
+You can also use the stock ASP.NET Core default document middleware to automatically display a Markdown document on a root Url if you provide a physical file in the physical folder that matches a default document like `index.md`.
+
+You'll need to use the default ASP.NET Core **DefaultDocuments** middleware and ensure it's registered **before** the Markdown middleware in the startup `Configure()` method:
+
+```cs
+app.UseDefaultFiles(new DefaultFilesOptions()
+{
+    DefaultFileNames = new List<string> { "index.md", "index.html" }
+});
+
+services.AddMarkdown(config =>
+            {
+                var folderConfig = config.AddMarkdownProcessingFolder(
+                    "/docs/", 
+                    "~/Pages/__MarkdownPageTemplate.cshtml");
+}
+```
+
+Then create `/docs/index.md`.
+
+You can now navigate to `/docs/` and the `/docs/index.md` file will be served.
+
+## Westwind.AspNetCore.Markdown and XSS
 You should always treat Markdown **exactly like you would treat raw HTML**. If you're letting users input Markdown, understand that the rendered HTML may have to be **sanitized**.
 
 This component has a few features that provides basic options to remove the most obvious XSS attacks.
