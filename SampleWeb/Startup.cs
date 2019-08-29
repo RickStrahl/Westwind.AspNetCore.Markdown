@@ -92,10 +92,17 @@ namespace SampleWeb
             else
             {
                 app.UseExceptionHandler("/Error");            
-            }            
+            }
+
+            app.UseDefaultFiles(new DefaultFilesOptions()
+            {
+                DefaultFileNames = new List<string> { "index.md", "index.html" }
+            });
 
             app.UseMarkdown();
-            
+
+          
+            // Ultra-simplistic Markdown router
             //app.Use(async (context, next) =>
             //{
             //    if (context.Request.Path.Value.EndsWith(".md", StringComparison.InvariantCultureIgnoreCase))
@@ -108,7 +115,6 @@ namespace SampleWeb
 
             //    await next();
             //});
-
 
             app.UseStaticFiles();
 

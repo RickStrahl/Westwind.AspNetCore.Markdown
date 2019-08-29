@@ -91,6 +91,8 @@ namespace Westwind.AspNetCore.Markdown
                          (folder.ProcessExtensionlessUrls && !hasExtension ||
                           hasMdExtension && folder.ProcessMdFiles))
                 {
+
+                    // it's a physical directory - don't convert that - only virtual files
                     if (!hasExtension && Directory.Exists(pageFile))
                         continue;
 
