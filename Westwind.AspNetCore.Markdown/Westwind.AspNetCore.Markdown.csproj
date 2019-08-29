@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.2.5.1</Version>    
+    <Version>3.2.6</Version>    
     <Authors>Rick Strahl</Authors>
     <Company>West Wind Technologies</Company>
     <Product>West Wind Web Toolkit</Product>

@@ -26,7 +26,7 @@ namespace Westwind.AspNetCore.Markdown
 
                 contextAccessor = ServiceProvider.GetService(typeof(IHttpContextAccessor)) as IHttpContextAccessor;
             }
-            catch (Exception ex)
+            catch 
             {
                 throw new InvalidOperationException("IHttpContextAccessor is not available. Please add `app.ConfigureMarkdown()` in `Startup.ConfigureServices()`.");
             }

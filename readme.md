@@ -64,7 +64,17 @@ public void ConfigureServices(IServiceCollection services)
 
 public void Configure(IApplicationBuilder app)
 {
-	app.UseMarkdown();
+    // if you use default files and want to load .md files make sure you use it before
+    app.UseDefaultFiles(new DefaultFilesOptions()
+    {
+        DefaultFileNames = new List<string> { "index.md", "index.html" }
+    });
+
+    app.UseMarkdown();
+
+    // if you serve static files make sure it comes after `UseMarkdown()`
+    // otherwise any physical files are rendered as text
+    app.UseStaticFiles();
 }
 ```
 
@@ -549,7 +559,10 @@ app.UseDefaultFiles(new DefaultFilesOptions()
     DefaultFileNames = new List<string> { "index.md", "index.html" }
 });
 
-app.UseMarkdown(); 
+app.UseMarkdown();
+
+// make sure `UseMarkdown()` is called before this
+app.UseStaticFiles()
 ```
 
 Assuming I've mapped the `/docs/` folder, I can then create `/docs/index.md`. I can now navigate to `/docs/` and the `/docs/index.md` file will be served.
