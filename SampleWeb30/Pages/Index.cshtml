@@ -1,0 +1,116 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+@section headers
+{
+
+    <style>
+        .hero-text {
+            text-align: center;
+            line-height: 1.8em;
+            font-size: 2.7em;
+            padding: 35px 0 82px;
+            background: black;
+            color: white;
+            font-weight: 500;
+        }
+        @@media (max-width:600px) {
+            .hero-text {
+                font-size: 1.8em;
+            }
+        }
+   
+        .text-primary {
+            font-weight: bold !important;
+            color: khaki;
+            font-size: 1.2em;
+        }    
+    </style>
+}
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">            
+            <a href="/MarkdownTagHelper" style="text-decoration: none;" alt="click to see the TagHelper samples">
+                <div class="hero-text">
+                    <p class="text-primary">Markdown TagHelper</p>
+                    <p>embed static text or model data</p>
+                    <p>embed Markdown from files</p>
+                </div>
+            </a>
+        </div>
+        <div class="item">            
+            <a href="/MarkdownParsing" style="text-decoration: none;" alt="click to see the Parsing samples">
+                <div class="hero-text">
+                    <p class="text-primary">Markdown Parsing</p>
+                    <p>parse Markdown from strings</p>
+                    <p>parse Markdown from files</p>
+                </div>
+            </a>
+        </div>
+        <div class="item">            
+            <a href="/posts/2018/03/23/MarkdownTagHelper" style="text-decoration: none;" alt="click to see a page directly rendered from Markdown file on disk">
+                <div class="hero-text">
+                    <p class="text-primary">Markdown Pages</p>
+                    <p>render Markdown pages from disk</p>
+                    <p>simply drop files into a folder</p>
+                </div>
+            </a>
+        </div>
+
+
+        <div class="item" style="background: black;">
+            <a href="https://markdownMonster.west-wind.com">
+                <img src="~/images/MarkdownMonster_wide.jpg" alt="Markdown Monster" class="img-responsive" style="padding: 65px 0" />                
+            </a>
+            
+        </div>
+    </div>
+
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Markdown Samples</h2>
+        <ul>
+            <li><a href="/MarkdownTagHelper">Markdown 'Islands' TagHelper Sample Page</a></li>
+            <li><a href="/MarkdownParsing">Markdown Parsing Sample Page</a></li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h2>Markdown Page Middleware</h2>
+        <ul>
+            <li><a href="/posts/2018/03/23/MarkdownTagHelper">Markdown TagHelper Post (extensionless)</a></li>
+            <li><a href="/posts/2018/03/23/MarkdownTagHelper.md">Markdown TagHelper Post(.md file)</a></li>
+            
+            <li><a href="/posts/2018/03/24/CreatingAGenericMarkdownPageHandlerInAspNetCore">Markdown Page Handler Post (extensionless)</a></li>
+            <li><a href="/posts/2018/03/24/CreatingAGenericMarkdownPageHandlerInAspNetCore.md">Markdown Page Handler Post(.md file)</a></li>
+
+            <li><a href="/docs/ChangeLog">ChangeLog (extensionless)</a></li>
+            <li><a href="/docs/ChangeLog.md">ChangeLog (.md file)</a></li>     
+            <li>
+                <a href="/docs/">Default Document Processing (`/docs/` -> `/docs/index.md`)</a><br />
+                <i><small>note: requires that DefaultDocument middleware is<br/>
+                    registered <b>before</b> the Markdown middleware</small></i>
+
+            </li>
+        </ul>
+    </div>   
+</div>

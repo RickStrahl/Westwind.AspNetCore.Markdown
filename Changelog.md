@@ -2,6 +2,14 @@
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore.Markdown)</small>
 
 
+### Version 3.3.0
+
+* **Add support for .NET Core 3.0**  
+Added support for .NET Core 3.0 by re-configuring the projects and conditionally compiling parts of the application. 
+
+* **Multi-Targeted for .NET Core 2.1  and 3.0**  
+The package now works for both .NET Core 2.1 and .NET Core 3.0. Unfortunately due to some fundamental type changes in .NET Core 3.0 this means the packages no longer can target .NET Standard so the targets now are `netcoreapp2.1` and `netcoreapp3.0`.
+
 ### Version 3.2.5
 
 * **Update to latest version of MarkDig**  

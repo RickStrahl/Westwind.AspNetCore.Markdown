@@ -43,7 +43,7 @@ namespace Westwind.AspNetCore.Markdown
 
             // We need access to the HttpContext for Filename resolution
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            
+
             return services;
         }
 

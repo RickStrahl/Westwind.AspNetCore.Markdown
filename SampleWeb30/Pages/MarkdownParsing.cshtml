@@ -1,0 +1,104 @@
+﻿@page
+@model MarkdownControlModel
+@using Westwind.AspNetCore.Markdown
+@{
+    ViewBag.Title = "Markdown TagHelper";   
+}
+@section Headers {
+    <style>
+        .header {
+            margin-top: 50px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .sample-block {
+            margin-left: 25px;
+            margin-top: 10px;
+            padding: 15px 15px 15px 15px;
+            background: #f2f2f2;
+            border-radius: 6px;
+        }
+        /* vs2015 theme specific*/
+        pre {
+            background: #1E1E1E;
+            color: #eee;
+            padding: 0.7em !important;
+            overflow-x: auto;
+            white-space: pre;
+            word-break: normal;
+            word-wrap: normal;
+        }
+
+            pre > code {
+                white-space: pre;
+            }
+    </style>
+}
+
+<h1>Markdown Parsing with the Markdown Class</h1>
+  
+
+    <h3 class="header">Markdown Parsing in Razor HTML  with <code>@@Markdown.ParseHtmlString()</code></h3>
+    <div class="sample-block">
+        @Markdown.ParseHtmlString("This is **Markdown Text** using the `@Markdown.ParseHtmlString()` method.")
+    </div>
+
+
+    <h3 class="header">Markdown Parsing using the raw <code>Markdown.Parse()</code> method</h3>
+    <div class="sample-block">
+        @{ var html = Markdown.Parse("This is **Markdown** Text using the `Markdown.Parse()` method."); }
+        <div>@Html.Raw(html)</div>
+    </div>   
+
+
+    <h3 class="header">Markdown.ParseHtmlFromFile()</h3>
+    <p>
+        Rendering Markdown from a file <code>Markdown.ParseHtmlStringFromFile()</code>:
+    </p>
+
+    <div class="sample-block">    
+        @await Markdown.ParseHtmlStringFromFileAsync("~/MarkdownPartialPage.md")
+    </div>
+        
+
+    <h3 class="header">Async Markdown.ParseFromFileAsync()</h3>
+    <p>
+        And one more time with the same content as above using <code>Markdown.ParseFromFileAsync()</code>:
+    </p>
+
+    <div class="sample-block">
+        
+        @{
+            var parsedHtml = await Markdown.ParseFromFileAsync("~/MarkdownPartialPage.md");
+        }
+        @Html.Raw(parsedHtml)
+        
+    </div>
+
+    <h3 class="header">Async Markdown.ParseFromUrlAsync()</h3>
+    <p>
+        This URL is processed off a GitHub URL that contains Markdown code:
+<pre><code>@@{
+    parsedHtml = await Markdown.ParseFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md", noHttpException: true);
+}
+@@Html.Raw(parsedHtml)</code></pre>
+    </p>
+
+    <div class="sample-block">  
+        @(await Markdown.ParseHtmlStringFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md",noHttpException: true))
+    </div>
+
+
+@section Scripts {
+        <script src="~/lib/highlightjs/highlight.pack.js"></script>
+        <link href="~/lib/highlightjs/styles/vs2015.css" rel="stylesheet" />
+        <script>
+            setTimeout(function () {
+                var pres = document.querySelectorAll("pre>code");
+                for (var i = 0; i < pres.length; i++) {
+                    hljs.highlightBlock(pres[i]);
+                }
+            });
+
+        </script>
+    }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Westwind.AspNetCore.Markdown;
 using Westwind.AspNetCore.Markdown.Utilities;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Westwind.AspNetCore.Markdown
 {
@@ -18,9 +19,18 @@ namespace Westwind.AspNetCore.Markdown
     public class MarkdownPageProcessorController : Controller
     {
         public MarkdownConfiguration MarkdownProcessorConfig { get; }
+#if NETCOREAPP2_1
         private readonly IHostingEnvironment hostingEnvironment;
+#else
+        private readonly IWebHostEnvironment hostingEnvironment;
+#endif
 
-        public MarkdownPageProcessorController(IHostingEnvironment hostingEnvironment,
+        public MarkdownPageProcessorController(
+#if NETCOREAPP2_1
+            IHostingEnvironment hostingEnvironment,
+#else
+            IWebHostEnvironment hostingEnvironment,
+#endif
             MarkdownConfiguration config)
         {
             MarkdownProcessorConfig = config;
@@ -32,6 +42,9 @@ namespace Westwind.AspNetCore.Markdown
         public async Task<IActionResult> MarkdownPage()
         {
             var model = HttpContext.Items["MarkdownProcessor_Model"] as MarkdownModel;
+            if (model == null)
+                throw new InvalidOperationException(
+                    "This controller is not accessible directly unless the Markdown Model is set");
 
             var basePath = hostingEnvironment.WebRootPath;
             var relativePath = model.RelativePath;

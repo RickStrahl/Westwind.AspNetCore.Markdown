@@ -47,11 +47,23 @@ namespace Westwind.AspNetCore.Markdown
     {
         private readonly RequestDelegate _next;
         private readonly MarkdownConfiguration _configuration;
+
+#if NETCOREAPP2_1
         private readonly IHostingEnvironment _env;
+#endif
+#if NETCOREAPP3_0
+        private readonly IWebHostEnvironment _env;
+#endif
 
         public MarkdownPageProcessorMiddleware(RequestDelegate next,
             MarkdownConfiguration configuration,
-            IHostingEnvironment env)
+#if NETCOREAPP2_1
+            IHostingEnvironment env
+#endif
+#if NETCOREAPP3_0
+          IWebHostEnvironment env
+#endif
+        )
         {
             _next = next;
             _configuration = configuration;

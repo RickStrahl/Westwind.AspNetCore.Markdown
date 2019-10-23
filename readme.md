@@ -54,27 +54,40 @@ dotnet add package westwind.aspnetcore.markdown
 ```
 
 ## Startup Configuration
-To use these components you need to add the following to your Startup class at minimum:
+To use these components you need to add the following to your Startup class at minimum. The following is for ASP.NET Core 3.0 and later using endpoint routing:
 
 ```cs
 public void ConfigureServices(IServiceCollection services)
 {
-	services.AddMarkdown();
+    services.AddMarkdown();
+	
+	// We need to use MVC so we can use a Razor Configuration Template
+    services.AddMvc()
+        // have to let MVC know we have a controller
+        .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly);
 }
 
 public void Configure(IApplicationBuilder app)
 {
-    // if you use default files and want to load .md files make sure you use it before
+    // if you use default files make sure you do it before markdown middleware
     app.UseDefaultFiles(new DefaultFilesOptions()
     {
         DefaultFileNames = new List<string> { "index.md", "index.html" }
     });
-
+    
     app.UseMarkdown();
-
-    // if you serve static files make sure it comes after `UseMarkdown()`
-    // otherwise any physical files are rendered as text
     app.UseStaticFiles();
+    
+    // the following enables MVC and Razor Pages
+    app.UseRouting();
+    
+    app.UseEndpoints(endpoints =>
+    {
+        // endpoints.MapRazorPages();  // optional
+        
+        // MVC routing is required
+        endpoints.MapDefaultControllerRoute();
+    });
 }
 ```
 
