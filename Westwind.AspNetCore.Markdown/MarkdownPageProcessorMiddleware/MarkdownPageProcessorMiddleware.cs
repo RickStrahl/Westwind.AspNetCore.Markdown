@@ -50,8 +50,7 @@ namespace Westwind.AspNetCore.Markdown
 
 #if NETCOREAPP2_1
         private readonly IHostingEnvironment _env;
-#endif
-#if NETCOREAPP3_0
+#else
         private readonly IWebHostEnvironment _env;
 #endif
 
@@ -59,8 +58,7 @@ namespace Westwind.AspNetCore.Markdown
             MarkdownConfiguration configuration,
 #if NETCOREAPP2_1
             IHostingEnvironment env
-#endif
-#if NETCOREAPP3_0
+#else
           IWebHostEnvironment env
 #endif
         )
