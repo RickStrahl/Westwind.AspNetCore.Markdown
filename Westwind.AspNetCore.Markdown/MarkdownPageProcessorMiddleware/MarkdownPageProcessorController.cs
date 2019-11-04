@@ -41,6 +41,7 @@ namespace Westwind.AspNetCore.Markdown
         [Route("markdownprocessor/markdownpage")]		
         public async Task<IActionResult> MarkdownPage()
         {
+            // Model saved in middleware processing
             var model = HttpContext.Items["MarkdownProcessor_Model"] as MarkdownModel;
             if (model == null)
                 throw new InvalidOperationException(

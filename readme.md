@@ -1,4 +1,4 @@
-﻿# ASP.NET Core Markdown Support
+# ASP.NET Core Markdown Support
 
 [![NuGet](https://img.shields.io/nuget/vpre/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) [![](https://img.shields.io/nuget/dt/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/)
 
@@ -499,6 +499,36 @@ A more complete template might also add a code highlighter ([highlightJs](https:
 
     </script>
 }
+```
+
+### Title Rendering
+The middleware will attempt to find a title in the document to use as the title tag for the HTML page it generates. It'll look for the title in:
+
+* Yaml Header `title: Your Title Text`
+* The first `# Header` tag in the first 10 lines of non-Yaml content
+* The first line underlined with `===` in the first 11 lines of non-Yaml content
+
+Both of the following will pick up `Hello World` as the title for a Markdown document:
+
+```markdown
+---
+title: Hello World
+---
+# This is my Hello World
+
+Text to follow
+```
+
+```markdown
+# Hello World
+
+Text to follow
+```
+
+```markdown
+Hello World
+===========
+Text to follow
 ```
 
 ### Create your Markdown Pages
