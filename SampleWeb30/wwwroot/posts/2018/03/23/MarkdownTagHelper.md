@@ -1,5 +1,6 @@
 ﻿---
 title: Creating an ASP.NET Core Markdown TagHelper and Parser
+basePath: https://west-wind.com/
 abstract: A couple of months ago I wrote about creating a WebForms based Markdown control. This time around I'll build an ASP.NET Core MVC TagHelper that performs similar functionality for embedding Markdown text into a content area of a Razor page. The component also includes easy access to a Markdown parser using the blazing fast MarkDig Markdown parser.
 keywords: Markdown, TagHelper, ASP.NET Core
 categories: ASP.NET Core, Markdown

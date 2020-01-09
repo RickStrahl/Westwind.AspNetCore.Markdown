@@ -75,9 +75,24 @@ namespace Westwind.AspNetCore.Markdown
     public class MarkdownProcessingFolder
     {
         /// <summary>
-        /// Relative path
+        /// Site Relative path where this folder processes markdown files.
+        /// Can use ~ virtual path syntax.
         /// </summary>
         public string RelativePath { get; set; }
+
+
+        /// <summary>
+        /// An optional Base Path that can be set on the model to embed in a
+        /// Markdown page template.
+        ///
+        /// This can be useful if you are retrieving content from another site,
+        /// and you need to locate depedent resources from the same location as
+        /// the source file.
+        ///
+        /// You can also specify `basePath: <path>` in the Yaml header of the
+        /// the rendered Markdown document. 
+        /// </summary>
+        public string BasePath {get; set;}
 
         /// <summary>
         /// View Template to use to render the Markdown page
