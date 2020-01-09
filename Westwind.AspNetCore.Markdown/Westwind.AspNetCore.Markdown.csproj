@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.0;netcoreapp2.1;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.3.0</Version>    
+    <Version>3.3.5</Version>    
     <Authors>Rick Strahl</Authors>
     <Company>West Wind Technologies</Company>
     <Product>West Wind Web Toolkit</Product>
@@ -23,7 +23,7 @@ This library provides Markdown support for ASP.NET Core applications:
 
 For similar features in System.Web based classic ASP.NET apps see `Westwind.Web.MarkdownControl`.
     </Description>
-    <Copyright>(c) West Wind Technologies, 2017-2019</Copyright>
+    <Copyright>(c) West Wind Technologies, 2017-2020</Copyright>
     <PackageProjectUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown#License</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown</RepositoryUrl>

@@ -57,15 +57,15 @@ namespace Westwind.AspNetCore.Markdown
         public MarkdownPageProcessorMiddleware(RequestDelegate next,
             MarkdownConfiguration configuration,
 #if NETCOREAPP2_1
-            IHostingEnvironment env
+            IHostingEnvironment _env
 #else
-          IWebHostEnvironment env
+          IWebHostEnvironment _env
 #endif
         )
         {
             _next = next;
             _configuration = configuration;
-            _env = env;
+            this._env = _env;
         }
 
         public Task InvokeAsync(HttpContext context)

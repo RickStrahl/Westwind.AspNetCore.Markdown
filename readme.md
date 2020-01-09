@@ -1,4 +1,4 @@
-# ASP.NET Core Markdown Support
+﻿# ASP.NET Core Markdown Support
 
 [![NuGet](https://img.shields.io/nuget/vpre/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) [![](https://img.shields.io/nuget/dt/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/)
 
@@ -92,6 +92,9 @@ public void Configure(IApplicationBuilder app)
 ```
 
 There are additional configuration options for the `AddMarkdown()` method available which are discussed in more detail later.
+
+> #### Configuration is optional Static `Markdown` methods or the TagHelper
+> Note the above configuration is required only if you use the Markdown Middleware that processes loose Markdown pages. If you use the static Markdown functions or the TagHelper and you don't need custom Markdown configuration of the Markdown Parser, configuration is not required.
 
 ## Markdown Parsing Helpers
 At it's simplest this component provides Markdown parsing that you can use to convert Markdown text to HTML either inside of application code, or inside of Razor expressions.
@@ -240,10 +243,10 @@ You can specify a filename to pull Markdown from and render into HTML. Files can
 You can also load Markdown documents from URL and process them as markdown to HTML for embedding into the page. The Url has to be openly accessible (ie. no authentication). This is great for loading and embedding content from remote sources such as from Github and rendering it as part of your application. It's very useful for CMS and Documentation solutions where a remote repository serves as the document store.
 
 #### url-fixup-basepath
-When `true` (default) an relative Markdown images and links are converted to absolute URLs relative to the Markdown document that is being loaded via the `url=` attribute. Typically you'll want images and links to be fixed up so images show and you don't end up with dead links. However in some situations you might want to render the page with the original links in which case you can explicitly force the attribute to `false`.
+When `true` (default) any relative Markdown images and links are converted to absolute URLs relative to the Markdown document that is being loaded via the `url=` attribute. Typically you'll want images and links to be fixed up so images show and you don't end up with dead links. However in some situations you might want to render the page with the original links in which case you can explicitly force the attribute to `false`.
 
 #### markdown (Model Binding)
-In addition to the content you can also bind to the `markdown` attribute which allows for programmatic assignment and databinding.
+In addition to the content you can also bind to the `markdown` attribute which allows for programmatic assignment and data binding.
 
 ```html
 @model MarkdownPageModel
@@ -321,7 +324,7 @@ The default behavior strips the script content shown below (`sanitize-html` tag 
 With the flag set to `false` the script **does execute** and the link will trigger the second alert. The default of `true` removes the entire script block and replaces `javascript:` in the href with `unsupported:` which effectively doesn't do anything.
 
 #### no-http-exception
-Optional parameter that can be set if you are using a URL bound to the tag helper. When `true` causes the taghelper to render empty instead of throwing an HTTP load exception and break the page.
+Optional parameter that can be set if you are using a URL bound to the tag helper. When `true` causes the TagHelper to render empty instead of throwing an HTTP load exception and break the page.
 
 
 ## Markdown Page Processor Middleware
@@ -376,6 +379,8 @@ services.AddMarkdown(config =>
 
     // Optionally strip script/iframe/form/object/embed tags ++
     folderConfig.SanitizeHtml = false;  //  default
+    
+    // folderConfig.BasePath = "http://othersite.com";
 
     // Optional configuration settings
     folderConfig.ProcessExtensionlessUrls = true;  // default
@@ -460,6 +465,10 @@ A more complete template might also add a code highlighter ([highlightJs](https:
     Layout = "_Layout";
 }
 @section Headers {
+    @if (!string.IsNullOrEmpty(Model.BasePath))
+    {
+        <base href="@Model.BasePath" />
+    }
     <style>
         h3 {
             margin-top: 50px;
@@ -529,6 +538,28 @@ Text to follow
 Hello World
 ===========
 Text to follow
+```
+
+### Base Path Rendering
+When rendering Markdown pages, the page is rendered similar to the way an HTML would be rendered in the path of the active document (ie. what's shown in the address bar). This works great if you have all the content locally and relative to the active document, treating the output much the same way you would an HTML document.
+
+However, if you're loading content from a remote source, you may have to specify a separate base path in order to retrieve related dependencies like images, fonts, css etc. In order to do this you need to get a `<base href="<url>" />` into the page.
+
+You can specify the baseUrl in two ways:
+
+* Via Markdown folder configuration (`folderConfig.BaseUrl`)
+* In the Markdown document via `baseUrl: <url>` YAML header
+
+The default Markdown rendering template includes the following header code:
+
+```html
+@section Headers {
+    @if (string.IsNullOrEmpty(Model.BasePath))
+    {
+        <base href="@Model.BasePath"/>
+    }
+    ...
+}
 ```
 
 ### Create your Markdown Pages
@@ -713,6 +744,17 @@ The Westwind.Web.MarkdownControl library is an open source product licensed unde
 All source code is **&copy; West Wind Technologies**, regardless of changes made to them. Any source code modifications must leave the original copyright code headers intact if present.
 
 There's no charge to use, integrate or modify the code for this project. You are free to use it in personal, commercial, government and any other type of application and you are free to modify the code for use in your own projects.
+
+### Change Log
+
+#### v3.3.5
+
+* **Add BasePath support for Markdown Templates in Middleware**  
+If you're using external URLs for pulling in Markdown content you may need to reference content relative to a non-local URL. This fix adds a new `FolderConfiguration.BasePath` property and the ability to specify a `basePath: <url>` in the Markdown document's YAML header to embed the basePath into the document. The value is exposed on the `MarkdownModel.BasePath` and can be embedded into the Markdown page layout template.
+
+* **Add highlightjs-badge to Code Snippet Rendering**   
+Added optional highlightjs-badge component to allow code-snippets to be easily copied and display the syntax language in a small badge.
+
 
 ### Give back
 If you find this library useful, consider making a small donation:
