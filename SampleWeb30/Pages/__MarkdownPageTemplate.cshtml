@@ -4,6 +4,10 @@
     Layout = "_Layout";
 }
 @section Headers {
+    @if (!string.IsNullOrEmpty(Model.BasePath))
+    {
+        <base href="@Model.BasePath" />
+    }
     <style>
         h3 {
             margin-top: 50px;
@@ -21,9 +25,9 @@
             word-wrap: normal;
         }
 
-            pre > code {
-                white-space: pre;
-            }
+        pre > code {
+            white-space: pre;
+        }
     </style>
 }
 <div style="margin-top: 40px;">
@@ -31,15 +35,19 @@
 </div>
 
 @section Scripts {
+    <!-- Syntax Highlighting code -->
     <script src="~/lib/highlightjs/highlight.pack.js"></script>
     <link href="~/lib/highlightjs/styles/vs2015.css" rel="stylesheet" />
-    <script>
-        setTimeout(function () {
-            var pres = document.querySelectorAll("pre>code");
-            for (var i = 0; i < pres.length; i++) {
-                hljs.highlightBlock(pres[i]);
-            }
-        });
+    <script src="~/lib/highlightjs-badge.min.js"></script>
 
+    <script>
+        // apply HighlightJS
+        var pres = document.querySelectorAll("pre>code");
+        for (var i = 0; i < pres.length; i++) {
+            hljs.highlightBlock(pres[i]);
+        }
+
+        // https://github.com/RickStrahl/highlightjs-badge
+        window.highlightJsBadge();
     </script>
 }
