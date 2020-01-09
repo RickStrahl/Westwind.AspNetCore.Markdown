@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -85,21 +86,30 @@ namespace Westwind.AspNetCore.Markdown
             if (model == null)
                 model = new MarkdownModel();
 
-            
-            if (model.FolderConfiguration.ExtractTitle)
-            {
-                var firstLines = StringUtils.GetLines(markdown, 50).ToList();
-                var firstLinesText = String.Join("\n", firstLines);
+            string yaml = null;
+            string firstLinesText = null;
+            List<string> firstLines = null;
 
-                // Assume YAML 
-                if (markdown.StartsWith("---"))
+            
+            if (markdown.StartsWith("---"))
+            {
+                firstLines = StringUtils.GetLines(markdown, 50).ToList();
+                firstLinesText = String.Join("\n", firstLines);
+                yaml = StringUtils.ExtractString(firstLinesText, "---", "---", returnDelimiters: true);
+            }
+
+            if (yaml != null && yaml.Contains("basePath: "))
+                model.BasePath = StringUtils.ExtractString(yaml, "basePath: ", "\n")?.Trim();
+            if (string.IsNullOrEmpty(model.BasePath))
+                model.BasePath = model.FolderConfiguration.BasePath;
+
+            if (model.FolderConfiguration.ExtractTitle )
+            {
+
+                if (yaml != null)
                 {
-                    var yaml = StringUtils.ExtractString(firstLinesText, "---", "---", returnDelimiters: true);
-                    if (yaml != null)
-                    {
-                        model.Title = StringUtils.ExtractString(yaml, "title: ", "\n");
-                        model.YamlHeader = yaml.Replace("---", "").Trim();
-                    }
+                    model.Title = StringUtils.ExtractString(yaml, "title: ", "\n");
+                    model.YamlHeader = yaml.Replace("---", "").Trim();
                 }
 
                 // if we don't have Yaml headers the header has to be closer to the top

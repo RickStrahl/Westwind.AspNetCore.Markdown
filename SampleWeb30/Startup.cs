@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Markdig;
 using Markdig.Extensions.AutoIdentifiers;
-using Markdig.Extensions.Tables;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -53,6 +47,8 @@ namespace SampleWeb
                     // controller.ViewBag.Model = new MyCustomModel();
                 };
 
+                // folderConfig.BasePath = "https://github.com/RickStrahl/Westwind.AspNetCore.Markdow/raw/master";
+
                 // Create your own IMarkdownParserFactory and IMarkdownParser implementation
                 // to replace the default Markdown Processing
                 //config.MarkdownParserFactory = new CustomMarkdownParserFactory();                 
@@ -78,8 +74,10 @@ namespace SampleWeb
             });
 
             // We need to use MVC so we can use a Razor Configuration Template
+            // for the Markdown Processing Middleware
             services.AddMvc()
-                    .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly);
+                // have to let MVC know we have a controller otherwise it won't be found
+                .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly);
         }
 
 

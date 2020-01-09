@@ -11,6 +11,12 @@ namespace Westwind.AspNetCore.Markdown
         public string Title { get; set; }
 
         /// <summary>
+        /// An optional base Url that can is embedded into the rendered template page
+        /// when rendering through the page middleware.
+        /// </summary>
+        public string BasePath { get; set; }
+
+        /// <summary>
         /// HTML output from the rendered markdown text
         /// </summary>
         public HtmlString RenderedMarkdown { get; set; }
