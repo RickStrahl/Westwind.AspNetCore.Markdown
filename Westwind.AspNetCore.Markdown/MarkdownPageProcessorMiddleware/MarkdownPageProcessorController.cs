@@ -88,12 +88,10 @@ namespace Westwind.AspNetCore.Markdown
 
             string yaml = null;
             string firstLinesText = null;
-            List<string> firstLines = null;
+            var firstLines = StringUtils.GetLines(markdown, 50).ToList();
 
-            
             if (markdown.StartsWith("---"))
             {
-                firstLines = StringUtils.GetLines(markdown, 50).ToList();
                 firstLinesText = String.Join("\n", firstLines);
                 yaml = StringUtils.ExtractString(firstLinesText, "---", "---", returnDelimiters: true);
             }
@@ -105,7 +103,6 @@ namespace Westwind.AspNetCore.Markdown
 
             if (model.FolderConfiguration.ExtractTitle )
             {
-
                 if (yaml != null)
                 {
                     model.Title = StringUtils.ExtractString(yaml, "title: ", "\n");
@@ -121,7 +118,7 @@ namespace Westwind.AspNetCore.Markdown
                     {
                         if (line.TrimStart().StartsWith("# "))
                         {
-                            model.Title = line.TrimStart(new char[] {' ', '\t', '#'});
+                            model.Title = line.TrimStart(' ', '\t', '#');
                             break;
                         }
                     }

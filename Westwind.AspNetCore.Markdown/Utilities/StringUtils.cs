@@ -112,11 +112,11 @@ namespace Westwind.AspNetCore.Markdown.Utilities
         /// </summary>
         /// <param name="s">String to check for lines</param>
         /// <param name="maxLines">Optional - max number of lines to return</param>
-        /// <returns>array of strings, or null if the string passed was a null</returns>
+        /// <returns>array of strings, or empty array if the string passed was a null</returns>
         public static string[] GetLines(string s, int maxLines = 0)
         {
             if (s == null)
-                return null;
+                return new string[] {};
 
             s = s.Replace("\r\n", "\n");
 
