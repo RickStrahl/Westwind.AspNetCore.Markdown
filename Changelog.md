@@ -2,6 +2,17 @@
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore.Markdown)</small>
 
 
+### Version 3.3.6
+
+* **Fix: Disk based Page Parsing Bug**   
+Fix issue with header parsing.
+
+* **Update to MarkDig 1.18.1**  
+Updating to the latest version of Markdig
+
+* **Project Targeting Cleanup**  
+Clean up project targeting for the library project for .NET Core 2.1 and 3.0.
+
 ### Version 3.3.0
 
 * **Add support for .NET Core 3.0**  

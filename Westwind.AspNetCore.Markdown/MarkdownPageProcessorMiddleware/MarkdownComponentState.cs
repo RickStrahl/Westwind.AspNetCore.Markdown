@@ -32,16 +32,5 @@ namespace Westwind.AspNetCore.Markdown
             }
             return contextAccessor.HttpContext;
         }
-
-        //internal static IHttpClientFactory HttpClientFactory
-        //{
-        //    get
-        //    {
-        //        if (_httpClientFactory == null)
-        //            _httpClientFactory = ServiceProvider.GetService(typeof(IHttpClientFactory)) as IHttpClientFactory;
-        //        return _httpClientFactory;
-        //    }
-        //}
-        //private static IHttpClientFactory _httpClientFactory;
     }
 }
