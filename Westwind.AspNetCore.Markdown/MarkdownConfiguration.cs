@@ -124,7 +124,18 @@ namespace Westwind.AspNetCore.Markdown
 
         //public IMarkdownParserFactory MarkdownParserFactory { get; set; }
 
+        /// <summary>
+        /// Optional theme - set during middleware initialization
+        /// </summary>
+        public string RenderTheme {get; set;}
 
+
+        /// <summary>
+        /// Optional syntaxTheme - set during middleware initialization
+        /// </summary>
+        public string SyntaxTheme {get; set;} 
+
+        
         /// <summary>
         /// Function that can be set to be called before the Markdown View is fired.
         /// Use this method to potentially add additional data into the ViewBag you 

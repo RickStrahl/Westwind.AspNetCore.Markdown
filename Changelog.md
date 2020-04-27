@@ -1,6 +1,11 @@
 # Westwind.AspNetCore Change Log
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore.Markdown)</small>
 
+### Version 3.3.8
+
+* **Add Theme and SyntaxTheme to MarkdownModel**  
+Added optional `RenderTheme` and `SyntaxTheme` properties to the folder configuration as optional values that are then passed into the page model for rendering. The target application can then optionally take advantage of the themes via code configuration or dynamically at runtime.
+
 
 ### Version 3.3.6
 

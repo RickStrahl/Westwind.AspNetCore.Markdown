@@ -36,7 +36,7 @@ namespace SampleWeb
 
                 // Optionally strip script/iframe/form/object/embed tags ++
                 folderConfig.SanitizeHtml = false;  //  default
-
+                
                 // Optional configuration settings
                 folderConfig.ProcessExtensionlessUrls = true;  // default
                 folderConfig.ProcessMdFiles = true; // default
