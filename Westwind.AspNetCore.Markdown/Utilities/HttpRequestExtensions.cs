@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
-namespace Westwind.AspnetCore.Markdown.Utilities
+namespace Westwind.AspNetCore.Markdown.Utilities
 {
     public static class HttpRequestExtensions
     {
@@ -83,14 +84,14 @@ namespace Westwind.AspnetCore.Markdown.Utilities
 
             if (relativePath.StartsWith("~"))
                 relativePath = relativePath.TrimStart('~');
-            
+
             string path = Path.Combine(basePath, relativePath);
 
             string slash = Path.DirectorySeparatorChar.ToString();
             return path
                 .Replace("/", slash)
                 .Replace("\\", slash)
-                .Replace(slash + slash, slash);            
+                .Replace(slash + slash, slash);
         }
 
         /// <summary>
@@ -98,7 +99,7 @@ namespace Westwind.AspnetCore.Markdown.Utilities
         /// </summary>
         /// <param name="request"></param>
         public static string GetUrl(this HttpRequest request)
-        {                        
+        {
             return $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
         }
 
@@ -113,10 +114,10 @@ namespace Westwind.AspnetCore.Markdown.Utilities
         {
             string value = request.Form[key].FirstOrDefault();
             if (string.IsNullOrEmpty(value))
-                value = request.Query[key].FirstOrDefault();            
-            if (string.IsNullOrEmpty(value))            
+                value = request.Query[key].FirstOrDefault();
+            if (string.IsNullOrEmpty(value))
                 value = request.HttpContext.Session.GetString(key);
-            
+
             return value;
         }
 
