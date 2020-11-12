@@ -12,9 +12,9 @@ namespace SampleWeb.Controllers
 {
     public class MarkdownController : Controller
     {
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
-        public MarkdownController(IHostingEnvironment hostingEnvironment)
+        public MarkdownController(IWebHostEnvironment hostingEnvironment)
         {
             this.hostingEnvironment = hostingEnvironment;
         }

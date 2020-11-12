@@ -1,11 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Markdig;
 using Markdig.Extensions.AutoIdentifiers;
+using Markdig.Extensions.Tables;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Westwind.AspNetCore.Markdown;
 
 namespace SampleWeb
@@ -36,7 +41,7 @@ namespace SampleWeb
 
                 // Optionally strip script/iframe/form/object/embed tags ++
                 folderConfig.SanitizeHtml = false;  //  default
-                
+
                 // Optional configuration settings
                 folderConfig.ProcessExtensionlessUrls = true;  // default
                 folderConfig.ProcessMdFiles = true; // default
@@ -46,8 +51,6 @@ namespace SampleWeb
                 {
                     // controller.ViewBag.Model = new MyCustomModel();
                 };
-
-                // folderConfig.BasePath = "https://github.com/RickStrahl/Westwind.AspNetCore.Markdow/raw/master";
 
                 // Create your own IMarkdownParserFactory and IMarkdownParser implementation
                 // to replace the default Markdown Processing
@@ -74,15 +77,12 @@ namespace SampleWeb
             });
 
             // We need to use MVC so we can use a Razor Configuration Template
-            // for the Markdown Processing Middleware
-            services.AddMvc()
-                // have to let MVC know we have a controller otherwise it won't be found
-                .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly);
+            services.AddMvc();
         }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -98,9 +98,9 @@ namespace SampleWeb
                 DefaultFileNames = new List<string> { "index.md", "index.html" }
             });
 
+            app.UseMarkdown();
 
-
-
+          
             // Ultra-simplistic Markdown router
             //app.Use(async (context, next) =>
             //{
@@ -115,19 +115,9 @@ namespace SampleWeb
             //    await next();
             //});
 
-
-            app.UseMarkdown();
-
-            app.UseRouting();
-
             app.UseStaticFiles();
-            
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-                endpoints.MapDefaultControllerRoute();
 
-            });
+            app.UseMvcWithDefaultRoute();
 
 
         }

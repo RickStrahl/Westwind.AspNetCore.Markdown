@@ -4,11 +4,11 @@
     Layout = "_Layout";
 }
 @section Headers {
-    @if (!string.IsNullOrEmpty(Model.BasePath))
-    {
-        <base href="@Model.BasePath" />
-    }
     <style>
+        @if (!string.IsNullOrEmpty(Model.BasePath))
+        {
+            <base href="@Model.BasePath" />
+        }
         h3 {
             margin-top: 50px;
             padding-bottom: 10px;

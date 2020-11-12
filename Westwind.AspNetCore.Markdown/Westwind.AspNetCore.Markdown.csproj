@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;netcoreapp2.1;</TargetFrameworks>
-    <Version>3.4</Version>    
+    <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
+    <Version>3.5</Version>    
     <Authors>Rick Strahl</Authors>
     <Company>West Wind Technologies</Company>
     <Product>West Wind Web Toolkit</Product>
-    <Title>Westwind AspNet Core Markdown TagHelper and Parsing Support</Title>
+    <Title>Westwind AspNet Core Markdown Parsing, Loading and TagHelper</Title>
     <Description>
 This library provides Markdown support for ASP.NET Core applications:
 
@@ -33,21 +33,19 @@ For similar features in System.Web based classic ASP.NET apps see `Westwind.Web.
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>    
     <PackageOutputPath>./nupkg</PackageOutputPath>  
 
-    <PackageTags>Markdown AspNetCore Web</PackageTags>
-    <PackageIconUrl>https://markdownmonster.west-wind.com/images/markdown_icon.png</PackageIconUrl>    
+    <PackageTags>markdown aspnetcore web westwind</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageLicense>LICENSE.MD</PackageLicense>
     <PackageProjectUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown#License</PackageLicenseUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.21.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Markdig" Version="0.22.0" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.0" />
+  
+  <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="" />
+    <None Include="LICENSE.MD" Pack="true" PackagePath="" />
   </ItemGroup>
-
 </Project>
