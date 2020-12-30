@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
-namespace Westwind.AspnetCore.Markdown.Utilities
+namespace Westwind.AspNetCore.Markdown.Utilities
 {
     public static class HttpRequestExtensions
     {
