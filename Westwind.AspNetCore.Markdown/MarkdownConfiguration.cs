@@ -66,6 +66,47 @@ namespace Westwind.AspNetCore.Markdown
 
             return folder;
         }
+
+        /// <summary>
+        /// Adds a url masked folder to the list of folders that are to be 
+        /// processed by this middleware. 
+        /// </summary>
+        /// <param name="path">The path to work on. Examples: /docs/ or /classes/docs/.</param>
+        /// <param name="viewTemplate">Path to a View Template. Defaults to: ~/Views/__MarkdownPageTemplate.cshtml</param>
+        /// <param name="processMdFiles">Process files with an .md extension</param>
+        /// <param name="processExtensionlessUrls">Process extensionless Urls as Markdown. Assume matching .md file is available that holds the actual Markdown text</param>
+        /// <returns></returns>
+        public MarkdownProcessingFolder AddMarkdownMaskedProcessingFolder(string urlMask,
+                                                                    string filePath,
+                                                                    string viewTemplate = null,
+                                                                    bool processMdFiles = true,
+                                                                    bool processExtensionlessUrls = true)
+        {
+
+            if (!filePath.StartsWith("/"))
+                filePath = "/" + filePath;
+            if (!filePath.EndsWith("/"))
+                filePath = "/" + filePath + "/";
+            if (!urlMask.StartsWith("/"))
+                urlMask = "/" + urlMask;
+            if (!urlMask.EndsWith("/"))
+                urlMask = "/" + urlMask + "/";
+
+            var folder = new MarkdownProcessingFolder()
+            {
+                RelativePath = filePath,
+                ProcessMdFiles = processMdFiles,
+                ProcessExtensionlessUrls = processExtensionlessUrls,
+                UrlPathMask = urlMask
+            };
+
+            if (!string.IsNullOrEmpty(viewTemplate))
+                folder.ViewTemplate = viewTemplate;
+
+            MarkdownProcessingFolders.Add(folder);
+
+            return folder;
+        }
     }
 
     /// <summary>
@@ -79,6 +120,13 @@ namespace Westwind.AspNetCore.Markdown
         /// Can use ~ virtual path syntax.
         /// </summary>
         public string RelativePath { get; set; }
+
+
+        /// <summary>
+        /// If used, provides masking between url path and RelativePath.
+        /// Can use ~ virtual path syntax.
+        /// </summary>
+        public string UrlPathMask { get; set; }
 
 
         /// <summary>

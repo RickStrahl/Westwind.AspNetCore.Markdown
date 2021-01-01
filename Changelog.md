@@ -1,6 +1,12 @@
 # Westwind.AspNetCore Change Log
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore.Markdown)</small>
 
+### Version 3.3.?
+
+* **Add URL masking functionality for ProcessorMiddleware**  
+Added new AddMarkdownMaskedProcessingFolder method for MarkdownConfiguration which allows to define URL mask which allows for independent file path and url path. 
+
+
 ### Version 3.3.8
 
 * **Add Theme and SyntaxTheme to MarkdownModel**  

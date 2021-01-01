@@ -81,24 +81,35 @@ namespace Westwind.AspNetCore.Markdown
 
             var basePath = _env.WebRootPath;
             var relativePath = path;
-            relativePath = PathHelper.NormalizePath(relativePath).Substring(1).TrimEnd('\\', '/');
-            var pageFile = Path.Combine(basePath, relativePath);
+            
 
             // process any Markdown file that has .md extension explicitly
             foreach (var folder in _configuration.MarkdownProcessingFolders)
             {
                 if (!path.StartsWith(folder.RelativePath, StringComparison.InvariantCultureIgnoreCase))
-                    continue;
+                {
+                    if(folder.UrlPathMask != null && path.StartsWith(folder.UrlPathMask, StringComparison.InvariantCultureIgnoreCase))
+                    {//check if UrlPathMask is present, if so, update relativePath to files
+                        relativePath = path.Replace(folder.UrlPathMask, null);//strip mask away
+                        relativePath = relativePath.Insert(0,folder.RelativePath);//add relative physical path
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
 
                 if (isRoot && folder.RelativePath != "/")
                     continue;
+
+                relativePath = PathHelper.NormalizePath(relativePath).Substring(1).TrimEnd('\\', '/');
+                var pageFile = Path.Combine(basePath, relativePath);
 
                 if (hasMdExtension)
                 {
                     processAsMarkdown = true;
                 }
-                else if (path.StartsWith(folder.RelativePath, StringComparison.InvariantCultureIgnoreCase) &&
-                         (folder.ProcessExtensionlessUrls && !hasExtension ||
+                else if ((folder.ProcessExtensionlessUrls && !hasExtension ||
                           hasMdExtension && folder.ProcessMdFiles))
                 {
 

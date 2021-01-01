@@ -31,6 +31,9 @@ namespace SampleWeb
                 // Simplest: Use all default settings
                 var folderConfig = config.AddMarkdownProcessingFolder("/docs/", "~/Pages/__MarkdownPageTemplate.cshtml");
 
+                // Simple example with url masked folders
+                folderConfig = config.AddMarkdownMaskedProcessingFolder("/HelloWorld/Superman/","/docs/", "~/Pages/__MarkdownPageTemplate.cshtml");
+
                 // Customized Configuration: Set FolderConfiguration options
                 folderConfig = config.AddMarkdownProcessingFolder("/posts/", "~/Pages/__MarkdownPageTemplate.cshtml");
 

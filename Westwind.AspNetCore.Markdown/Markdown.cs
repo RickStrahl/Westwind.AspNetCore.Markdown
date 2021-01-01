@@ -42,7 +42,7 @@ using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
-using Westwind.AspnetCore.Markdown.Utilities;
+using Westwind.AspNetCore.Markdown.Utilities;
 
 namespace Westwind.AspNetCore.Markdown
 {
