@@ -1,6 +1,17 @@
 # Westwind.AspNetCore Change Log
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore.Markdown)</small>
 
+### Version 3.6
+
+* **Add .NET 5.0 Target removed .NET Core 2.1 Target**   
+Updated the target frameworks to support .NET 5.0 and at the same time remove support for netcoreapp2.1. 1 version back compatibilty update schedule if there are feature differences as there are with 2.1. Removed 2.1 specific code.
+
+* **Add ParseFile() overloads for IFileInfo**   
+There are now overloads that allow the various `ParseFile` and`ParseFileAsync()` to work with `IFileInfo` objects to allow loading of virtual resources. ([#22](https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/pull/22))
+
+* **Updated to MarkDig 0.24**  
+Update to latest version of MarkDig.
+
 ### Version 3.3.8
 
 * **Add Theme and SyntaxTheme to MarkdownModel**  

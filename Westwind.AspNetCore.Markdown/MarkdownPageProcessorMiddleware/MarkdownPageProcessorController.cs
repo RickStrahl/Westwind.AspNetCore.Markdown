@@ -18,18 +18,11 @@ namespace Westwind.AspNetCore.Markdown
     public class MarkdownPageProcessorController : Controller
     {
         public MarkdownConfiguration MarkdownProcessorConfig { get; }
-#if NETCOREAPP2_1
-        private readonly IHostingEnvironment hostingEnvironment;
-#else
-        private readonly IWebHostEnvironment hostingEnvironment;
-#endif
 
+        private readonly IWebHostEnvironment hostingEnvironment;
+        
         public MarkdownPageProcessorController(
-#if NETCOREAPP2_1
-            IHostingEnvironment hostingEnvironment,
-#else
             IWebHostEnvironment hostingEnvironment,
-#endif
             MarkdownConfiguration config)
         {
             MarkdownProcessorConfig = config;
