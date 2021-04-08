@@ -41,7 +41,7 @@ For similar features in System.Web based classic ASP.NET apps see `Westwind.Web.
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Markdig" Version="0.22.0" />
+    <PackageReference Include="Markdig" Version="0.24.0" />
   </ItemGroup>
   
   <ItemGroup>
