@@ -75,7 +75,7 @@ namespace Westwind.AspNetCore.Markdown
                 return _next(context);
 
             bool hasExtension = !string.IsNullOrEmpty(Path.GetExtension(path));
-            bool hasMdExtension = path.EndsWith(".md");
+            bool hasMdExtension = path.EndsWith(".md", StringComparison.OrdinalIgnoreCase) || path.EndsWith(".markdown", StringComparison.OrdinalIgnoreCase);
             bool isRoot = path == "/";
             bool processAsMarkdown = false;
 
@@ -93,7 +93,7 @@ namespace Westwind.AspNetCore.Markdown
                 if (isRoot && folder.RelativePath != "/")
                     continue;
 
-                if (context.Request.Path.Value.EndsWith(".md", StringComparison.InvariantCultureIgnoreCase))
+                if (hasMdExtension)
                 {
                     processAsMarkdown = true;
                 }
@@ -111,7 +111,7 @@ namespace Westwind.AspNetCore.Markdown
                         pageFile += ".md";
                     }
 
-                    if (!File.Exists(pageFile))
+                    if (!File.Exists(pageFile) && !File.Exists(pageFile.Replace(".md",".markdown")))
                         continue;
 
                     processAsMarkdown = true;

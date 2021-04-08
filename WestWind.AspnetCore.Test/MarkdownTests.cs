@@ -28,10 +28,12 @@ namespace Tests
         public void BasicMarkdownFromUrl()
         {
             var html = Markdown.ParseFromUrl(                
-                "https://github.com/RickStrahl/BlogPosts/raw/master/2018-11/Updating-Westwind.AspNetCore.Markdown-with-Markdown-from-Files-and-URLs/UpdatingWestwindAspnetcoreMarkdownWithMarkdownFromFilesAndUrls.md",
+                "https://raw.githubusercontent.com/RickStrahl/BlogPosts/master/2018-11/Updating-Westwind.AspNetCore.Markdown-with-Markdown-from-Files-and-URLs/UpdatingWestwindAspnetcoreMarkdownWithMarkdownFromFilesAndUrls.md",
                 fixupBaseUrl: true);
 
-            Assert.That(html.Contains("<h2 id=\"features\">Features</h2>"));
+            Console.WriteLine(html);
+
+            Assert.That(html.Contains("<p><strong>For ASP.NET Core:</strong></p>"));
 
         }
     }

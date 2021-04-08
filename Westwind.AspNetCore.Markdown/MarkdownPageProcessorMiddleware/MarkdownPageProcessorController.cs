@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Westwind.AspNetCore.Markdown;
 using Westwind.AspNetCore.Markdown.Utilities;
-using Microsoft.AspNetCore.Hosting;
+
 
 namespace Westwind.AspNetCore.Markdown
 {

@@ -57,7 +57,7 @@ namespace Westwind.AspNetCore.Markdown.Utilities
         /// <param name="host">Optional - IHostingEnvironment instance. If not passed retrieved from RequestServices DI</param>
         /// <param name="basePath">Optional - Optional physical base path. By default host.WebRootPath</param>
         /// <returns></returns>
-        public static string MapPath(this HttpRequest request, string relativePath, IHostingEnvironment host = null, string basePath = null)
+        public static string MapPath(this HttpRequest request, string relativePath, IWebHostEnvironment host = null, string basePath = null)
         {
             if (string.IsNullOrEmpty(relativePath))
                 return string.Empty;
@@ -68,8 +68,8 @@ namespace Westwind.AspNetCore.Markdown.Utilities
                 {
                     if (host == null)
                         host =
-                            request.HttpContext.RequestServices.GetService(typeof(IHostingEnvironment)) as
-                                IHostingEnvironment;
+                            request.HttpContext.RequestServices.GetService(typeof(IWebHostEnvironment)) as
+                                IWebHostEnvironment;
                     WebRootPath = host.WebRootPath;
 
                 }
