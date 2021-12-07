@@ -120,14 +120,17 @@ namespace Westwind.AspNetCore.Markdown
             {
                 builder = new MarkdownPipelineBuilder()
                     .UseEmphasisExtras()
+                    .UseAutoLinks() // URLs are parsed into anchors
+                    .UseAutoIdentifiers(AutoIdentifierOptions.GitHub) // Headers get id="name" 
+                    .UseAbbreviations()
+
                     .UsePipeTables()
                     .UseGridTables()
                     .UseFooters()
                     .UseFootnotes()
                     .UseCitations()
-                    .UseAutoLinks() // URLs are parsed into anchors
-                    .UseAutoIdentifiers(AutoIdentifierOptions.GitHub) // Headers get id="name" 
-                    .UseAbbreviations()
+                  
+                   
                     .UseYamlFrontMatter()
                     .UseEmojiAndSmiley(true)
                     .UseMediaLinks()

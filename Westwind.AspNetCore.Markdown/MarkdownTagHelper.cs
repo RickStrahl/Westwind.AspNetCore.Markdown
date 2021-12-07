@@ -1,9 +1,9 @@
 ﻿#region License
 /**************************************************************
- *  Author: Rick Strahl 
- *          © West Wind Technologies, 
+ *  Author: Rick Strahl
+ *          © West Wind Technologies,
  *          http://www.west-wind.com/
- * 
+ *
  * Created: 3/25/2018
  *
  * Permission is hereby granted, free of charge, to any person
@@ -14,10 +14,10 @@
  * copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following
  * conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -26,7 +26,7 @@
  * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
- **************************************************************  
+ **************************************************************
 */
 #endregion
 
@@ -44,12 +44,12 @@ namespace Westwind.AspNetCore.Markdown
 
     /// <summary>
     /// &lt;markdown&gt; TagHelper that lets you embed Markdown text directly
-    /// into your Razor page. Razor expressions are evaluated **before** 
+    /// into your Razor page. Razor expressions are evaluated **before**
     /// Markdown is parsed.
-    /// </summary>        
+    /// </summary>
     [HtmlTargetElement("markdown")]
     public class MarkdownTagHelper : TagHelper
-    {        
+    {
         /// <summary>
         /// When set to true (default) strips leading white space based
         /// on the first line of non-empty content. The first line of
@@ -69,10 +69,10 @@ namespace Westwind.AspNetCore.Markdown
 
 
         /// <summary>
-        /// Optional Content property that allows you to bind a 
-        /// Markdown model expression to the content. 
-        /// 
-        /// This Markdown content takes priority over the 
+        /// Optional Content property that allows you to bind a
+        /// Markdown model expression to the content.
+        ///
+        /// This Markdown content takes priority over the
         /// body content of the control.
         /// </summary>
         [HtmlAttributeName("markdown")]
@@ -80,7 +80,7 @@ namespace Westwind.AspNetCore.Markdown
 
 
         /// <summary>
-        /// Optional file to load content. Use       
+        /// Optional file to load content. Use
         /// </summary>
         [HtmlAttributeName("filename")]
         public string Filename { get; set; }
@@ -96,7 +96,8 @@ namespace Westwind.AspNetCore.Markdown
 
         [HtmlAttributeName("no-http-exceptions")]
         public bool NoHttpException { get; set; }
-        
+
+
         /// <summary>
         /// Process markdown and generate HTML output
         /// </summary>
@@ -105,12 +106,10 @@ namespace Westwind.AspNetCore.Markdown
         /// <returns></returns>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            await base.ProcessAsync(context, output);
-
             string content = null;
             string html = null;
             if (!string.IsNullOrEmpty(Url))
-            {                
+            {
                 html = await Westwind.AspNetCore.Markdown.Markdown.ParseFromUrlAsync(Url,fixupBaseUrl: UrlFixupBaseUrl, noHttpException: NoHttpException);
 
                 output.TagName = null;  // Remove the <markdown> element
@@ -149,6 +148,10 @@ namespace Westwind.AspNetCore.Markdown
 
             output.TagName = null;  // Remove the <markdown> element
             output.Content.SetHtmlContent(html);
+
+            await base.ProcessAsync(context, output);
+
+
         }
 
         string NormalizeWhiteSpaceText(string text)

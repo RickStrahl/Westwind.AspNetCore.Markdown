@@ -15,7 +15,7 @@ namespace Westwind.AspNetCore.Markdown
         public const string DefaultMarkdownViewTemplate = "~/Views/__MarkdownPageTemplate.cshtml";
 
         /// <summary>
-        /// List of relative virtual folders where any extensionless URL is 
+        /// List of relative virtual folders where any extensionless URL is
         /// matched to an .md file on disk
         /// </summary>
         public List<MarkdownProcessingFolder> MarkdownProcessingFolders { get; set; } = new List<MarkdownProcessingFolder>();
@@ -28,13 +28,13 @@ namespace Westwind.AspNetCore.Markdown
         public Action<MarkdownPipelineBuilder> ConfigureMarkdigPipeline { get; set; }
 
         /// <summary>
-        /// Global HtmlTagBlackList when StripScriptTags is set for Markdown parsing     
+        /// Global HtmlTagBlackList when StripScriptTags is set for Markdown parsing
         /// </summary>
         public string HtmlTagBlackList { get; set; } = "script|iframe|object|embed|form";
 
         /// <summary>
-        /// Adds a folder to the list of folders that are to be 
-        /// processed by this middleware. 
+        /// Adds a folder to the list of folders that are to be
+        /// processed by this middleware.
         /// </summary>
         /// <param name="path">The path to work on. Examples: /docs/ or /classes/docs/.</param>
         /// <param name="viewTemplate">Path to a View Template. Defaults to: ~/Views/__MarkdownPageTemplate.cshtml</param>
@@ -90,7 +90,7 @@ namespace Westwind.AspNetCore.Markdown
         /// the source file.
         ///
         /// You can also specify `basePath: <path>` in the Yaml header of the
-        /// the rendered Markdown document. 
+        /// the rendered Markdown document.
         /// </summary>
         public string BasePath {get; set;}
 
@@ -133,14 +133,14 @@ namespace Westwind.AspNetCore.Markdown
         /// <summary>
         /// Optional syntaxTheme - set during middleware initialization
         /// </summary>
-        public string SyntaxTheme {get; set;} 
+        public string SyntaxTheme {get; set;}
 
-        
+
         /// <summary>
         /// Function that can be set to be called before the Markdown View is fired.
-        /// Use this method to potentially add additional data into the ViewBag you 
-        /// might want access to in the 
-        /// 
+        /// Use this method to potentially add additional data into the ViewBag you
+        /// might want access to in the Markdown template you create that renders
+        /// the final HTML output.
         /// </summary>
         public Action<MarkdownModel, Controller> PreProcess { get; set; }
     }

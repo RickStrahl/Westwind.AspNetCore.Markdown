@@ -1,4 +1,4 @@
-﻿---
+---
 title: Creating an ASP.NET Core Markdown TagHelper and Parser
 abstract: A couple of months ago I wrote about creating a WebForms based Markdown control. This time around I'll build an ASP.NET Core MVC TagHelper that performs similar functionality for embedding Markdown text into a content area of a Razor page. The component also includes easy access to a Markdown parser using the blazing fast MarkDig Markdown parser.
 keywords: Markdown, TagHelper, ASP.NET Core
@@ -8,7 +8,6 @@ postId: 708211
 postDate: 2018-03-23T01:11:43.8926586-10:00
 ---
 # Creating an ASP.NET Core Markdown TagHelper and Parser
-
 ![](ScribeImage.jpg)
 
 A few months ago I wrote about creating a [literal Markdown Control for WebForms](https://weblog.west-wind.com/posts/2017/Sep/13/A-Literal-Markdown-Control-for-ASPNET-WebForms), where I described a simple content control that takes the content from within a tag and parses the embedded Markdown and then produces HTML output in its stead. I created a WebForms control mainly for selfish reasons, because I have tons of semi-static content on my content sites that still live in classic ASP.NET ASPX pages.
@@ -19,26 +18,15 @@ There are already a number of implementations available, but I'm a big fan of th
 
 Using the TagHelper you can render Markdown like this inside of a Razor Page:
 
-```html
-<markdown>
-    #### This is Markdown text inside of a Markdown block
+```markdown
+#### This is Markdown text inside of a Markdown block
 
-    * Item 1
-    * Item 2
- 
-    ### Dynamic Data is supported:
-    The current Time is: @DateTime.Now.ToString("HH:mm:ss")
+* Item 1
+* Item 2
 
-    ```cs
-    // this c# is a code block
-    for (int i = 0; i < lines.Length; i++)
-    {
-        line1 = lines[i];
-        if (!string.IsNullOrEmpty(line1))
-            break;
-    }
-    ```
-</markdown>
+### Dynamic Data is supported:
+The current Time is: @DateTime.Now.ToString("HH:mm:ss")
+
 ```
 
 The Markdown is expanded into HTML to replace the markdown TagHelper content.
