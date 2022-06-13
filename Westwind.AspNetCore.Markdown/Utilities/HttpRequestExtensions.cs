@@ -120,11 +120,5 @@ namespace Westwind.AspNetCore.Markdown.Utilities
 
             return value;
         }
-
-        /// TODO: Create a generic way to retrieve the route dictionary
-        //public static string GetRouteValue(this HttpRequest request, string routeKey)
-        //{
-        //      throw new NotImplementedException();
-        //}
     }
 }

@@ -38,7 +38,9 @@ namespace Westwind.AspNetCore.Markdown
                 {
                     try
                     {
+#pragma warning disable SYSLIB0014
                         var webClient = new WebClient();
+#pragma warning restore SYSLIB0014
                         string content =  webClient.DownloadString(url);
 
                         url = StringUtils.ExtractString(content, "data-original_content_git_url=\"", "\"");

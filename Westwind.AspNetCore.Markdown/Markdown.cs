@@ -45,6 +45,9 @@ using Westwind.AspNetCore.Markdown.Utilities;
 
 namespace Westwind.AspNetCore.Markdown
 {
+    /// <summary>
+    /// Markdown Helper class that provides basic parsing features for 
+    /// </summary>
     public static class Markdown
     {
         #region From String
@@ -277,7 +280,10 @@ namespace Westwind.AspNetCore.Markdown
             string content = null;
             try
             {
+
+#pragma warning disable SYSLIB0014
                 var client = new WebClient();
+#pragma warning restore SYSLIB0014
                 content = client.DownloadString(new Uri(url));
             }
             catch (Exception ex)
@@ -316,7 +322,9 @@ namespace Westwind.AspNetCore.Markdown
 
             try
             {
+#pragma warning disable SYSLIB0014
                 var client = new WebClient();
+#pragma warning restore SYSLIB0014
                 content = await client.DownloadStringTaskAsync(new Uri(url));
             }
             catch (Exception ex)

@@ -89,7 +89,7 @@ namespace Westwind.AspNetCore.Markdown
         /// and you need to locate depedent resources from the same location as
         /// the source file.
         ///
-        /// You can also specify `basePath: <path>` in the Yaml header of the
+        /// You can also specify `basePath: &lt;path&gt;` in the Yaml header of the
         /// the rendered Markdown document.
         /// </summary>
         public string BasePath {get; set;}

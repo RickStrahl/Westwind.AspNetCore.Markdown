@@ -1,6 +1,14 @@
 # Westwind.AspNetCore Change Log
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore.Markdown)</small>
 
+### Version 3.8
+
+* **Add .NET 6.0 Target**   
+Updated the target frameworks to support .NET 6.0 and leave 5.0 and 3.1 in place as well.
+
+* **Update Markdig 0.28**  
+Update Markdig dependency to the latest version.
+
 ### Version 3.6
 
 * **Add .NET 5.0 Target removed .NET Core 2.1 Target**   
