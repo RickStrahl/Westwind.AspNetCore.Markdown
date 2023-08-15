@@ -2,7 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+ using Markdig.Extensions.Abbreviations;
+ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Westwind.AspNetCore.Markdown.Utilities;
 

@@ -38,6 +38,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Text.Encodings.Web;
 
 namespace Westwind.AspNetCore.Markdown
 {
@@ -128,7 +129,9 @@ namespace Westwind.AspNetCore.Markdown
             if (Markdown != null)
                 content = Markdown.Model?.ToString();
 
+            
             if (content == null)
+                // this works only for literal content and **does expand**
                 content = (await output.GetChildContentAsync(NullHtmlEncoder.Default))
                     .GetContent(NullHtmlEncoder.Default);
 
@@ -148,6 +151,7 @@ namespace Westwind.AspNetCore.Markdown
 
             output.TagName = null;  // Remove the <markdown> element
             output.Content.SetHtmlContent(html);
+
 
             await base.ProcessAsync(context, output);
 

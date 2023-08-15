@@ -2,22 +2,22 @@
 
 [![NuGet](https://img.shields.io/nuget/vpre/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) [![](https://img.shields.io/nuget/dt/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/)
 
-<img src="MarkdownIcon.png" width="182">
+![](MarkdownIcon.png){width=182}
 
 This small package provides Markdown support for your ASP.NET Core applications. It has the following features:
 
 *  **[Markdown Parsing](#markdown-parsing)**
-    * Parse Markdown to HTML Strings 
+    * **Parse Markdown to HTML Strings**  
       `Markdown.Parse(markdown)`  
       `@Markdown.ParseHtmlString(markdown)`
-    * Parse Markdown from Files  
+    * **Parse Markdown from Files**  
        `Markdown.ParseFromFile("~/MarkdownPartial.md")`  
        `Markdown.ParseFromFileAsync("~/MarkdownPartial.md")`  
        `Markdown.ParseHtmlStringFromFile("~/MarkdownPartial.md")`
     * **Parse Markdown from Urls**  
        `Markdown.ParseFromUrl("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md")`  
        `Markdown.ParseFromUrlAsync("https://github.com/RickStrahl/Westwind.AspNetCore.Markdown/raw/master/readme.md")`
-    * Configurable Markdown Parser  
+    * **Configurable Markdown Parser**  
     	Plug in your own or customize the Markdown Parser via `IMarkdownParserFactory` and `IMarkdownParser`
 * **[Markdown TagHelper](#markdown-taghelper)** 
 	*  Embed Markdown text into Views and Pages
@@ -571,7 +571,7 @@ For example:
 wwwroot/posts/2018/03/23/MarkdownTagHelper.md
 ```
 
-![](ProjectFolderLayout.png)
+![](https://raw.githubusercontent.com/RickStrahl/Westwind.AspNetCore.Markdown/master/ProjectFolderLayout.png)
 
 I can now access this post using either:
 
@@ -587,7 +587,7 @@ http://localhost:59805/posts/2018/03/23/MarkdownTagHelper
 
 The screenshot below shows the output of this page which is a Markdown blog post I simply copied into a folder along with a couple of support images. This is in a stock ASP.NET Core MVC project without any other changes save a few label updates:
 
-![](MarkdownRenderedPage.png)
+![](https://raw.githubusercontent.com/RickStrahl/Westwind.AspNetCore.Markdown/master/MarkdownRenderedPage.png)
 
 Voila generically rendered Markdown content from .md files on disk.
 

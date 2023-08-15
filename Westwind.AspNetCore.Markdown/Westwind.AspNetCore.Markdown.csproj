@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>net6.0;net7.0;netcoreapp3.1;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.11</Version>    
+    <Version>3.12</Version>    
     <Authors>Rick Strahl</Authors>
     <Company>West Wind Technologies</Company>
     <Product>West Wind Web Toolkit</Product>
@@ -36,16 +36,18 @@ For similar features in System.Web based classic ASP.NET apps see `Westwind.Web.
     <PackageTags>markdown aspnetcore web westwind</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
     <PackageLicense>LICENSE.MD</PackageLicense>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Markdig" Version="0.31.0" />
+    <PackageReference Include="Markdig" Version="0.32.0" />
   </ItemGroup>
   
   <ItemGroup>
     <None Include="icon.png" Pack="true" PackagePath="" />
     <None Include="LICENSE.MD" Pack="true" PackagePath="" />
+    <None Include="../README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
