@@ -2,7 +2,7 @@
 
 [![NuGet](https://img.shields.io/nuget/vpre/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) [![](https://img.shields.io/nuget/dt/westwind.aspnetcore.markdown.svg)](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/)
 
-![](MarkdownIcon.png){width=182}
+![Markdown Icon](https://raw.githubusercontent.com/RickStrahl/Westwind.AspNetCore.Markdown/master/MarkdownIcon.png)
 
 This small package provides Markdown support for your ASP.NET Core applications. It has the following features:
 
