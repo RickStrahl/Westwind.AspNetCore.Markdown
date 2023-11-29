@@ -747,7 +747,13 @@ There's no charge to use, integrate or modify the code for this project. You are
 
 ### Change Log
 
-#### v3.3.5
+#### v3.15
+
+* **Add .NET 8.0 target, drop netcoreapp3.1**  
+Updated project to add .NET 8.0 native target and update to MarkDig 0.33.
+
+
+#### v3.4
 
 * **Add BasePath support for Markdown Templates in Middleware**  
 If you're using external URLs for pulling in Markdown content you may need to reference content relative to a non-local URL. This fix adds a new `FolderConfiguration.BasePath` property and the ability to specify a `basePath: <url>` in the Markdown document's YAML header to embed the basePath into the document. The value is exposed on the `MarkdownModel.BasePath` and can be embedded into the Markdown page layout template.
