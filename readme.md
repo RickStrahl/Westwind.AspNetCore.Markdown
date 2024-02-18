@@ -748,7 +748,7 @@ There's no charge to use, integrate or modify the code for this project. You are
 ### Change Log
 
 #### v3.15
-
+.\b
 * **Add .NET 8.0 target, drop netcoreapp3.1**  
 Updated project to add .NET 8.0 native target and update to MarkDig 0.33.
 
