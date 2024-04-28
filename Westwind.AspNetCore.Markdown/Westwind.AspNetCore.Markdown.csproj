@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0;net8.0;</TargetFrameworks>
+    <TargetFrameworks>net6.0;net8.0;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.15</Version>    
+    <Version>3.17</Version>    
     <Authors>Rick Strahl</Authors>
     <Company>West Wind Technologies</Company>
     <Product>West Wind Web Toolkit</Product>
@@ -20,10 +20,8 @@ This library provides Markdown support for ASP.NET Core applications:
  * Supports basic HTML Sanitation
  * TagHelper supports White Space Normalization
  * Customization of Markdown Processing Options
-
-For similar features in System.Web based classic ASP.NET apps see `Westwind.Web.Markdown`.
     </Description>
-    <Copyright>(c) West Wind Technologies, 2017-2023</Copyright>
+    <Copyright>(c) West Wind Technologies, 2017-2024</Copyright>
     <RepositoryUrl>https://github.com/RickStrahl/Westwind.AspNetCore.Markdown</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     
@@ -42,7 +40,7 @@ For similar features in System.Web based classic ASP.NET apps see `Westwind.Web.
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Markdig" Version="0.35.0" />
+    <PackageReference Include="Markdig" Version="0.37.0" />
   </ItemGroup>
   
   <ItemGroup>
