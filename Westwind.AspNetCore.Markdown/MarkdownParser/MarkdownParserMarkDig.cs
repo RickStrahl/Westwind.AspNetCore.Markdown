@@ -123,14 +123,11 @@ namespace Westwind.AspNetCore.Markdown
                     .UseAutoLinks() // URLs are parsed into anchors
                     .UseAutoIdentifiers(AutoIdentifierOptions.GitHub) // Headers get id="name" 
                     .UseAbbreviations()
-
                     .UsePipeTables()
                     .UseGridTables()
                     .UseFooters()
                     .UseFootnotes()
-                    .UseCitations()
-                  
-                   
+                    .UseCitations()                                     
                     .UseYamlFrontMatter()
                     .UseEmojiAndSmiley(true)
                     .UseMediaLinks()
