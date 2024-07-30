@@ -1,5 +1,20 @@
-# Westwind.AspNetCore Change Log
+# Westwind.AspNetCore.Markdown Change Log
 <small>[Nuget](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) &bull; [Github](https://github.com/RickStrahl/Westwind.AspNetCore.Markdown)</small>
+
+
+### Change Log
+
+### v3.17
+
+* **Add Support for MarkdownRenderExtensions**  
+Adding support for extending the rendering process via external overrides pre-rendering via Markdown text, and post rendering via HTML text. Implemented using the `IMarkdownRenderExtension` interface and added to `RenderExtensionsManager.Current.RenderExtensions`.
+
+* **Add PlantUMLRenderExtension**  
+Add a Markdown Render Extension for PlantUML as an example for a Markdown Render Extension.
+
+#### v3.15
+* **Add .NET 8.0 target, drop netcoreapp3.1**  
+Updated project to add .NET 8.0 native target and update to MarkDig 0.33.
 
 ### Version 3.10
 
@@ -27,6 +42,15 @@ There are now overloads that allow the various `ParseFile` and`ParseFileAsync()`
 
 * **Updated to MarkDig 0.24**  
 Update to latest version of MarkDig.
+
+#### v3.4
+
+* **Add BasePath support for Markdown Templates in Middleware**  
+If you're using external URLs for pulling in Markdown content you may need to reference content relative to a non-local URL. This fix adds a new `FolderConfiguration.BasePath` property and the ability to specify a `basePath: <url>` in the Markdown document's YAML header to embed the basePath into the document. The value is exposed on the `MarkdownModel.BasePath` and can be embedded into the Markdown page layout template.
+
+* **Add highlightjs-badge to Code Snippet Rendering**   
+Added optional highlightjs-badge component to allow code-snippets to be easily copied and display the syntax language in a small badge.
+
 
 ### Version 3.3.8
 

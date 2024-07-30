@@ -207,6 +207,21 @@ namespace Westwind.AspNetCore.Markdown.Utilities
             return html;
         }
 
+        /// <summary>
+        /// Replaces multiple matches with a new value
+        /// </summary>
+        /// <param name="str">String to work on</param>
+        /// <param name="matchValues">String values to match</param>
+        /// <param name="replaceWith">String to replace with</param>
+        /// <returns></returns>
+        public static string ReplaceMany(this string str, string[] matchValues, string replaceWith)
+        {
+            foreach (var value in matchValues)
+            {
+                str = str.Replace(value, replaceWith);
+            }
 
+            return str;
+        }
     }
 }

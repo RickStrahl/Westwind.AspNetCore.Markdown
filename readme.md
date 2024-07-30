@@ -33,6 +33,7 @@ This small package provides Markdown support for your ASP.NET Core applications.
 	* Customizable Markdown Parsing Pipeline for Markdig
 	* Pluggable Markdown Parser Support
 	* Basic HTML Sanitation support built in
+	* RenderExtensions to inject custom functionality
 
 Related links:
 
@@ -713,6 +714,76 @@ public void ConfigureServices(IServiceCollection services)
 
 This value is global and can only be set during startup. Changing it at runtime has no effect as it translates to RegEx expression parameters.
 
+## Extend Rendering with MarkdownRenderExtensions
+You can add custom rendering functionality to the Markdown parser via Markdown Render Extensions, that let you modify the inbound markdown and outbound html before the parsed result is returned via an implementation of `IMarkdownRenderExtension`. You can create a custom class and implement the required interface, to modify content to render or already rendered for final output and then add the custom class to:
+
+```cs
+MarkdownRenderExtensionsManager.Current.RenderExtensions.Add( new MyRenderExtension() );
+```
+
+To implement a render extension involves implement the `IMarkdownRenderExtension` interface. Here's an example for a PlantUMLRenderExtension that intercepts incoming markdown and replace ` ```plantuml` code blocks with `<img>` urls that generate diagrams:
+
+```cs
+public class PlantUmlMarkdownRenderExtension : IMarkdownRenderExtension
+{
+    private const string PlantUmlServerUrl = "http://www.plantuml.com/plantuml/png/";
+    private const string StartUmlString = "\n```plantuml";
+    private static readonly Regex plantUmlRegex = new Regex(@"(\n```plantuml[\S\s]).*?([\s\S]```)", RegexOptions.Singleline);
+
+    public void BeforeMarkdownRendered(ModifyMarkdownArguments args)
+    {
+        if (string.IsNullOrEmpty(args.Markdown) ||
+            !args.Markdown.Contains(StartUmlString))
+            return;
+
+        var markdown = args.Markdown;
+        var matches = plantUmlRegex.Matches(markdown);
+        foreach (var match in matches)
+        {
+            var origBlock = match?.ToString();
+            var umlBlock = origBlock.TrimStart();
+            if (umlBlock.StartsWith("```"))
+                umlBlock = umlBlock.Replace("```plantuml", string.Empty).Trim(' ', '`', '\n', '\r');
+
+            var url = PlantUmlServerUrl + PlantUmlTextEncoding.EncodeUrl(umlBlock);
+            var html = $"<img src=\"{url}\" alt=\"diagram\" />";
+
+            if (url.Contains("plantuml.com"))
+            {
+                var linkUrl = url.ReplaceMany(new string[] { "/svg/", "/png/", "/txt/" }, "/uml/");
+                if (!string.IsNullOrEmpty(linkUrl))
+                    html = $"<a href=\"{linkUrl}\" target=\"_blank\">{html}</a>";
+            }
+
+            markdown = markdown.Replace(origBlock, html);
+        }
+
+        args.Markdown = markdown;
+    }
+
+    public void AfterMarkdownRendered(ModifyHtmlAndHeadersArguments args)
+    { 
+        args.Html += "\n<div class='shareware-banner'>This is a demonstration copy of MyGreatProduct. Please register your copy.</div>";
+    }
+
+
+    public void AfterDocumentRendered(ModifyHtmlArguments args)
+    { }
+}
+```
+
+This addin overrides the `BeforeMarkdownRendered()` method which receives the inbound `args.Markdown`  property that can be modified. It parses the inbound Markdown and replaces it with the transformed Markdown which is then used in rendering.
+
+Likewise the `AfterMarkdownRendered(ModifyHtmlAndHeadersArguments()` method receives an `args.Html` property which allows you to modify the rendered HTML output and lets you modify that. 
+
+You can create new addins and register them application wide using the following:
+
+```cs
+MarkdownRenderExtensionsManager.Current.RenderExtensions.Add( new PlantUMLRenderExtension() );
+```
+
+Markdown Render Extensions are a great and quick way to extend Markdown processing at the application level without affecting the core Markdown processor.
+
 ## Using a Different Markdown Parser
 The default implementation of this library and middleware uses the [MarkDig Markdown Parser](https://github.com/lunet-io/markdig) for processing of Markdown content. However, you can implement your own parser by implementing:
 
@@ -745,21 +816,6 @@ All source code is **&copy; West Wind Technologies**, regardless of changes made
 
 There's no charge to use, integrate or modify the code for this project. You are free to use it in personal, commercial, government and any other type of application and you are free to modify the code for use in your own projects.
 
-### Change Log
-
-#### v3.15
-.\b
-* **Add .NET 8.0 target, drop netcoreapp3.1**  
-Updated project to add .NET 8.0 native target and update to MarkDig 0.33.
-
-
-#### v3.4
-
-* **Add BasePath support for Markdown Templates in Middleware**  
-If you're using external URLs for pulling in Markdown content you may need to reference content relative to a non-local URL. This fix adds a new `FolderConfiguration.BasePath` property and the ability to specify a `basePath: <url>` in the Markdown document's YAML header to embed the basePath into the document. The value is exposed on the `MarkdownModel.BasePath` and can be embedded into the Markdown page layout template.
-
-* **Add highlightjs-badge to Code Snippet Rendering**   
-Added optional highlightjs-badge component to allow code-snippets to be easily copied and display the syntax language in a small badge.
 
 
 ### Give back

@@ -60,9 +60,7 @@ namespace Westwind.AspNetCore.Markdown
 
 
         private readonly bool _usePragmaLines;
-
         
-
         /// <summary>
         /// Optional global configuration for setting up the Markdig Pipeline
         /// </summary>
@@ -70,7 +68,6 @@ namespace Westwind.AspNetCore.Markdown
 
         public MarkdownParserMarkdig(bool usePragmaLines = false, bool force = false, Action<MarkdownPipelineBuilder> markdigConfiguration = null)
         {
-
             _usePragmaLines = usePragmaLines;
             if (force || Pipeline == null)
             {
@@ -80,6 +77,7 @@ namespace Westwind.AspNetCore.Markdown
                 var builder = CreatePipelineBuilder(markdigConfiguration);                
                 Pipeline = builder.Build();
             }
+
         }
 
         /// <summary>
@@ -92,6 +90,13 @@ namespace Westwind.AspNetCore.Markdown
         {
             if (string.IsNullOrEmpty(markdown))
                 return string.Empty;
+
+            foreach (var renderExtension in MarkdownRenderExtensionManager.Current.RenderExtensions)
+            {
+                var args = new ModifyMarkdownArguments(markdown);
+                renderExtension.BeforeMarkdownRendered(args);
+                markdown = args.Markdown;
+            }
 
             string html;
             using (var htmlWriter = new StringWriter())
@@ -107,7 +112,14 @@ namespace Westwind.AspNetCore.Markdown
 
             if (sanitizeHtml)
                 html = Sanitize(html);
-                      
+
+            foreach (var renderExtension in MarkdownRenderExtensionManager.Current.RenderExtensions)
+            {
+                var args = new ModifyHtmlAndHeadersArguments(html, markdown);
+                renderExtension.AfterMarkdownRendered(args);
+                html = args.Html;
+            }
+
             return html;
         }
 
@@ -143,8 +155,7 @@ namespace Westwind.AspNetCore.Markdown
                     builder = builder.UsePragmaLines();
 
                 return builder;
-            }
-            
+            }            
             
             // let the passed in action configure the builder
             builder = new MarkdownPipelineBuilder();

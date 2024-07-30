@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Markdig.Syntax;
+﻿using Markdig.Syntax;
 
 namespace Westwind.AspNetCore.Markdown
 {
+
+
     /// <summary>
     /// Interface implemented for RenderExtensions that allow modification
     /// of the inbound Markdown before rendering or outbound HTML after
@@ -17,7 +14,7 @@ namespace Westwind.AspNetCore.Markdown
     /// add any custom extensions you create. Typically you do this in 
     /// the `Addin.OnApplicationStart()` method.
     /// </summary>
-    public interface IRenderExtension
+    public interface IMarkdownRenderExtension
     {
         /// <summary>
         /// Method that is fired on the inbound pass before the document is rendered and that

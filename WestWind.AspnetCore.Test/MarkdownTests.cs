@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Html;
 using NUnit.Framework;
 using Westwind.AspNetCore.Markdown;
+using Westwind.Utilities;
 
 namespace Tests
 {
@@ -19,9 +20,11 @@ namespace Tests
         [Test]
         public void BasicMarkdownHtmlString()
         {
-            HtmlString htmlString = Markdown.ParseHtmlString("This is **basic** Markdown `code` converted to *HTML*.");
+            HtmlString htmlString = Markdown.ParseHtmlString("This is **basic** Markdown `code` converted to *HTML*. ~~Strike out~~ text.");
             var html = htmlString.ToString();
-            Assert.That(html.Contains("<strong>") && html.Contains("<em>") && html.Contains("<code>"));
+            Assert.That(html.ContainsMany("<strong>","<em>","<code>","<del>"));
+
+            Console.WriteLine(html);
         }
 
         [Test]
@@ -34,6 +37,36 @@ namespace Tests
             Console.WriteLine(html);
 
             Assert.That(html.Contains("<p><strong>For ASP.NET Core:</strong></p>"));
+
+        }
+
+        [Test]
+        public void PlantUMLEmbeddingRenderExtensionTest()
+        {
+            // You can manage RenderExtensions in:
+            // MarkdownRenderExtensionManager.Current.RenderExtensions.Add(new PlantUmlRenderExtension());
+            // this extension is a default extension
+
+            var md =
+"""
+# PlantUml Diagrams
+
+```plantuml
+@startuml
+skinparam monochrome true
+left to right direction
+User1 --> (Story1)
+(Story1) --> (Story2)
+(Story2) --> (Story3)
+@enduml
+```
+""";
+
+            var html = Markdown.Parse(md);
+
+            Console.WriteLine(html);
+
+            Assert.That(html.Contains("<img "));
 
         }
     }
