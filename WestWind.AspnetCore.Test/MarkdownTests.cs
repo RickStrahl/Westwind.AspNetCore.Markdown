@@ -9,6 +9,17 @@ namespace Tests
     public class MarkdownTests
     {
 
+        public MarkdownTests()
+        {
+             
+        }
+
+        [SetUp]
+        public void Setup()
+        {            
+            MarkdownRenderExtensionManager.Current.RenderExtensions.Add( new PlantUmlMarkdownRenderExtension() );
+        }
+
         [Test]
         public void BasicMarkdown()
         {
@@ -43,9 +54,9 @@ namespace Tests
         [Test]
         public void PlantUMLEmbeddingRenderExtensionTest()
         {
-            // You can manage RenderExtensions in:
-            // MarkdownRenderExtensionManager.Current.RenderExtensions.Add(new PlantUmlRenderExtension());
-            // this extension is a default extension
+            // Ensure that PlantUML Render Extension is added
+            // requires [Setup]: MarkdownRenderExtensionManager.Current.RenderExtensions.Add( new PlantUmlMarkdownRenderExtension() );
+
 
             var md =
 """

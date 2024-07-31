@@ -35,141 +35,137 @@ using System;
 using System.IO;
 using Markdig;
 using Markdig.Extensions.AutoIdentifiers;
-using Markdig.Extensions.EmphasisExtras;
 using Markdig.Renderers;
-using Westwind.AspNetCore.Markdown.Utilities;
 
-namespace Westwind.AspNetCore.Markdown
+namespace Westwind.AspNetCore.Markdown;
+
+/// <summary>
+/// Wrapper around the MarkDig parser that provides a cached
+/// instance of the Markdown parser. Hooks up custom processing.
+/// </summary>
+public class  MarkdownParserMarkdig : MarkdownParserBase
 {
+    /// <summary>
+    /// Cached pipeline instance
+    /// </summary>
+    public static MarkdownPipeline Pipeline;
 
     /// <summary>
-    /// Wrapper around the MarkDig parser that provides a cached
-    /// instance of the Markdown parser. Hooks up custom processing.
+    /// Removes script code if set
     /// </summary>
-    public class  MarkdownParserMarkdig : MarkdownParserBase
-    {
-        /// <summary>
-        /// Cached pipeline instance
-        /// </summary>
-        public static MarkdownPipeline Pipeline;
-
-        /// <summary>
-        /// Removes script code if set
-        /// </summary>
-        public static bool StripScriptCode { get; set; } = true;
+    public static bool StripScriptCode { get; set; } = true;
 
 
-        private readonly bool _usePragmaLines;
+    private readonly bool _usePragmaLines;
         
-        /// <summary>
-        /// Optional global configuration for setting up the Markdig Pipeline
-        /// </summary>
-        public static Action<MarkdownPipelineBuilder> ConfigurePipelineBuilder { get; set; }
+    /// <summary>
+    /// Optional global configuration for setting up the Markdig Pipeline
+    /// </summary>
+    public static Action<MarkdownPipelineBuilder> ConfigurePipelineBuilder { get; set; }
 
-        public MarkdownParserMarkdig(bool usePragmaLines = false, bool force = false, Action<MarkdownPipelineBuilder> markdigConfiguration = null)
+    public MarkdownParserMarkdig(bool usePragmaLines = false, bool force = false, Action<MarkdownPipelineBuilder> markdigConfiguration = null)
+    {
+        _usePragmaLines = usePragmaLines;
+        if (force || Pipeline == null)
         {
-            _usePragmaLines = usePragmaLines;
-            if (force || Pipeline == null)
-            {
-                if (markdigConfiguration == null && ConfigurePipelineBuilder != null)                
-                    markdigConfiguration = ConfigurePipelineBuilder;
+            if (markdigConfiguration == null && ConfigurePipelineBuilder != null)                
+                markdigConfiguration = ConfigurePipelineBuilder;
 
-                var builder = CreatePipelineBuilder(markdigConfiguration);                
-                Pipeline = builder.Build();
-            }
-
+            var builder = CreatePipelineBuilder(markdigConfiguration);                
+            Pipeline = builder.Build();
         }
 
-        /// <summary>
-        /// Parses the actual markdown down to html
-        /// </summary>
-        /// <param name="markdown"></param>
-        /// <param name="sanitizeHtml">If true strips script tags and javascript: directives</param>
-        /// <returns></returns>        
-        public override string Parse(string markdown, bool sanitizeHtml = true)
+    }
+
+    /// <summary>
+    /// Parses the actual markdown down to html
+    /// </summary>
+    /// <param name="markdown"></param>
+    /// <param name="sanitizeHtml">If true strips script tags and javascript: directives</param>
+    /// <returns></returns>        
+    public override string Parse(string markdown, bool sanitizeHtml = true)
+    {
+        if (string.IsNullOrEmpty(markdown))
+            return string.Empty;
+
+        foreach (var renderExtension in MarkdownRenderExtensionManager.Current.RenderExtensions)
         {
-            if (string.IsNullOrEmpty(markdown))
-                return string.Empty;
-
-            foreach (var renderExtension in MarkdownRenderExtensionManager.Current.RenderExtensions)
-            {
-                var args = new ModifyMarkdownArguments(markdown);
-                renderExtension.BeforeMarkdownRendered(args);
-                markdown = args.Markdown;
-            }
-
-            string html;
-            using (var htmlWriter = new StringWriter())
-            {
-                var renderer = CreateRenderer(htmlWriter);
-
-                Markdig.Markdown.Convert(markdown, renderer, Pipeline);
-
-                html = htmlWriter.ToString();
-            }
-
-            html = ParseFontAwesomeIcons(html);
-
-            if (sanitizeHtml)
-                html = Sanitize(html);
-
-            foreach (var renderExtension in MarkdownRenderExtensionManager.Current.RenderExtensions)
-            {
-                var args = new ModifyHtmlAndHeadersArguments(html, markdown);
-                renderExtension.AfterMarkdownRendered(args);
-                html = args.Html;
-            }
-
-            return html;
+            var args = new ModifyMarkdownArguments(markdown);
+            renderExtension.BeforeMarkdownRendered(args);
+            markdown = args.Markdown;
         }
 
-        public virtual MarkdownPipelineBuilder CreatePipelineBuilder(Action<MarkdownPipelineBuilder> markdigConfiguration)
+        string html;
+        using (var htmlWriter = new StringWriter())
         {
-            MarkdownPipelineBuilder builder = null;
+            var renderer = CreateRenderer(htmlWriter);
 
-            // build it explicitly
-            if (markdigConfiguration == null)
-            {
-                builder = new MarkdownPipelineBuilder()
-                    .UseEmphasisExtras()
-                    .UseAutoLinks() // URLs are parsed into anchors
-                    .UseAutoIdentifiers(AutoIdentifierOptions.GitHub) // Headers get id="name" 
-                    .UseAbbreviations()
-                    .UsePipeTables()
-                    .UseGridTables()
-                    .UseFooters()
-                    .UseFootnotes()
-                    .UseCitations()                                     
-                    .UseYamlFrontMatter()
-                    .UseEmojiAndSmiley(true)
-                    .UseMediaLinks()
-                    .UseListExtras()
-                    .UseFigures()
-                    .UseTaskLists()
-                    .UseCustomContainers()
-                    .UseGenericAttributes();
+            Markdig.Markdown.Convert(markdown, renderer, Pipeline);
 
-                //builder = builder.UseSmartyPants();            
+            html = htmlWriter.ToString();
+        }
 
-                if (_usePragmaLines)
-                    builder = builder.UsePragmaLines();
+        html = ParseFontAwesomeIcons(html);
 
-                return builder;
-            }            
-            
-            // let the passed in action configure the builder
-            builder = new MarkdownPipelineBuilder();
-            markdigConfiguration.Invoke(builder);
+        if (sanitizeHtml)
+            html = Sanitize(html);
+
+        foreach (var renderExtension in MarkdownRenderExtensionManager.Current.RenderExtensions)
+        {
+            var args = new ModifyHtmlAndHeadersArguments(html, markdown);
+            renderExtension.AfterMarkdownRendered(args);
+            html = args.Html;
+        }
+
+        return html;
+    }
+
+    public virtual MarkdownPipelineBuilder CreatePipelineBuilder(Action<MarkdownPipelineBuilder> markdigConfiguration)
+    {
+        MarkdownPipelineBuilder builder = null;
+
+        // build it explicitly
+        if (markdigConfiguration == null)
+        {
+            builder = new MarkdownPipelineBuilder()
+                .UseEmphasisExtras()
+                .UseAutoLinks() // URLs are parsed into anchors
+                .UseAutoIdentifiers(AutoIdentifierOptions.GitHub) // Headers get id="name" 
+                .UseAbbreviations()
+                .UsePipeTables()
+                .UseGridTables()
+                .UseFooters()
+                .UseFootnotes()
+                .UseCitations()                                     
+                .UseYamlFrontMatter()
+                .UseEmojiAndSmiley(true)
+                .UseMediaLinks()
+                .UseListExtras()
+                .UseFigures()
+                .UseTaskLists()
+                .UseCustomContainers()
+                .UseGenericAttributes();
+
+            //builder = builder.UseSmartyPants();            
 
             if (_usePragmaLines)
                 builder = builder.UsePragmaLines();
-            
-            return builder;
-        }
 
-        protected virtual IMarkdownRenderer CreateRenderer(TextWriter writer)
-        {
-            return new HtmlRenderer(writer);
-        }
+            return builder;
+        }            
+            
+        // let the passed in action configure the builder
+        builder = new MarkdownPipelineBuilder();
+        markdigConfiguration.Invoke(builder);
+
+        if (_usePragmaLines)
+            builder = builder.UsePragmaLines();
+            
+        return builder;
+    }
+
+    protected virtual IMarkdownRenderer CreateRenderer(TextWriter writer)
+    {
+        return new HtmlRenderer(writer);
     }
 }

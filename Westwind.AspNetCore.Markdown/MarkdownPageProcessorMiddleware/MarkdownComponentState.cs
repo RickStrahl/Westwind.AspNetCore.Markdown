@@ -1,23 +1,23 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 
-namespace Westwind.AspNetCore.Markdown
+namespace Westwind.AspNetCore.Markdown;
+
+/// <summary>
+/// Internally held references that made accessible to the static Markdown functions
+/// </summary>
+internal static class MarkdownComponentState
 {
+    internal static IServiceProvider ServiceProvider { get; set; }
+    internal static MarkdownConfiguration Configuration { get; set; } = new MarkdownConfiguration();
+
+
     /// <summary>
-    /// Internally held references that made accessible to the static Markdown functions
+    /// Retrieves an HTTP Context instance
     /// </summary>
-    internal static class MarkdownComponentState
+    /// <returns></returns>
+    internal static HttpContext GetHttpContext()
     {
-        internal static IServiceProvider ServiceProvider { get; set; }
-        internal static MarkdownConfiguration Configuration { get; set; } = new MarkdownConfiguration();
-
-
-        /// <summary>
-        /// Retrieves an HTTP Context instance
-        /// </summary>
-        /// <returns></returns>
-        internal static HttpContext GetHttpContext()
-        {
             IHttpContextAccessor contextAccessor;
             try
             {
@@ -32,5 +32,4 @@ namespace Westwind.AspNetCore.Markdown
             }
             return contextAccessor.HttpContext;
         }
-    }
 }

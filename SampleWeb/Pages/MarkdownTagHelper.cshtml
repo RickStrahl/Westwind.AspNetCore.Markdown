@@ -48,6 +48,10 @@
 </p>
 
 <hr />
+
+<h3 class="header">Markdown Render Extension: PlantUML</h3>
+
+
 <div class="sample-block ">
     <markdown normalize-whitespace="true" sanitize-html="true">
         #### This is Markdown text inside of a Markdown block
@@ -116,6 +120,29 @@
 </div>
 
 
+<markdown>
+    ### PlantUML Render Extension Rendering{class="header"}
+    PlantUML is a image generation markup language that creates embeddable image diagrams. 
+    Added with an optional PlantUML `MarkdownRenderExtension` which has to be added in
+    the Middleware configuration or via `MarkdownRenderExtensions.Current.RenderExtensions.Add()`.
+</markdown>
+
+<div class="sample-block">
+    <markdown normalize-whitespace="true">    
+    ### PlantUML diagram
+
+    ```plantuml
+    @@startuml
+    skinparam monochrome true
+    left to right direction
+    User1 --> (Story1)
+    (Story1) --> (Story2)
+    (Story2) --> (Story3)
+    @@enduml
+    ```
+    </markdown>
+</div>
+
 
 <h3 class="header">Markdown Model Binding</h3>
 
@@ -151,6 +178,9 @@ This example data binds the Model.MarkdownText property to the TagHelper's <code
         url-fixup-baseurl="true">
     </markdown>
 </div>
+
+
+
 
 
 @section Scripts {

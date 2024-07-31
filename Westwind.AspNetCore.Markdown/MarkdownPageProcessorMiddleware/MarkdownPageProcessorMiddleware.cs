@@ -37,98 +37,97 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
-namespace Westwind.AspNetCore.Markdown
+namespace Westwind.AspNetCore.Markdown;
+
+/// <summary>
+/// Middleware that allows you to serve static Markdown files from disk
+/// and merge them using a configurable View template.
+/// </summary>
+public class MarkdownPageProcessorMiddleware
 {
-    /// <summary>
-    /// Middleware that allows you to serve static Markdown files from disk
-    /// and merge them using a configurable View template.
-    /// </summary>
-    public class MarkdownPageProcessorMiddleware
+    private readonly RequestDelegate _next;
+    private readonly MarkdownConfiguration _configuration;
+
+    private readonly IWebHostEnvironment _env;
+
+
+    public MarkdownPageProcessorMiddleware(RequestDelegate next,
+        MarkdownConfiguration configuration,
+        IWebHostEnvironment _env
+    )
     {
-        private readonly RequestDelegate _next;
-        private readonly MarkdownConfiguration _configuration;
+        _next = next;
+        _configuration = configuration;
+        this._env = _env;
+    }
 
-        private readonly IWebHostEnvironment _env;
+    public Task InvokeAsync(HttpContext context)
+    {
+        var path = context.Request.Path.Value;
+        if (string.IsNullOrEmpty(path))
+            return _next(context);
 
+        bool hasExtension = !string.IsNullOrEmpty(Path.GetExtension(path));
+        bool hasMdExtension = path.EndsWith(".md", StringComparison.OrdinalIgnoreCase) || path.EndsWith(".markdown", StringComparison.OrdinalIgnoreCase);
+        bool isRoot = path == "/";
+        bool processAsMarkdown = false;
 
-        public MarkdownPageProcessorMiddleware(RequestDelegate next,
-            MarkdownConfiguration configuration,
-            IWebHostEnvironment _env
-        )
+        var basePath = _env.WebRootPath;
+        var relativePath = path;
+        relativePath = PathHelper.NormalizePath(relativePath).Substring(1).TrimEnd('\\', '/');
+        var pageFile = Path.Combine(basePath, relativePath);
+
+        // process any Markdown file that has .md extension explicitly
+        foreach (var folder in _configuration.MarkdownProcessingFolders)
         {
-            _next = next;
-            _configuration = configuration;
-            this._env = _env;
-        }
+            if (!path.StartsWith(folder.RelativePath, StringComparison.InvariantCultureIgnoreCase))
+                continue;
 
-        public Task InvokeAsync(HttpContext context)
-        {
-            var path = context.Request.Path.Value;
-            if (string.IsNullOrEmpty(path))
-                return _next(context);
+            if (isRoot && folder.RelativePath != "/")
+                continue;
 
-            bool hasExtension = !string.IsNullOrEmpty(Path.GetExtension(path));
-            bool hasMdExtension = path.EndsWith(".md", StringComparison.OrdinalIgnoreCase) || path.EndsWith(".markdown", StringComparison.OrdinalIgnoreCase);
-            bool isRoot = path == "/";
-            bool processAsMarkdown = false;
-
-            var basePath = _env.WebRootPath;
-            var relativePath = path;
-            relativePath = PathHelper.NormalizePath(relativePath).Substring(1).TrimEnd('\\', '/');
-            var pageFile = Path.Combine(basePath, relativePath);
-
-            // process any Markdown file that has .md extension explicitly
-            foreach (var folder in _configuration.MarkdownProcessingFolders)
+            if (hasMdExtension)
             {
-                if (!path.StartsWith(folder.RelativePath, StringComparison.InvariantCultureIgnoreCase))
+                processAsMarkdown = true;
+            }
+            else if (path.StartsWith(folder.RelativePath, StringComparison.InvariantCultureIgnoreCase) &&
+                     (folder.ProcessExtensionlessUrls && !hasExtension ||
+                      hasMdExtension && folder.ProcessMdFiles))
+            {
+
+                // it's a physical directory - don't convert that - only virtual files
+                if (!hasExtension && Directory.Exists(pageFile))
                     continue;
 
-                if (isRoot && folder.RelativePath != "/")
+                if (!hasExtension)
+                {
+                    pageFile += ".md";
+                }
+
+                if (!File.Exists(pageFile) && !File.Exists(pageFile.Replace(".md",".markdown")))
                     continue;
 
-                if (hasMdExtension)
-                {
-                    processAsMarkdown = true;
-                }
-                else if (path.StartsWith(folder.RelativePath, StringComparison.InvariantCultureIgnoreCase) &&
-                         (folder.ProcessExtensionlessUrls && !hasExtension ||
-                          hasMdExtension && folder.ProcessMdFiles))
-                {
-
-                    // it's a physical directory - don't convert that - only virtual files
-                    if (!hasExtension && Directory.Exists(pageFile))
-                        continue;
-
-                    if (!hasExtension)
-                    {
-                        pageFile += ".md";
-                    }
-
-                    if (!File.Exists(pageFile) && !File.Exists(pageFile.Replace(".md",".markdown")))
-                        continue;
-
-                    processAsMarkdown = true;
-                }
-
-                if (processAsMarkdown)
-                {
-                    var model = new MarkdownModel
-                    {
-                        FolderConfiguration = folder,
-                        RelativePath = path,
-                        PhysicalPath = pageFile
-                    };
-
-                    // push the model into the context for controller to pick up
-                    context.Items["MarkdownProcessor_Model"] = model;
-
-                    // rewrite path to our controller so we can use _layout page
-                    context.Request.Path = "/markdownprocessor/markdownpage";
-                    break;
-                }
+                processAsMarkdown = true;
             }
 
-            return _next(context);
+            if (processAsMarkdown)
+            {
+                var model = new MarkdownModel
+                {
+                    FolderConfiguration = folder,
+                    RelativePath = path,
+                    PhysicalPath = pageFile
+                };
+
+                // push the model into the context for controller to pick up
+                context.Items["MarkdownProcessor_Model"] = model;
+
+                // rewrite path to our controller so we can use _layout page
+                context.Request.Path = "/markdownprocessor/markdownpage";
+                break;
+            }
         }
+
+        return _next(context);
     }
 }

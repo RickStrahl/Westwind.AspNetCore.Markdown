@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Westwind.AspNetCore.Markdown;
 
 namespace Westwind.AspNetCore.Markdown;
 
@@ -11,14 +10,7 @@ namespace Westwind.AspNetCore.Markdown;
 /// </summary>
 public class MarkdownRenderExtensionManager
 {
-    public static MarkdownRenderExtensionManager Current { get; set; } = new MarkdownRenderExtensionManager();
+    public static MarkdownRenderExtensionManager Current { get; set; } = new();
 
-    public List<IMarkdownRenderExtension> RenderExtensions { get; set; }
-
-    public MarkdownRenderExtensionManager()
-    {
-        RenderExtensions = new List<IMarkdownRenderExtension>() {
-            new PlantUmlMarkdownRenderExtension(),            
-        };
-    }
+    public List<IMarkdownRenderExtension> RenderExtensions { get; set; } = new();    
 }

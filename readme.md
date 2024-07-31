@@ -714,7 +714,7 @@ public void ConfigureServices(IServiceCollection services)
 
 This value is global and can only be set during startup. Changing it at runtime has no effect as it translates to RegEx expression parameters.
 
-## Extend Rendering with MarkdownRenderExtensions
+## Extend Markdown to HTML Rendering with MarkdownRenderExtensions
 You can add custom rendering functionality to the Markdown parser via Markdown Render Extensions, that let you modify the inbound markdown and outbound html before the parsed result is returned via an implementation of `IMarkdownRenderExtension`. You can create a custom class and implement the required interface, to modify content to render or already rendered for final output and then add the custom class to:
 
 ```cs
@@ -778,8 +778,20 @@ Likewise the `AfterMarkdownRendered(ModifyHtmlAndHeadersArguments()` method rece
 
 You can create new addins and register them application wide using the following:
 
+**Directly**
+
 ```cs
 MarkdownRenderExtensionsManager.Current.RenderExtensions.Add( new PlantUMLRenderExtension() );
+```
+
+**via Middleware Configuration in ASP.NET** 
+
+```cs
+services.AddMarkdown(config =>
+{
+    config.MarkdownRenderExtensions.Add( new PlantUmlMarkdownRenderExtension() );
+    // ...
+}    
 ```
 
 Markdown Render Extensions are a great and quick way to extend Markdown processing at the application level without affecting the core Markdown processor.

@@ -24,9 +24,11 @@ namespace SampleWeb
         {
 
             services.AddMarkdown(config =>
-            {
+            {        
                 // optional Tag BlackList
                 config.HtmlTagBlackList = "script|iframe|object|embed|form"; // default
+
+                config.MarkdownRenderExtensions.Add(new PlantUmlMarkdownRenderExtension());
 
                 // Simplest: Use all default settings
                 var folderConfig = config.AddMarkdownProcessingFolder("/docs/", "~/Pages/__MarkdownPageTemplate.cshtml");
@@ -46,6 +48,8 @@ namespace SampleWeb
                 {
                     // controller.ViewBag.Model = new MyCustomModel();
                 };
+
+                
 
                 // folderConfig.BasePath = "https://github.com/RickStrahl/Westwind.AspNetCore.Markdow/raw/master";
 
