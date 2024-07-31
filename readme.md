@@ -718,7 +718,7 @@ This value is global and can only be set during startup. Changing it at runtime 
 You can add custom rendering functionality to the Markdown parser via Markdown Render Extensions, that let you modify the inbound markdown and outbound html before the parsed result is returned via an implementation of `IMarkdownRenderExtension`. You can create a custom class and implement the required interface, to modify content to render or already rendered for final output and then add the custom class to:
 
 ```cs
-MarkdownRenderExtensionsManager.Current.RenderExtensions.Add( new MyRenderExtension() );
+MarkdownRenderExtensionsManager.Current.AddRenderExtension( new MyRenderExtension() );
 ```
 
 To implement a render extension involves implement the `IMarkdownRenderExtension` interface. Here's an example for a PlantUMLRenderExtension that intercepts incoming markdown and replace ` ```plantuml` code blocks with `<img>` urls that generate diagrams:
@@ -726,10 +726,13 @@ To implement a render extension involves implement the `IMarkdownRenderExtension
 ```cs
 public class PlantUmlMarkdownRenderExtension : IMarkdownRenderExtension
 {
+    public string Name {get; set;} = "PlantUmlRenderExtension";
+
     private const string PlantUmlServerUrl = "http://www.plantuml.com/plantuml/png/";
     private const string StartUmlString = "\n```plantuml";
     private static readonly Regex plantUmlRegex = new Regex(@"(\n```plantuml[\S\s]).*?([\s\S]```)", RegexOptions.Singleline);
 
+    // demonstrates pre-render Markdown processing
     public void BeforeMarkdownRendered(ModifyMarkdownArguments args)
     {
         if (string.IsNullOrEmpty(args.Markdown) ||
@@ -761,6 +764,7 @@ public class PlantUmlMarkdownRenderExtension : IMarkdownRenderExtension
         args.Markdown = markdown;
     }
 
+    // demonstrate post-render HTML processing
     public void AfterMarkdownRendered(ModifyHtmlAndHeadersArguments args)
     { 
         args.Html += "\n<div class='shareware-banner'>This is a demonstration copy of MyGreatProduct. Please register your copy.</div>";
@@ -781,7 +785,7 @@ You can create new addins and register them application wide using the following
 **Directly**
 
 ```cs
-MarkdownRenderExtensionsManager.Current.RenderExtensions.Add( new PlantUMLRenderExtension() );
+MarkdownRenderExtensionsManager.Current.AddRenderExtension( new PlantUMLRenderExtension() );
 ```
 
 **via Middleware Configuration in ASP.NET** 
@@ -794,7 +798,7 @@ services.AddMarkdown(config =>
 }    
 ```
 
-Markdown Render Extensions are a great and quick way to extend Markdown processing at the application level without affecting the core Markdown processor.
+Markdown Render Extensions are a great and quick way to extend Markdown rendering at the application level, without affecting the core Markdown processor.
 
 ## Using a Different Markdown Parser
 The default implementation of this library and middleware uses the [MarkDig Markdown Parser](https://github.com/lunet-io/markdig) for processing of Markdown content. However, you can implement your own parser by implementing:
