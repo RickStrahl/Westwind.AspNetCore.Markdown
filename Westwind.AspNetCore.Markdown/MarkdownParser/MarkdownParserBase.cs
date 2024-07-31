@@ -37,6 +37,10 @@ public abstract class MarkdownParserBase : IMarkdownParser
     /// </summary>
     public static string HtmlSanitizeTagBlackList { get; set; } = "script|iframe|object|embed|form";
 
+
+    public MarkdownRenderExtensionManager RenderExtensionManager { get; set; } = MarkdownRenderExtensionManager.Current;
+
+
     /// <summary>
     /// Parses out script tags that might not be encoded yet
     /// </summary>

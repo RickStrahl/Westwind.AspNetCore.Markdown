@@ -14,7 +14,11 @@ namespace WestWind.AspnetCore.Test
         [SetUp]
         public void Setup()
         {
-            MarkdownRenderExtensionManager.Current.AddRenderExtension(new PlantUmlMarkdownRenderExtension());            
+            MarkdownRenderExtensionManager.Current.AddRenderExtensions(
+            [
+                new PlantUmlMarkdownRenderExtension(),
+                new FontAwesomeRenderExtension()
+            ]);
         }
 
 
@@ -46,7 +50,25 @@ namespace WestWind.AspnetCore.Test
             Assert.That(html.Contains("<img "));
 
         }
+        [Test]
+        public void FontAwesomeRenderExtensionTest()
+        {
+            var md = """
+# FontAwesome Icons
 
+> #### @icon-icon-circle Warning: This is a warning message
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+@icon-duotone-certificate
+""";
+
+            var html = Markdown.Parse(md);
+
+            Console.WriteLine(html);
+
+            Assert.IsTrue(html.Contains("""<i class="fas fa-icon-circle" """));
+            Assert.IsTrue(html.Contains("""<i class="fa fa-duotone-certificate">"""));
+        }
 
         [Test]
         public void CustomRenderExtensionTest()

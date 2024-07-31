@@ -19,6 +19,7 @@ public interface IMarkdownRenderExtension
     /// </summary>
     public string Name { get; set; }
 
+
     /// <summary>
     /// Method that is fired on the inbound pass before the document is rendered and that
     /// allows you to modify the *markdown* before it is sent out for rendering.

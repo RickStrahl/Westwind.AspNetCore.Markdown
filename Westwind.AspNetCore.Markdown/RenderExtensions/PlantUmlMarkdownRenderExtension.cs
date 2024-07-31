@@ -15,7 +15,6 @@ public class PlantUmlMarkdownRenderExtension : IMarkdownRenderExtension
 {
     public string Name { get; set; } = "PlantUmlRenderExtension";
 
-
     private const string StartUmlString = "\n```plantuml";
     private static readonly Regex plantUmlRegex = new Regex(@"(\n```plantuml[\S\s]).*?([\s\S]```)", RegexOptions.Singleline);
 
@@ -25,13 +24,12 @@ public class PlantUmlMarkdownRenderExtension : IMarkdownRenderExtension
     /// </summary>
     public string PlantUmlServerUrl = "http://www.plantuml.com/plantuml/png/";
 
-
     /// <summary>
     /// Fix up input Markdown before it's rendered by converting plantuml codeblocks
     /// into image elements with a link wrapper to the PlantUML server editor.
     /// </summary>
     /// <param name="args"></param>
-    public void BeforeMarkdownRendered(ModifyMarkdownArguments args)
+    public  void BeforeMarkdownRendered(ModifyMarkdownArguments args)
     {
         if (string.IsNullOrEmpty(args.Markdown) ||
             !args.Markdown.Contains(StartUmlString))
@@ -64,7 +62,8 @@ public class PlantUmlMarkdownRenderExtension : IMarkdownRenderExtension
 
     public void AfterMarkdownRendered(ModifyHtmlAndHeadersArguments args)
     { }
-
+    
+    
 
     public void AfterDocumentRendered(ModifyHtmlArguments args)
     { }
