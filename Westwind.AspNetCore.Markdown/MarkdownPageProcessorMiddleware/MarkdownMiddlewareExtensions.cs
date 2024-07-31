@@ -42,15 +42,8 @@ public static class MarkdownMiddlewareExtensions
         // We need access to the HttpContext for Filename resolution
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-        // Add MarkdownRenderExtensions
-        if (config.MarkdownRenderExtensions.Count>0)
-        {
-            foreach (var extension in config.MarkdownRenderExtensions)
-            {
-                MarkdownRenderExtensionManager.Current.RenderExtensions.Add(extension);
-            }
-        }
-
+        MarkdownRenderExtensionManager.Current.AddRenderExtensions(config.MarkdownRenderExtensions);            
+        
         return services;
     }
 

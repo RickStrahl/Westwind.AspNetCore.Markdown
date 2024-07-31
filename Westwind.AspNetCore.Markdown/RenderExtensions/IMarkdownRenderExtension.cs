@@ -15,6 +15,11 @@ namespace Westwind.AspNetCore.Markdown;
 public interface IMarkdownRenderExtension
 {
     /// <summary>
+    /// The name of the Render Extension
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
     /// Method that is fired on the inbound pass before the document is rendered and that
     /// allows you to modify the *markdown* before it is sent out for rendering.
     ///

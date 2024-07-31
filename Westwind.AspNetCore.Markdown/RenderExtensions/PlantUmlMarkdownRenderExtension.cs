@@ -13,6 +13,9 @@ namespace Westwind.AspNetCore.Markdown;
 /// </summary>
 public class PlantUmlMarkdownRenderExtension : IMarkdownRenderExtension
 {
+    public string Name { get; set; } = "PlantUmlRenderExtension";
+
+
     private const string StartUmlString = "\n```plantuml";
     private static readonly Regex plantUmlRegex = new Regex(@"(\n```plantuml[\S\s]).*?([\s\S]```)", RegexOptions.Singleline);
 
