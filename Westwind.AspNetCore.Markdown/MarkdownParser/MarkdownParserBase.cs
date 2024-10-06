@@ -38,6 +38,12 @@ public abstract class MarkdownParserBase : IMarkdownParser
     public static string HtmlSanitizeTagBlackList { get; set; } = "script|iframe|object|embed|form";
 
 
+    /// <summary>
+    /// Render Extensions Manager used for this parser instance. Defaults
+    /// to the global Singleton instance that can be globally configured
+    /// on startup. Property provided here allows local overriding of the
+    /// extension manager.
+    /// </summary>
     public MarkdownRenderExtensionManager RenderExtensionManager { get; set; } = MarkdownRenderExtensionManager.Current;
 
 

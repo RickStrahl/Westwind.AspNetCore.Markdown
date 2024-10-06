@@ -88,7 +88,7 @@ public class  MarkdownParserMarkdig : MarkdownParserBase
         if (string.IsNullOrEmpty(markdown))
             return string.Empty;
 
-        foreach (var renderExtension in MarkdownRenderExtensionManager.Current.RenderExtensions)
+        foreach (var renderExtension in RenderExtensionManager.RenderExtensions)
         {
             var args = new ModifyMarkdownArguments(markdown);
             renderExtension.BeforeMarkdownRendered(args);
@@ -110,7 +110,7 @@ public class  MarkdownParserMarkdig : MarkdownParserBase
         if (sanitizeHtml)
             html = Sanitize(html);
 
-        foreach (var renderExtension in MarkdownRenderExtensionManager.Current.RenderExtensions)
+        foreach (var renderExtension in RenderExtensionManager.RenderExtensions)
         {
             var args = new ModifyHtmlAndHeadersArguments(html, markdown);
             renderExtension.AfterMarkdownRendered(args);

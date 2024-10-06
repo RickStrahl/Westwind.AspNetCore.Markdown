@@ -76,7 +76,7 @@ public class MarkdownUtilities
             if (lurl.Contains(".md") && lurl.Contains("/blob/"))
             {
                 // Norm:  https://github.com/RickStrahl/MarkdownMonster/blob/master/README.md
-                // Conv:  https://github.com/RickStrahl/MarkdownMonster/raw/master/README.md                
+                // Conv:  https://github.com/RickStrahl/MarkdownMonster/raw/master/README.md
                 // Redir: https://raw.githubusercontent.com/RickStrahl/MarkdownMonster/master/README.md
 
                 // This what GitHub uses for their link on the actual repo
@@ -126,5 +126,19 @@ public class MarkdownUtilities
             }
         }
         return markdown;
+    }
+
+    /// <summary>
+    /// strip markdown text and just return the plain text
+    /// </summary>
+    /// <param name="markdown"></param>
+    /// <returns></returns>
+    public static string StripMarkdown(string markdown)
+    {
+        if (string.IsNullOrEmpty(markdown))
+            return markdown;
+
+        var txt = Markdig.Markdown.ToPlainText(markdown);
+        return txt;
     }
 }

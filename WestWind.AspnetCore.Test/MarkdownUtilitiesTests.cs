@@ -45,5 +45,28 @@ namespace Tests
             Console.WriteLine(fixedupUrl);
         }
 
+
+        [Test]
+        public void StripMarkdownTest()
+        {
+            var md = """
+# Test Markdown Text
+
+This is **some markdown text** that has been *marked up*. We want to return just the plain text.
+
+> Note: This is a test of the Emergency broadcast system.
+
+Thank you for your cooperation.
+""";
+
+            var plainText = MarkdownUtilities.StripMarkdown(md);
+            Console.WriteLine(plainText);
+
+            Assert.IsFalse(plainText.Contains("**"));
+            Assert.IsFalse(plainText.Contains("*"));
+            Assert.IsFalse(plainText.Contains(">"));
+            Assert.IsFalse(plainText.Contains("#"));
+        }
+
     }
 }

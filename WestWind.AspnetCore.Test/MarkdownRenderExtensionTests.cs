@@ -94,7 +94,7 @@ Thank you for your time.
             Console.WriteLine(html);
 
             var extensions = MarkdownRenderExtensionManager.Current.GetRenderExtensions();
-            Assert.IsTrue(extensions.Count() == 2);
+            Assert.IsTrue(extensions.Count() == 3);
 
             var ext2 = MarkdownRenderExtensionManager.Current["MySampleRenderExtension"];
             Assert.IsNotNull(ext2);
@@ -103,7 +103,7 @@ Thank you for your time.
             Assert.IsNotNull(ext2);
 
             MarkdownRenderExtensionManager.Current.RemoveRenderExtension(ext);
-            Assert.IsTrue(extensions.Count() == 1);
+            Assert.IsTrue(extensions.Count() == 2);
         }
 
     }
