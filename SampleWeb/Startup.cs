@@ -28,7 +28,9 @@ namespace SampleWeb
                 // optional Tag BlackList
                 config.HtmlTagBlackList = "script|iframe|object|embed|form"; // default
 
+                // Any render extensions can be added here
                 config.MarkdownRenderExtensions.Add(new PlantUmlMarkdownRenderExtension());
+                config.MarkdownRenderExtensions.Add(new FontAwesomeRenderExtension());
 
                 // Simplest: Use all default settings
                 var folderConfig = config.AddMarkdownProcessingFolder("/docs/", "~/Pages/__MarkdownPageTemplate.cshtml");
@@ -48,6 +50,8 @@ namespace SampleWeb
                 {
                     // controller.ViewBag.Model = new MyCustomModel();
                 };
+
+                
 
                 
 
@@ -80,8 +84,10 @@ namespace SampleWeb
             // We need to use MVC so we can use a Razor Configuration Template
             // for the Markdown Processing Middleware
             services.AddMvc()
+                
                 // have to let MVC know we have a controller otherwise it won't be found
-                .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly);
+                .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly)
+                .AddRazorRuntimeCompilation();
         }
 
 

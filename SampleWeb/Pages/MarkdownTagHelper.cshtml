@@ -49,7 +49,6 @@
 
 <hr />
 
-<h3 class="header">Markdown Render Extension: PlantUML</h3>
 
 
 <div class="sample-block ">
@@ -80,11 +79,7 @@
         }
         ```
 
-        ### Rudimentary XSS Support
-        Below are a script tag, and some raw HTML alert with an onclick handler which
-        are potential XSS vulnerable. Default is `sanitize-html="true"` to remove
-        script and other vulnerabilities. `true` is the default.
-
+     
 
         > If you didn't see an alert box when the page loaded the
         > `
@@ -120,12 +115,16 @@
 </div>
 
 
+
 <markdown>
     ### PlantUML Render Extension Rendering{class="header"}
     PlantUML is a image generation markup language that creates embeddable image diagrams. 
     Added with an optional PlantUML `MarkdownRenderExtension` which has to be added in
     the Middleware configuration or via `MarkdownRenderExtensions.Current.RenderExtensions.Add()`.
 </markdown>
+
+
+
 
 <div class="sample-block">
     <markdown normalize-whitespace="true">    
@@ -141,6 +140,20 @@
     @@enduml
     ```
     </markdown>
+</div>
+
+
+<h3 class="header">Markdown Render Extension: FontAwesome</h3>
+<div class="sample-block">
+    <markdown>
+        <!-- Note limited options for the free version of FontAwesome 
+             but you can specify, -regular, -duotone, etc. -->
+        #### @@icon-home Home
+        #### @@icon-solid-cloud-arrow-up-color:steelblue Beam me up!
+        #### @@icon-solid-rotate-right-spin-color:goldenrod Spin me up!
+
+    </markdown>
+
 </div>
 
 

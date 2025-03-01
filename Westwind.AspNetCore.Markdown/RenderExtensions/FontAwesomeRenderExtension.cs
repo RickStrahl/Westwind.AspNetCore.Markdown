@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Westwind.AspNetCore.Markdown.Utilities;
 
 namespace Westwind.AspNetCore.Markdown;
 
@@ -10,12 +11,16 @@ namespace Westwind.AspNetCore.Markdown;
 /// * @icon-regular-home - renders `far fa-home`
 /// * @icon-duotone-home - renders `fad fa-home`
 /// * @icon-solid-home - renders `fas fa-home`
+///
+/// Other:
+/// -spin to spin
+/// -color:steelblue
 /// </summary>
 public class FontAwesomeRenderExtension : IMarkdownRenderExtension
 {
     public string Name { get; set; } = "FontAwesomeRenderExtension";
 
-    static Regex fontAwesomeIconRegEx = new Regex(@"@icon-.*?[\s|\.|\,|\<]");
+    private static Regex fontAwesomeIconRegEx = new Regex(@"@icon-.*?[\s|\.|\,|\<]");
 
     public void BeforeMarkdownRendered(ModifyMarkdownArguments args)
     {
@@ -49,9 +54,30 @@ public class FontAwesomeRenderExtension : IMarkdownRenderExtension
                 icon = iconblock.Replace("@icon-light-", "");
             }
             else
+            {
+                faPrefix = "fas";
                 icon = iconblock.Replace("@icon-", "");
+            }
 
-            md = md.Replace(iconblock, $"<i class=\"{faPrefix} fa-" + icon + "\" style=\"font-size: 1.1em\"></i> ");
+
+            string color = null;
+            var idx = icon.IndexOf("-color:");
+            if (idx > 0)
+            {
+                var extr = StringUtils.ExtractString(icon, "-color:", "-", caseSensitive: false, allowMissingEndDelimiter: true, returnDelimiters: true);
+                color = StringUtils.ExtractString(extr, "-color:", "-", caseSensitive: false, allowMissingEndDelimiter: true, returnDelimiters: false);
+                if (!string.IsNullOrEmpty(color))
+                {
+                    color = $";color: {color}";
+                    icon = icon.Replace(extr.TrimEnd('-'), string.Empty);
+                }
+            }
+
+
+            if (iconblock.EndsWith("-spin") || iconblock.Contains("-spin-"))
+                icon = icon.Replace("-spin", " fa-spin ");
+
+            md = md.Replace(iconblock, $"<i class=\"{faPrefix} fa-" + icon + $"\" style=\"font-size: 1.1em{color}\"></i> ");
         }
 
         if (md != args.Markdown)

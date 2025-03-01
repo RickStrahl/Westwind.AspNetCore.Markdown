@@ -800,6 +800,38 @@ services.AddMarkdown(config =>
 
 Markdown Render Extensions are a great and quick way to extend Markdown rendering at the application level, without affecting the core Markdown processor.
 
+
+### Bundled RenderExtensions
+There are two RenderExtensions included in this library:
+
+* FontAwesome 
+* PlantUml
+
+> These extensions are also present in Markdown Monster and various Westwind client libraries that provide Markdown support.
+
+#### FontAwesome 
+The FontAwesome render extension allows you to render FontAwesome icons with syntax like this:
+
+```
+@icon-home  Home
+@icon-spinner-spin  Spin me up!
+@icon-duotone-upload-color:steelblue Upload
+```
+
+##### PlanUml RenderExtension
+Embeds PlantUml render extensions.
+
+
+## License
+The Westwind.Web.MarkdownControl library is an open source product licensed under:
+
+* **[MIT license](http://opensource.org/licenses/MIT)**
+
+All source code is **&copy; West Wind Technologies**, regardless of changes made to them. Any source code modifications must leave the original copyright code headers intact if present.
+
+There's no charge to use, integrate or modify the code for this project. You are free to use it in personal, commercial, government and any other type of application and you are free to modify the code for use in your own projects.
+
+
 ## Using a Different Markdown Parser
 The default implementation of this library and middleware uses the [MarkDig Markdown Parser](https://github.com/lunet-io/markdig) for processing of Markdown content. However, you can implement your own parser by implementing:
 
@@ -821,16 +853,6 @@ To configure a custom parser apply it to the `Configuration.MarkdownParserFactor
 ```
 
 The custom parser is then used for all markdown processing in this library.
-
-
-## License
-The Westwind.Web.MarkdownControl library is an open source product licensed under:
-
-* **[MIT license](http://opensource.org/licenses/MIT)**
-
-All source code is **&copy; West Wind Technologies**, regardless of changes made to them. Any source code modifications must leave the original copyright code headers intact if present.
-
-There's no charge to use, integrate or modify the code for this project. You are free to use it in personal, commercial, government and any other type of application and you are free to modify the code for use in your own projects.
 
 
 

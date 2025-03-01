@@ -59,7 +59,9 @@ namespace WestWind.AspnetCore.Test
 > #### @icon-icon-circle Warning: This is a warning message
 > Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-@icon-duotone-certificate
+@icon-duotone-certificate Safe and Sound
+
+@icon-solid-spinner-spin-color:goldenrod Spin me up!
 """;
 
             var html = Markdown.Parse(md);
@@ -67,7 +69,8 @@ namespace WestWind.AspnetCore.Test
             Console.WriteLine(html);
 
             Assert.IsTrue(html.Contains("""<i class="fas fa-icon-circle" """));
-            Assert.IsTrue(html.Contains("""<i class="fa fa-duotone-certificate">"""));
+            Assert.IsTrue(html.Contains("""<i class="fad fa-certificate"""));
+            Assert.IsTrue(html.Contains("""style="font-size: 1.1em;color: goldenrod">"""));
         }
 
         [Test]

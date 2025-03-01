@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>net9.0;net8.0;net6.0;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.22</Version>    
+    <Version>3.23</Version>    
     <Authors>Rick Strahl</Authors>
     <Company>West Wind Technologies</Company>
     <Product>West Wind Web Toolkit</Product>
