@@ -857,9 +857,10 @@ The custom parser is then used for all markdown processing in this library.
 
 
 ### Give back
-If you find this library useful, consider making a small donation:
+If you find this library useful, please consider *starring* the repository, and/or consider making a small donation:
 
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BA3NHHFHTMXD8" 
+* [Sponsor my work on GitHub Sponsors](https://github.com/sponsors/RickStrahl)
+* <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BA3NHHFHTMXD8" 
     title="Find this library useful? Consider making a small donation." alt="Make Donation" style="text-decoration: none;">
 	<img src="https://weblog.west-wind.com/images/donation.png" />
 </a>
