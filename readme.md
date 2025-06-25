@@ -39,7 +39,7 @@ Related links:
 
 * [What's New](Changelog.md)
 * [Markdown TagHelper Blog Post](https://weblog.west-wind.com/posts/2018/Mar/23/Creating-an-ASPNET-Core-Markdown-TagHelper-and-Parser)
-* [Markdown Page Handler Middleware Blog Post](https://weblog.west-wind.com/posts/2018/Apr/18/Creating-a-generic-Markdown-Page-Handler-in-ASPNET-Core)
+* [Markdown Page Handler Middleware Blog Post](https://weblog.west-wind.com/posts/2018/Apr/18/Creating-a-generic-Markdown-Page-Handler-using-ASPNET-Core-Middleware)
 
 ## Installing the NuGet Package
 You can install the package [from NuGet](https://www.nuget.org/packages/Westwind.AspNetCore.Markdown/) in Visual Studio or from the command line:
