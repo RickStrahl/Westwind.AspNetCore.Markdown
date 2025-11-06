@@ -40,7 +40,7 @@ This library provides Markdown support for ASP.NET Core applications:
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Markdig" Version="0.41.2" />
+    <PackageReference Include="Markdig" Version="0.43.0" />
   </ItemGroup>
   
   <ItemGroup>
