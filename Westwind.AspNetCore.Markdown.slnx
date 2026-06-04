@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Documents/">
+    <File Path="Changelog.md" />
+    <File Path="readme.md" />
+  </Folder>
+  <Project Path="SampleWeb/SampleWeb.csproj" />
+  <Project Path="Westwind.AspNetCore.Markdown/Westwind.AspNetCore.Markdown.csproj" />
+  <Project Path="WestWind.AspnetCore.Test/WestWind.AspnetCore.Test.csproj" />
+</Solution>
