@@ -27,7 +27,7 @@ This small package provides Markdown support for your ASP.NET Core applications.
 *  **[Markdown Page Processor Middleware](#markdown-page-processor-middleware)**
 	*  Serve `.md` files as Markdown
 	*  Serve mapped extensionless URLs as Markdown
-	*  Configure a Razor template to customize Markdown Page Container UI
+    *  Render with either an MVC Razor view template or a static HTML template
 *  **Configuration and Support Features**
 	* Uses the awesome [MarkDig Markdown Parser](https://github.com/lunet-io/markdig) by default
 	* Customizable Markdown Parsing Pipeline for Markdig
@@ -55,17 +55,36 @@ dotnet add package westwind.aspnetcore.markdown
 ```
 
 ## Startup Configuration
-To use these components you need to add the following to your Startup class at minimum. The following is for ASP.NET Core 3.0 and later using endpoint routing:
 
 ```cs
+MarkdownConfiguration markdownConfiguration = null;
+
 public void ConfigureServices(IServiceCollection services)
 {
-    services.AddMarkdown();
-	
-	// We need to use MVC so we can use a Razor Configuration Template
-    services.AddMvc()
-        // have to let MVC know we have a controller
-        .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly);
+    services.AddMarkdown(config =>
+    {
+        markdownConfiguration = config;
+
+        // Default: ControllerAndView
+        // config.MarkdownPageMode = MarkdownPageModes.ControllerAndView;
+
+        // Optional: no controller/view rewrite, render with static HTML template
+        // config.MarkdownPageMode = MarkdownPageModes.MiddlewareAndStaticHtmlFile;
+
+        var folder = config.AddMarkdownProcessingFolder("/docs/", "~/Views/__MarkdownPageTemplate.cshtml");
+
+        // Optional static template path for MiddlewareAndStaticHtmlFile mode.
+        // Default: ~/__MarkdownPageTemplate.html (relative to ContentRoot)
+        // folder.StaticHtmlViewTemplate = "~/__MarkdownPageTemplate.html";
+    });
+
+    // if using ControllerAndView here we use a controller to handle the template
+    // which allows for _Layout and logic in the template - MiddlewareAndStaticHtml requires just a file
+    if (markdownConfiguration.MarkdownPageMode == MarkdownPageModes.ControllerAndView)
+    {
+        services.AddMvc()
+            .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly);
+    }
 }
 
 public void Configure(IApplicationBuilder app)
@@ -78,16 +97,15 @@ public void Configure(IApplicationBuilder app)
     
     app.UseMarkdown();
     app.UseStaticFiles();
-    
-    // the following enables MVC and Razor Pages
+
     app.UseRouting();
-    
+
     app.UseEndpoints(endpoints =>
     {
-        // endpoints.MapRazorPages();  // optional
-        
-        // MVC routing is required
-        endpoints.MapDefaultControllerRoute();
+    
+        // Only required for ControllerAndView mode
+        if (markdownConfiguration.MarkdownPageMode == MarkdownPageModes.ControllerAndView)
+            endpoints.MapDefaultControllerRoute();
     });
 }
 ```
@@ -329,13 +347,18 @@ Optional parameter that can be set if you are using a URL bound to the tag helpe
 
 
 ## Markdown Page Processor Middleware
-The Markdown middleware allows you drop `.md` files into a configured folder and have that folder parsed directly from disk. The middleware merges the Markdown into a pre-configured Razor template you provide so your Markdown text can be rendered in the proper UI context of your site chrome. 
+The Markdown middleware allows you drop `.md` files into a configured folder and have that folder parsed directly from disk. Rendering can happen in two ways:
+
+* **Controller and View mode (default)**: rewrites to a controller endpoint that renders a Razor template.
+* **Middleware and Static HTML mode**: renders directly in middleware and merges into a static HTML template.
 
 To use this feature you need to do the following:
 
 * Use `AddMarkdown()` to **configure** the page processing
 * Use `UseMarkdown()` to **hook up** the middleware
-* Create a Markdown View Template (default is: `~/Views/__MarkdownPageTemplate.cshtml`)
+* Create a page template:
+    * Razor template default: `~/Views/__MarkdownPageTemplate.cshtml`
+    * Static HTML template default: `~/__MarkdownPageTemplate.html` (content root)
 * Create `.md` files for your content
 * Rock on!
 
@@ -351,13 +374,27 @@ At it's simplest you can just do:
 ```cs
 public void ConfigureServices(IServiceCollection services)
 {
+    MarkdownConfiguration markdownConfiguration = null;
+
     services.AddMarkdown(config =>
     {
+        markdownConfiguration = config;
+
         // just add a folder as is
-        config.AddMarkdownProcessingFolder("/docs/");
-        
-        services.AddMvc();
-    }
+        var folderConfig = config.AddMarkdownProcessingFolder("/docs/");
+
+        // Default mode: uses controller + Razor view template
+        config.MarkdownPageMode = MarkdownPageModes.ControllerAndView;
+
+        // Optional mode: direct middleware rendering with static HTML file
+        // config.MarkdownPageMode = MarkdownPageModes.MiddlewareAndStaticHtmlFile;
+        // folderConfig.StaticHtmlViewTemplate = "~/__MarkdownPageTemplate.html";
+    });
+
+    if (markdownConfiguration.MarkdownPageMode == MarkdownPageModes.MiddlewareAndStaticHtmlFile)
+        services.AddRazorPages();
+    else
+        services.AddMvc().AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly);
 }
 ```
 
@@ -374,6 +411,12 @@ services.AddMarkdown(config =>
 
     // Simplest: Use all default settings
     var folderConfig = config.AddMarkdownProcessingFolder("/docs/", "~/Pages/__MarkdownPageTemplate.cshtml");
+
+    // Choose rendering mode (default is ControllerAndView)
+    config.MarkdownPageMode = MarkdownPageModes.ControllerAndView;
+
+    // config.MarkdownPageMode = MarkdownPageModes.MiddlewareAndStaticHtmlFile;
+    // folderConfig.StaticHtmlViewTemplate = "~/__MarkdownPageTemplate.html";
     
     // Customized Configuration: Set FolderConfiguration options
     folderConfig = config.AddMarkdownProcessingFolder("/posts/", "~/Pages/__MarkdownPageTemplate.cshtml");
@@ -424,17 +467,28 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 {  
     ...
     app.UseMarkdown();
-    
+
+    app.UseRouting();
     app.UseStaticFiles();
-    app.UseMvc();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapRazorPages();
+
+        // Required only in ControllerAndView mode
+        endpoints.MapDefaultControllerRoute();
+    });
 }
 ```        
 
 The `UseMarkdown()` method hooks up the middleware into the pipeline.
 
-Note that both `ConfigureServices()` and `Configure()` are required to reference the MVC middleware - `services.AddMvc()` and `app.UseMvc()` respectively - as the middleware relies on MVC and Razor to render the Razor host view template.
+MVC is only required when using `MarkdownPageModes.ControllerAndView`. If you use `MarkdownPageModes.MiddlewareAndStaticHtmlFile`, no MVC markdown controller route is required.
 
-### Create a Markdown Page View Template
+### Create a Markdown Page Template
+In `MarkdownPageModes.ControllerAndView` mode, Markdown is rendered into a Razor template via MVC. In `MarkdownPageModes.MiddlewareAndStaticHtmlFile` mode, Markdown is merged into a static HTML file directly in middleware.
+
+### Razor View Template (ControllerAndView)
 Markdown is just an HTML fragment, not a complete document, so a host template is required into which the rendered Markdown is embedded. To accomplish this the middleware uses a well-known MVC controller endpoint that loads the configured Razor view template that embeds the Markdown text.
 
 The middleware reads in the Markdown file from disk, and then uses a generic MVC controller method call the specified template to render the page containing your Markdown text as the content. The template is passed a `MarkdownModel` that includes `RenderedMarkdown` and `Title` properties.
@@ -509,6 +563,38 @@ A more complete template might also add a code highlighter ([highlightJs](https:
 
     </script>
 }
+```
+
+### Static HTML Template (MiddlewareAndStaticHtmlFile)
+When using middleware-only rendering, configure `MarkdownPageMode = MarkdownPageModes.MiddlewareAndStaticHtmlFile` and provide a static template file (default: `~/__MarkdownPageTemplate.html`).
+
+The static template supports:
+
+* `{{ Title }}` for the page title
+* `{{ RenderedMarkdown }}` for rendered Markdown HTML
+
+which is replaced when the title and content when rendered.
+
+If the static template file is not found, the middleware writes the rendered Markdown HTML directly to the response.
+
+Make sure the static template file is deployed with your app (for example by marking it as Content in your project file and setting copy behavior for output/publish).
+
+Example static template:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ Title }}</title>
+</head>
+<body>
+    <main>
+        {{ RenderedMarkdown }}
+    </main>
+</body>
+</html>
 ```
 
 ### Title Rendering
