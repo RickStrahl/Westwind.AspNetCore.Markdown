@@ -194,7 +194,10 @@ public class MarkdownPageProcessorMiddleware
             {
                 staticTemplate = await sr.ReadToEndAsync();
             }
-            html = staticTemplate.Replace("{{ RenderedMarkdown }}", model.RenderedMarkdown.ToString());
+            
+            html = staticTemplate
+                .Replace("{{ RenderedMarkdown }}", model.RenderedMarkdown.ToString() )
+                .Replace("{{ Title }}", model.Title);
         }
         else
         {

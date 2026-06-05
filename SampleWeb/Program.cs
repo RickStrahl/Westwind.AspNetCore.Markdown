@@ -1,29 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Markdig;
 using Markdig.Extensions.AutoIdentifiers;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
-using SampleWeb.Components;
 using Westwind.AspNetCore.Markdown;
-using Markdown = Westwind.AspNetCore.Markdown.Markdown;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+MarkdownConfiguration markdownConfiguration = null;
 
 // Add services to the container.
 builder.Services.AddMarkdown(config =>
 {
+    markdownConfiguration = config;
+
     config.HtmlTagBlackList = "script|iframe|object|embed|form";
 
     config.MarkdownRenderExtensions.Add(new PlantUmlMarkdownRenderExtension());
@@ -63,11 +55,19 @@ builder.Services.AddMarkdown(config =>
     };
 });
 
-builder.Services.AddRazorPages();
 
-//builder.Services.AddMvc()
-//    .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly)
-//    .AddRazorRuntimeCompilation();
+if (markdownConfiguration.MarkdownPageMode == MarkdownPageModes.MiddlewareAndStaticHtmlFile)
+{
+    // need Razor Pages for samples
+    builder.Services.AddRazorPages();
+}
+else
+{
+    // Only required for Markdown Template using Razor Views
+    builder.Services.AddMvc()
+       .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly)
+       .AddRazorRuntimeCompilation();
+}
 
 var app = builder.Build();
 
@@ -87,95 +87,7 @@ app.UseDefaultFiles(new DefaultFilesOptions()
 });
 
 
-    app.UseMarkdown();
-
-
-//app.Use(async (context, next) =>
-//    {
-//        var path = context.Request.Path.Value?.ToLower();
-
-//        if (!(path?.StartsWith("/markdownprocessor/markdownpage") ?? false))
-//        {
-//            await next(context);
-//            return;
-//        }
-
-//        var services = context.RequestServices;
-//        var markdownConfig = services.GetRequiredService<MarkdownConfiguration>() as MarkdownConfiguration;
-//        var hostingEnvironment = services.GetRequiredService<IWebHostEnvironment>() as IWebHostEnvironment;
-        
-
-//        if (markdownConfig.MarkdownPageMode != MarkdownPageModes.MiddlewareAndStaticHtmlFile)
-//        {
-//            var endpoints = services.GetRequiredService<EndpointDataSource>() as EndpointDataSource;
-//            // check if controller method is mapped - only if controllers are enabled
-//            if (endpoints.Endpoints
-//                .OfType<RouteEndpoint>()
-//                .Any(e => string.Equals(
-//                    e.RoutePattern.RawText,
-//                    "markdownprocessor/markdownpage",
-//                    StringComparison.OrdinalIgnoreCase)))            
-//            {
-//                await next(context);
-//                return;
-//            }
-//        }
-        
-//        var model = context.Items["MarkdownProcessor_Model"] as MarkdownModel;
-//        if (model == null)
-//            throw new InvalidOperationException(
-//                "This controller is not accessible directly unless the Markdown Model is set");
-
-//        var basePath = hostingEnvironment.WebRootPath;
-//        var relativePath = model.RelativePath;
-//        if (relativePath == null)
-//        {
-//            throw new FileNotFoundException();            
-//        }
-
-//        if (!File.Exists(model.PhysicalPath))
-//        {
-//            throw new FileNotFoundException("");            
-//        }
-
-//        // string markdown = await File.ReadAllTextAsync(pageFile);
-//        string markdown;
-//        using (var fs = new FileStream(model.PhysicalPath,
-//                   FileMode.Open,
-//                   FileAccess.Read))
-//        using (var sr = new StreamReader(fs))
-//        {
-//            markdown = await sr.ReadToEndAsync();
-//        }
-
-
-//        // set title, raw markdown, yamlheader and rendered markdown
-//        MarkdownPageProcessorController.ParseMarkdownToModel(markdown, model);
-
-//        string html = null;
-
-//        var staticTemplatePath = Path.Combine(hostingEnvironment.ContentRootPath, model.FolderConfiguration.StaticHtmlViewTemplate.Replace("~/", ""));
-//        if (!File.Exists(staticTemplatePath))
-//        {
-
-//            string staticTemplate = null;
-//            using (var fs = new FileStream(staticTemplatePath,
-//                       FileMode.Open,
-//                       FileAccess.Read))
-//            using (var sr = new StreamReader(fs))
-//            {
-//                staticTemplate = await sr.ReadToEndAsync();
-//            }
-//            html = staticTemplate.Replace("{{ RenderedMarkdown }}", model.RenderedMarkdown.ToString());
-//        }
-//        else
-//        {
-//            html = model.RenderedMarkdown?.ToString();
-//        }
-
-//        await context.Response.WriteAsync(html);
-//    });
-
+app.UseMarkdown();
 
 
 app.UseRouting();
@@ -185,7 +97,11 @@ app.UseStaticFiles();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapRazorPages();
-    endpoints.MapDefaultControllerRoute();
+    if (markdownConfiguration.MarkdownPageMode == MarkdownPageModes.ControllerAndView)
+    {
+        // controllers not required in MiddlewareAndStaticHtmlFile mode
+        endpoints.MapDefaultControllerRoute();
+    }
 });
 
 app.Run();
