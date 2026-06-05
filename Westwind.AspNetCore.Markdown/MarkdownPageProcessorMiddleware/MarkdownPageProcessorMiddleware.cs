@@ -70,6 +70,8 @@ public class MarkdownPageProcessorMiddleware
             return;
         }
 
+        context.Response.ContentType = "text/html; charset=utf-8";
+
         bool hasExtension = !string.IsNullOrEmpty(Path.GetExtension(path));
         bool hasMdExtension = path.EndsWith(".md", StringComparison.OrdinalIgnoreCase) || path.EndsWith(".markdown", StringComparison.OrdinalIgnoreCase);
         bool isRoot = path == "/";
@@ -127,7 +129,7 @@ public class MarkdownPageProcessorMiddleware
 
                 if (_configuration.MarkdownPageMode == MarkdownPageModes.MiddlewareAndStaticHtmlFile)
                 {
-                    bool handled = await NoControllerProcessing(context, _next, model);
+                    await NoControllerProcessing(context, model);
                     return;  // we generated output so don't continue processing
                 }
 
@@ -168,16 +170,7 @@ public class MarkdownPageProcessorMiddleware
         }
 
         // string markdown = await File.ReadAllTextAsync(pageFile);
-        string markdown;
-        using (var fs = new FileStream(model.PhysicalPath,
-                   FileMode.Open,
-                   FileAccess.Read))
-        using (var sr = new StreamReader(fs))
-        {
-            markdown = await sr.ReadToEndAsync();
-        }
-
-
+        var markdown = await File.ReadAllTextAsync(model.PhysicalPath);
         if (string.IsNullOrEmpty(markdown))
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
@@ -191,17 +184,11 @@ public class MarkdownPageProcessorMiddleware
 
         var staticTemplatePath = Path.Combine(_env.ContentRootPath, model.FolderConfiguration.StaticHtmlViewTemplate.Replace("~/", ""));
         if (File.Exists(staticTemplatePath))
-        {
-            string staticTemplate = null;
-            using (var fs = new FileStream(staticTemplatePath,
-                       FileMode.Open,
-                       FileAccess.Read))
-            using (var sr = new StreamReader(fs))
-            {
-                staticTemplate = await sr.ReadToEndAsync();
-            }
+        {            
+            var staticTemplate = await File.ReadAllTextAsync(staticTemplatePath);            
             
             html = staticTemplate
+                .Replace("{{ RenderedContent }}", model.RenderedMarkdown.ToString())
                 .Replace("{{ RenderedMarkdown }}", model.RenderedMarkdown.ToString() )
                 .Replace("{{ Title }}", model.Title);
         }
@@ -210,7 +197,7 @@ public class MarkdownPageProcessorMiddleware
             html = model.RenderedMarkdown?.ToString();
         }
 
-        await context.Response.WriteAsync(html);
+        await context.Response.WriteAsync(html ?? string.Empty);
         return true;
     }
 }

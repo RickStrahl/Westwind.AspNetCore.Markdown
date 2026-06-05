@@ -21,8 +21,8 @@ builder.Services.AddMarkdown(config =>
     config.MarkdownRenderExtensions.Add(new PlantUmlMarkdownRenderExtension());
     config.MarkdownRenderExtensions.Add(new FontAwesomeRenderExtension());
 
-    //config.MarkdownPageMode = MarkdownPageModes.ControllerAndView;
-    config.MarkdownPageMode = MarkdownPageModes.MiddlewareAndStaticHtmlFile;
+    config.MarkdownPageMode = MarkdownPageModes.ControllerAndView;
+    //config.MarkdownPageMode = MarkdownPageModes.MiddlewareAndStaticHtmlFile;
 
     var folderConfig = config.AddMarkdownProcessingFolder("/docs/", "~/Pages/__MarkdownPageTemplate.cshtml");
     folderConfig = config.AddMarkdownProcessingFolder("/posts/", "~/Pages/__MarkdownPageTemplate.cshtml");
