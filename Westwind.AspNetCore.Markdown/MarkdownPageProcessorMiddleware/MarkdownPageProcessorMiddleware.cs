@@ -178,6 +178,12 @@ public class MarkdownPageProcessorMiddleware
         }
 
 
+        if (string.IsNullOrEmpty(markdown))
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            return true;
+        }
+
         // set title, raw markdown, yamlheader and rendered markdown
         MarkdownPageProcessorController.ParseMarkdownToModel(markdown, model);
 
