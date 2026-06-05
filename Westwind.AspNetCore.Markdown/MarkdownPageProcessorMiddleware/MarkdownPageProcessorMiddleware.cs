@@ -61,11 +61,16 @@ public class MarkdownPageProcessorMiddleware
         this._env = _env;
     }
 
-    public Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context)
     {
         var path = context.Request.Path.Value;
         if (string.IsNullOrEmpty(path))
-            return _next(context);
+        { 
+            await _next(context);
+            return;
+        }
+
+        context.Response.ContentType = "text/html; charset=utf-8";
 
         bool hasExtension = !string.IsNullOrEmpty(Path.GetExtension(path));
         bool hasMdExtension = path.EndsWith(".md", StringComparison.OrdinalIgnoreCase) || path.EndsWith(".markdown", StringComparison.OrdinalIgnoreCase);
@@ -122,12 +127,77 @@ public class MarkdownPageProcessorMiddleware
                 // push the model into the context for controller to pick up
                 context.Items["MarkdownProcessor_Model"] = model;
 
+                if (_configuration.MarkdownPageMode == MarkdownPageModes.MiddlewareAndStaticHtmlFile)
+                {
+                    await NoControllerProcessing(context, model);
+                    return;  // we generated output so don't continue processing
+                }
+
                 // rewrite path to our controller so we can use _layout page
                 context.Request.Path = "/markdownprocessor/markdownpage";
+
                 break;
             }
         }
 
-        return _next(context);
+        await _next(context);        
+    }
+
+
+    /// <summary>
+    /// Processes the markdown file directly in the middleware without going through the controller.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="next"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    /// <exception cref="FileNotFoundException"></exception>
+    private async Task<bool> NoControllerProcessing(HttpContext context, MarkdownModel model)
+    {
+        var path = context.Request.Path.Value?.ToLower();
+
+              
+        var basePath = _env.WebRootPath;
+        var relativePath = model.RelativePath;
+        if (relativePath == null)
+        {
+            throw new FileNotFoundException();
+        }
+
+        if (!File.Exists(model.PhysicalPath))
+        {
+            throw new FileNotFoundException("");
+        }
+
+        // string markdown = await File.ReadAllTextAsync(pageFile);
+        var markdown = await File.ReadAllTextAsync(model.PhysicalPath);
+        if (string.IsNullOrEmpty(markdown))
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            return true;
+        }
+
+        // set title, raw markdown, yamlheader and rendered markdown
+        MarkdownPageProcessorController.ParseMarkdownToModel(markdown, model);
+
+        string html = null;
+
+        var staticTemplatePath = Path.Combine(_env.ContentRootPath, model.FolderConfiguration.StaticHtmlViewTemplate.Replace("~/", ""));
+        if (File.Exists(staticTemplatePath))
+        {            
+            var staticTemplate = await File.ReadAllTextAsync(staticTemplatePath);            
+            
+            html = staticTemplate
+                .Replace("{{ RenderedContent }}", model.RenderedMarkdown.ToString())
+                .Replace("{{ RenderedMarkdown }}", model.RenderedMarkdown.ToString() )
+                .Replace("{{ Title }}", model.Title);
+        }
+        else
+        {
+            html = model.RenderedMarkdown?.ToString();
+        }
+
+        await context.Response.WriteAsync(html ?? string.Empty);
+        return true;
     }
 }

@@ -11,6 +11,7 @@ namespace Westwind.AspNetCore.Markdown;
 public class MarkdownConfiguration
 {
     public const string DefaultMarkdownViewTemplate = "~/Views/__MarkdownPageTemplate.cshtml";
+    public const string DefaultStaticHtmlTemplate = "~/__MarkdownPageTemplate.html";
 
     /// <summary>
     /// List of relative virtual folders where any extensionless URL is
@@ -37,6 +38,11 @@ public class MarkdownConfiguration
     /// Global HtmlTagBlackList when StripScriptTags is set for Markdown parsing
     /// </summary>
     public string HtmlTagBlackList { get; set; } = "script|iframe|object|embed|form";
+
+    /// <summary>
+    /// Determines the mode in which the Markdown pages are processed.
+    /// </summary>
+    public MarkdownPageModes MarkdownPageMode { get; set; } = MarkdownPageModes.ControllerAndView;
 
     /// <summary>
     /// Adds a folder to the list of folders that are to be
@@ -101,9 +107,15 @@ public class MarkdownProcessingFolder
     public string BasePath {get; set;}
 
     /// <summary>
-    /// View Template to use to render the Markdown page
+    /// Controller View Template to use to render the Markdown page
     /// </summary>
     public string ViewTemplate { get; set; } = MarkdownConfiguration.DefaultMarkdownViewTemplate;
+
+    /// <summary>
+    /// View Template to use to render the Markdown page
+    /// </summary>
+    public string StaticHtmlViewTemplate { get; set;  } = MarkdownConfiguration.DefaultStaticHtmlTemplate;
+
 
     /// <summary>
     /// If true processes files with .md extension
@@ -149,4 +161,10 @@ public class MarkdownProcessingFolder
     /// the final HTML output.
     /// </summary>
     public Action<MarkdownModel, Controller> PreProcess { get; set; }
+}
+
+public enum MarkdownPageModes
+{
+    ControllerAndView,
+    MiddlewareAndStaticHtmlFile
 }
