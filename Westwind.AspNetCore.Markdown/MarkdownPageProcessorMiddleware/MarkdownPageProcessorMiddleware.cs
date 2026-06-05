@@ -150,7 +150,7 @@ public class MarkdownPageProcessorMiddleware
     /// <param name="model"></param>
     /// <returns></returns>
     /// <exception cref="FileNotFoundException"></exception>
-    public async Task<bool> NoControllerProcessing(HttpContext context, RequestDelegate next,  MarkdownModel model)
+    private async Task<bool> NoControllerProcessing(HttpContext context, MarkdownModel model)
     {
         var path = context.Request.Path.Value?.ToLower();
 
