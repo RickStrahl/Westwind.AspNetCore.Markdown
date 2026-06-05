@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creating a generic Markdown Page Handler in ASP.NET Core - Westwind.AspNetCore</title>
+
+    
+        <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="/css/site.css" />
+    
+    
+
+    <link href="/lib/FontAwesome/css/all.min.css" rel="stylesheet">
+    <style>
+        img {
+            max-width: 100%
+        }
+    </style>
+    
+    <style>
+        h3 {
+            margin-top: 50px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        /* vs2015 theme specific*/
+        pre {
+            background: #1E1E1E;
+            color: #eee;
+            padding: 0.5em !important;
+            overflow-x: auto;
+            white-space: pre;
+            word-break: normal;
+            word-wrap: normal;
+        }
+
+        pre > code {
+            white-space: pre;
+        }
+    </style>
+
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Westwind.AspNetCore</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="https://github.com/RickStrahl/Westwind.AspNetCore.Markdown">GitHub</a></li>
+                    <li><a href="https://weblog.west-wind.com">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        <div style="margin-top: 40px;">
+            <h1>STATIC RENDERED PAGE</h1>
+
+            {{ RenderedMarkdown }}
+        </div>
+    </div>
+
+
+       
+        <hr />
+        <footer>
+            <div class="pull-right">
+                <a href="https://west-wind.com">
+                    <img src="/images/WestWindText.png" />
+                </a>
+            </div>
+            <p>&copy; 2026, West Wind Technologies</p>
+        </footer>
+    </div>
+
+    
+        <script src="/lib/jquery/dist/jquery.js"></script>
+        <script src="/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="/js/site.js?v=EWaMeWsJBYWmL2g_KkgXZQ5nPe-a3Ichp0LEgzXczKo"></script>
+    
+    
+
+    
+    <!-- Syntax Highlighting code -->
+    <script src="/lib/highlightjs/highlight.pack.js"></script>
+    <link href="/lib/highlightjs/styles/vs2015.css" rel="stylesheet" />
+    <script src="/lib/highlightjs-badge.js"></script>
+
+    <script>
+        // apply HighlightJS
+        var pres = document.querySelectorAll("pre>code");
+        for (var i = 0; i < pres.length; i++) {
+            hljs.highlightBlock(pres[i]);
+        }
+
+        // https://github.com/RickStrahl/highlightjs-badge
+        window.highlightJsBadge();
+    </script>
+
+
+<!-- Visual Studio Browser Link -->
+<script type="text/javascript" src="/_vs/browserLink" async="async" id="__browserLink_initializationData" data-requestId="7204c656237e44388e02d7db2cd4aeed" data-requestMappingFromServer="false" data-connectUrl="http://localhost:54233/3a954f75d5074279a2471b20b1501afb/browserLink"></script>
+<!-- End Browser Link -->
+<script src="/_framework/aspnetcore-browser-refresh.js"></script></body>
+</html>

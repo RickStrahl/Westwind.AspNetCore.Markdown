@@ -71,7 +71,7 @@ public class MarkdownPageProcessorController : Controller
         return View(MarkdownConfiguration.DefaultMarkdownViewTemplate, model);
     }
 
-    private MarkdownModel ParseMarkdownToModel(string markdown, MarkdownModel model = null)
+    public static  MarkdownModel ParseMarkdownToModel(string markdown, MarkdownModel model = null)
     {
         if (model == null)
             model = new MarkdownModel();
